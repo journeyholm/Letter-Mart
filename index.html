@@ -42,17 +42,51 @@ canvas{display:block;width:100%;height:100%}
 .hidden{display:none!important}
 
 /* ---------- boot ---------- */
+#boot.gone{display:none!important}
 #boot{background:radial-gradient(circle at 50% 35%,#8FE0FF 0%,#3B6FE0 60%,#2A1F53 100%);
   flex-direction:column;gap:18px;z-index:90;display:flex;text-align:center;padding:20px}
 #boot h1{font-size:clamp(44px,12vw,110px);color:#fff;text-shadow:0 8px 0 var(--tomato),0 12px 24px rgba(0,0,0,.4);letter-spacing:2px}
 #boot .sub{font-size:clamp(18px,4.5vw,28px);color:#FFF0B8;font-weight:600}
-#bootLetters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:620px}
-#bootLetters span{display:grid;place-items:center;width:52px;height:52px;border-radius:14px;
-  border:4px solid var(--ink);font-size:28px;font-weight:800;color:var(--ink);
-  animation:bob 1.6s ease-in-out infinite}
+#bootMark{display:grid;place-items:center;width:clamp(88px,22vw,120px);height:clamp(88px,22vw,120px);
+  border-radius:26px;border:6px solid var(--ink);background:var(--butter);color:var(--ink);
+  font-size:clamp(54px,14vw,76px);font-weight:800;animation:bob 2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
 
 /* ---------- profiles ---------- */
+#nameAsk{background:rgba(20,14,40,.7);z-index:86}
+#nameInput{font-family:var(--font);font-size:34px;font-weight:800;text-align:center;
+  width:min(80%,320px);border:5px solid var(--ink);border-radius:20px;padding:10px;margin-top:16px;
+  color:var(--ink);text-transform:capitalize}
+#listBar{position:absolute;top:96px;left:50%;transform:translateX(-50%);display:flex;gap:6px;
+  align-items:center;background:var(--cream);border:5px solid var(--ink);border-radius:20px;
+  padding:6px 12px;box-shadow:var(--shadow)}
+#listBar .lt{width:38px;height:38px;border-radius:11px;border:4px solid var(--ink);display:grid;
+  place-items:center;font-size:20px;font-weight:800;color:var(--ink);background:#fff}
+#listBar .lt.done{background:var(--mint)}
+#listBar .lt.now{animation:glow 1.1s ease-in-out infinite}
+#listBar .cap{font-size:16px;font-weight:800;color:var(--ink);padding-right:4px}
+#cert{background:rgba(20,14,40,.82);z-index:81}
+#certPaper{background:linear-gradient(180deg,#FFFDF3,#FFF3D6);border:8px double var(--ink);
+  border-radius:20px;width:min(94vw,560px);padding:22px 26px 26px;text-align:center;
+  box-shadow:0 12px 0 rgba(43,33,64,.35);animation:pop .5s ease}
+#certStar{font-size:clamp(48px,13vw,74px);line-height:1;animation:bob 2s ease-in-out infinite}
+#certTitle{font-size:clamp(26px,6.6vw,38px);font-weight:800;color:var(--tomato);letter-spacing:2px}
+#certLine,#certLine2{font-size:clamp(15px,3.6vw,18px);font-weight:700;color:#7b7191;margin-top:8px}
+#certName{font-size:clamp(34px,9vw,52px);font-weight:800;color:var(--blueberry);margin:6px 0}
+#certMeta{font-size:16px;font-weight:800;color:var(--ink);margin-top:12px;line-height:1.5}
+.balloon{position:absolute;bottom:-90px;font-size:44px;animation:rise linear forwards;pointer-events:none}
+@keyframes rise{to{transform:translateY(-115vh) rotate(18deg);opacity:.9}}
+#receipt{background:rgba(20,14,40,.72);z-index:79}
+#recPaper{background:#FFFDF3;border:5px solid var(--ink);border-radius:8px;width:min(92vw,420px);
+  padding:20px 22px 26px;box-shadow:var(--shadow);text-align:center;animation:slidein .6s ease}
+@keyframes slidein{from{transform:translateY(-60px);opacity:0}to{transform:translateY(0);opacity:1}}
+#recPaper .rh{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:2px}
+#recPaper .rs{font-size:15px;font-weight:700;color:#8a7f9e;margin-bottom:10px}
+#recPaper .rline{display:flex;justify-content:space-between;font-size:22px;font-weight:800;
+  color:var(--ink);padding:5px 2px;border-bottom:2px dashed #d8cfbe}
+#recPaper .rtot{display:flex;justify-content:space-between;font-size:26px;font-weight:800;
+  color:var(--tomato);margin-top:10px}
+#recPaper .rty{font-size:19px;font-weight:800;color:var(--mint);margin-top:12px}
 #profiles{flex-direction:column;gap:22px;background:rgba(20,14,40,.6);z-index:85}
 #profiles .panel{padding:26px 30px;max-width:640px}
 #slotRow{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:14px}
@@ -67,7 +101,7 @@ canvas{display:block;width:100%;height:100%}
 /* ---------- HUD ---------- */
 #hud{position:fixed;inset:0;pointer-events:none;z-index:20}
 #hud > *{pointer-events:auto}
-#questBar{position:absolute;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);
+#questBar{position:absolute;top:10px;left:50%;transform:translateX(-50%);
   display:flex;align-items:center;gap:12px;background:var(--cream);border:5px solid var(--ink);
   border-radius:26px;padding:8px 16px;box-shadow:var(--shadow);max-width:min(94vw,620px)}
 #questIcon{width:60px;height:60px;border-radius:16px;border:4px solid var(--ink);display:grid;
@@ -76,17 +110,19 @@ canvas{display:block;width:100%;height:100%}
 #questPrice{font-size:19px;font-weight:800;color:var(--tomato)}
 #repeatBtn{flex:0 0 auto;min-height:56px;min-width:56px;padding:6px 12px;font-size:26px;border-radius:18px}
 
-#topRight{position:absolute;top:calc(10px + env(safe-area-inset-top));right:10px;display:flex;flex-direction:column;gap:8px}
-#topLeft{position:absolute;top:calc(84px + env(safe-area-inset-top));left:10px;display:flex;flex-direction:column;gap:8px}
+#topRight{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:8px}
+#topLeft{position:absolute;top:84px;left:10px;display:flex;flex-direction:column;gap:8px}
 .iconbtn{width:62px;height:62px;font-size:30px;padding:0;border-radius:20px;display:grid;place-items:center}
 #starPill{background:var(--grape);color:#fff;border:4px solid var(--ink);border-radius:20px;
   padding:6px 14px;font-size:24px;font-weight:800;box-shadow:var(--shadow);text-align:center}
 #edgeArrow{position:absolute;width:76px;height:76px;display:none;place-items:center;font-size:44px;
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));z-index:19;pointer-events:none}
-#rolly{position:absolute;bottom:calc(290px + env(safe-area-inset-bottom));left:10px;max-width:min(72vw,400px);
-  background:#fff;border:5px solid var(--ink);border-radius:24px;padding:12px 16px;font-size:21px;
-  font-weight:800;color:var(--ink);box-shadow:var(--shadow);display:none}
-#rolly.on{display:block;animation:pop .3s ease}
+#rolly{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);cursor:pointer;
+  width:min(94vw,660px);background:#fff;border:5px solid var(--ink);border-radius:20px;
+  padding:10px 16px;font-size:clamp(15px,3.6vw,19px);line-height:1.25;font-weight:800;
+  color:var(--ink);box-shadow:var(--shadow);display:none;text-align:center;z-index:24;
+  max-height:74px;overflow:hidden}
+#rolly.on{display:block;animation:pop .25s ease}
 @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
 
 /* ---------- wallet ---------- */
@@ -133,7 +169,19 @@ canvas{display:block;width:100%;height:100%}
 /* ---------- garage / upgrades ---------- */
 #garage{background:rgba(20,14,40,.62);z-index:66}
 #garagePanel{padding:22px;width:min(96vw,760px);max-height:92vh;overflow:auto;text-align:center}
-#upGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:14px}
+#garTabs{display:flex;gap:10px;justify-content:center;margin:10px 0 4px}
+#garTabs .btn{min-height:52px;font-size:20px;padding:8px 20px}
+#garTabs .btn.sel{background:var(--blueberry);color:#fff}
+#upGrid,#cartGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:14px}
+.cartCard{border:5px solid var(--ink);border-radius:22px;background:#fff;padding:12px;
+  box-shadow:var(--shadow);cursor:pointer;text-align:center}
+.cartCard .ic{font-size:44px;line-height:1}
+.cartCard .nm{font-size:17px;font-weight:800;color:var(--ink);margin-top:2px}
+.cartCard .bl{font-size:13px;font-weight:600;color:#7b7191;line-height:1.2;margin-top:2px}
+.cartCard .cost{font-size:17px;font-weight:800;color:var(--grape);margin-top:4px}
+.cartCard.owned{background:#EAFBF3}
+.cartCard.using{background:var(--mint);box-shadow:0 0 0 5px rgba(63,208,155,.45),var(--shadow)}
+.cartCard.locked{opacity:.6}
 .upCard{border:5px solid var(--ink);border-radius:22px;background:#fff;padding:12px;box-shadow:var(--shadow);cursor:pointer}
 .upCard .ic{font-size:46px}
 .upCard .nm{font-size:18px;font-weight:800;color:var(--ink)}
@@ -153,6 +201,8 @@ canvas{display:block;width:100%;height:100%}
   border-radius:18px;padding:8px;font-family:var(--font)}
 
 /* ---------- celebration ---------- */
+#vignette{position:fixed;inset:0;pointer-events:none;z-index:15;
+  background:radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 45%, rgba(20,14,40,.26) 100%)}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:75;overflow:hidden}
 .conf{position:absolute;width:14px;height:20px;border-radius:3px;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(112vh) rotate(720deg);opacity:.9}}
@@ -165,7 +215,7 @@ canvas{display:block;width:100%;height:100%}
 #knob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;
   background:var(--butter);border:5px solid var(--ink);box-shadow:var(--shadow)}
 #alphaStrip{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:3px;
-  justify-content:center;align-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+  justify-content:center;align-content:center;padding:6px;padding-bottom:6px;
   background:linear-gradient(180deg,rgba(59,111,224,.85),rgba(43,33,64,.94));
   border-top:5px solid var(--ink)}
 .sl{width:clamp(20px,5.6vw,32px);height:clamp(20px,5.6vw,32px);border-radius:7px;
@@ -174,21 +224,19 @@ canvas{display:block;width:100%;height:100%}
 .sl.got{border-color:var(--ink);color:var(--ink)}
 .sl.hold{border-color:#FFD34E;color:#FFD34E;animation:glow 1s ease-in-out infinite}
 
-#dpad{position:absolute;left:10px;bottom:calc(84px + env(safe-area-inset-bottom));width:186px;height:186px}
+#dpad{position:absolute;left:10px;bottom:96px;width:186px;height:186px;z-index:22}
 .dbtn{position:absolute;width:60px;height:60px;font-size:26px;font-weight:800;font-family:var(--font);
   border:4px solid var(--ink);border-radius:16px;background:var(--cream);color:var(--ink);
   box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center}
 .dbtn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(43,33,64,.35)}
 .dbtn[data-k="u"]{left:63px;top:0} .dbtn[data-k="l"]{left:0;top:63px}
 .dbtn[data-k="r"]{left:126px;top:63px} .dbtn[data-k="d"]{left:63px;top:126px}
-#abpad{position:absolute;right:12px;bottom:calc(92px + env(safe-area-inset-bottom));
-  display:flex;gap:12px;align-items:flex-end}
+#abpad{position:absolute;right:12px;bottom:100px;display:flex;gap:12px;align-items:flex-end;z-index:22}
 .abtn{width:86px;height:86px;border-radius:50%;border:5px solid var(--ink);background:var(--mint);
   color:var(--ink);font-family:var(--font);font-size:34px;font-weight:800;box-shadow:var(--shadow);cursor:pointer}
 .abtn.b{width:68px;height:68px;font-size:26px;background:var(--butter)}
 .abtn:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(43,33,64,.35)}
-#carryPill{position:absolute;left:50%;transform:translateX(-50%);
-  bottom:calc(84px + env(safe-area-inset-bottom));background:var(--butter);border:5px solid var(--ink);
+#carryPill{position:absolute;left:50%;transform:translateX(-50%);bottom:98px;background:var(--butter);border:5px solid var(--ink);
   border-radius:24px;padding:8px 16px;font-size:19px;font-weight:800;color:var(--ink);box-shadow:var(--shadow)}
 
 #intercom{background:rgba(20,14,40,.75);z-index:78}
@@ -218,6 +266,25 @@ canvas{display:block;width:100%;height:100%}
 #tutDots span{width:13px;height:13px;border-radius:50%;background:#d8cfbe;border:3px solid var(--ink)}
 #tutDots span.on{background:var(--tomato)}
 
+#quiz{background:rgba(20,14,40,.72);z-index:69}
+#quizPanel{padding:18px 20px 20px;width:min(96vw,620px);max-height:96vh;overflow:auto;text-align:center}
+#quizStage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin:8px 0 4px}
+#quizEmoji{font-size:clamp(86px,26vw,150px);line-height:1;animation:bob 2.2s ease-in-out infinite}
+#quizAsk{font-size:clamp(18px,4.4vw,24px);font-weight:800;color:var(--ink)}
+#quizWord{font-size:clamp(34px,9vw,52px);font-weight:800;color:var(--tomato);line-height:1.1}
+#quizOpts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.optBtn{width:clamp(84px,22vw,112px);height:clamp(84px,22vw,112px);border:5px solid var(--ink);
+  border-radius:24px;background:#fff;box-shadow:var(--shadow);cursor:pointer;font-family:var(--font);
+  display:flex;align-items:center;justify-content:center;gap:4px;color:var(--ink)}
+.optBtn .up{font-size:clamp(34px,9vw,46px);font-weight:800;line-height:1}
+.optBtn .lo{font-size:clamp(26px,7vw,36px);font-weight:800;line-height:1;opacity:.75}
+.optBtn:active{transform:translateY(4px)}
+.optBtn.good{background:var(--mint);animation:cheer .5s ease}
+.optBtn.meh{background:#ffd9d1}
+.optBtn.hintGlow{animation:glow 1s ease-in-out infinite}
+#quizFeedback{font-size:19px;font-weight:800;color:var(--blueberry);margin-top:12px;min-height:24px}
+#quizBtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+#quizBtns .btn{min-height:56px;font-size:18px;padding:8px 14px}
 #trace{background:rgba(20,14,40,.7);z-index:68}
 #tracePanel{padding:16px 18px 18px;width:min(96vw,600px);max-height:96vh;overflow:auto;text-align:center}
 #traceTabs{display:flex;gap:10px;justify-content:center;margin:8px 0}
@@ -240,6 +307,19 @@ canvas{display:block;width:100%;height:100%}
 .btn.butter{background:var(--butter)}
 #loading{position:fixed;inset:0;background:#2A1F53;color:#fff;display:grid;place-items:center;
   font-size:28px;font-weight:800;z-index:95}
+@media (max-width:520px){
+  #dpad{width:150px;height:150px;bottom:88px}
+  .dbtn{width:48px;height:48px;font-size:21px}
+  .dbtn[data-k="u"]{left:51px;top:0} .dbtn[data-k="l"]{left:0;top:51px}
+  .dbtn[data-k="r"]{left:102px;top:51px} .dbtn[data-k="d"]{left:51px;top:102px}
+  .abtn{width:68px;height:68px;font-size:27px}
+  .abtn.b{width:54px;height:54px;font-size:21px}
+  #abpad{bottom:92px}
+  #rolly{bottom:6px;max-height:66px}
+  #questBar{padding:6px 10px} #questText{font-size:17px} #questPrice{font-size:15px}
+  #questIcon{width:46px;height:46px;font-size:26px}
+}
+@media (max-height:520px){ #dpad{bottom:74px} #abpad{bottom:78px} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -261,6 +341,7 @@ canvas{display:block;width:100%;height:100%}
   <div id="topLeft">
     <button id="hornBtn" class="btn iconbtn tom" aria-label="Horn">📣</button>
     <button id="helpBtn" class="btn iconbtn blue" aria-label="How to play">❓</button>
+    <button id="soundBtn" class="btn iconbtn butter" aria-label="Sound on or off">🔊</button>
   </div>
   <div id="carryPill" class="hidden"></div>
   <div id="dpad">
@@ -273,6 +354,7 @@ canvas{display:block;width:100%;height:100%}
     <button id="btnA" class="abtn" aria-label="Do it">A</button>
     <button id="btnB" class="abtn b" aria-label="Say it again">B</button>
   </div>
+  <div id="listBar" class="hidden"></div>
   <div id="alphaStrip"></div>
   <div id="edgeArrow">⬆️</div>
   <div id="rolly"></div>
@@ -309,8 +391,13 @@ canvas{display:block;width:100%;height:100%}
 <div id="garage" class="layer">
   <div id="garagePanel" class="panel">
     <div class="title">Cart Garage</div>
-    <div class="title sm">Spend stars to pimp your cart</div>
-    <div id="upGrid"></div>
+    <div id="garTabs">
+      <button id="tabCarts" class="btn cream sel">Carts</button>
+      <button id="tabDecor" class="btn cream">Decorations</button>
+    </div>
+    <div class="title sm" id="garHint">Pick a cart, or buy a new one with stars</div>
+    <div id="cartGrid"></div>
+    <div id="upGrid" class="hidden"></div>
     <button class="btn mint" style="margin-top:16px" data-close="garage">Back to shopping</button>
   </div>
 </div>
@@ -332,6 +419,19 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 
+<div id="nameAsk" class="layer">
+  <div class="panel" style="padding:26px;width:min(94vw,540px);text-align:center">
+    <div class="title">Who is playing?</div>
+    <div class="title sm" style="margin-top:6px">A grown-up can type the child&rsquo;s first name.<br>
+      The first shopping list will be the letters in their name.</div>
+    <input id="nameInput" maxlength="12" autocomplete="off" placeholder="Name">
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px">
+      <button id="nameGo" class="btn big mint">Start shopping</button>
+      <button id="nameSkip" class="btn cream">Skip</button>
+    </div>
+  </div>
+</div>
+
 <div id="profiles" class="layer">
   <div class="panel" style="padding:26px">
     <div class="title">Who's shopping?</div>
@@ -340,11 +440,10 @@ canvas{display:block;width:100%;height:100%}
 </div>
 
 <div id="boot">
-  <div id="bootLetters"></div>
+  <div id="bootMark">A</div>
   <h1>ALPHA-MART</h1>
-  <div class="sub">Sunny Street Mall &nbsp;•&nbsp; Letters &amp; Numbers Adventure</div>
-  <button id="startBtn" class="btn big tom" style="margin-top:10px">▶ TAP TO START</button>
-  <div class="sub" id="verBadge" style="font-size:15px;opacity:.8"></div>
+  <div class="sub">Letters &amp; Numbers Adventure</div>
+  <button id="startBtn" class="btn big tom" style="margin-top:14px">▶ TAP ANYWHERE TO START</button>
 </div>
 
 <div id="intercom" class="layer">
@@ -361,6 +460,32 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 
+<div id="cert" class="layer">
+  <div id="certPaper">
+    <div id="certStar">&#11088;</div>
+    <div id="certTitle">ALPHABET CHAMPION</div>
+    <div id="certLine">This certifies that</div>
+    <div id="certName">Shopper</div>
+    <div id="certLine2">bought every letter from A to Z at Alpha-Mart</div>
+    <div id="certMeta"></div>
+    <button id="certDone" class="btn big mint" style="margin-top:16px">Keep shopping!</button>
+  </div>
+</div>
+
+<div id="receipt" class="layer">
+  <div id="recPaper">
+    <div class="rh">ALPHA-MART</div>
+    <div class="rs">THANK YOU FOR SHOPPING</div>
+    <div id="recLines"></div>
+    <div class="rtot"><span>TOTAL</span><span id="recTotal">$0</span></div>
+    <div class="rty" id="recWho">Great shopping!</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+      <button id="recNext" class="btn big mint">Another list!</button>
+      <button id="recDone" class="btn cream">Just look around</button>
+    </div>
+  </div>
+</div>
+
 <div id="tut" class="layer">
   <div id="tutPanel" class="panel">
     <div id="tutIcon">🛒</div>
@@ -373,9 +498,29 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 
+<div id="quiz" class="layer">
+  <div id="quizPanel" class="panel">
+    <div class="title" id="quizTitle">Word Room · First Sounds</div>
+    <div id="quizStage">
+      <div id="quizEmoji">&#128054;</div>
+      <div>
+        <div id="quizAsk">Which letter begins</div>
+        <div id="quizWord">dog</div>
+      </div>
+    </div>
+    <div id="quizOpts"></div>
+    <div id="quizFeedback">Listen, then choose!</div>
+    <div id="quizBtns">
+      <button id="quizAgain" class="btn cream">&#128266; Say it again</button>
+      <button id="quizHelp" class="btn cream">&#128161; Help me</button>
+      <button id="quizDone" class="btn mint">↩︎ Back to shopping</button>
+    </div>
+  </div>
+</div>
+
 <div id="trace" class="layer">
   <div id="tracePanel" class="panel">
-    <div class="title">Break Room · Practice Writing</div>
+    <div class="title" id="traceTitle">Practice Writing</div>
     <div id="traceTabs">
       <button id="tabLetters" class="btn cream sel">A B C</button>
       <button id="tabNumbers" class="btn cream">1 2 3</button>
@@ -394,6 +539,7 @@ canvas{display:block;width:100%;height:100%}
   </div>
 </div>
 
+<div id="vignette"></div>
 <div id="confetti"></div>
 <div id="bigWord"><span>NICE!</span></div>
 <div id="loading">Loading the store…</div>
@@ -411,13 +557,16 @@ const CFG = {
   MOVEMENT: 'waypoint',      // 'waypoint' | 'rail'  (rail = cart slides along aisle only)
   USE_VOICE_FILES: false,    // flip true later + drop /audio/*.mp3 to replace TTS
   VOICE_DIR: 'audio/',
-  SPEECH_RATE: 0.82,
-  SPEECH_PITCH: 1.12,
+  SPEECH_RATE: 0.95,      // a natural pace; too slow reads as robotic
+  SPEECH_PITCH: 1.04,
+  SPEECH_RATE_SLOW: 0.8,  // for single letters and counting
   MAX_DPR: 1.25,            // retina at 2x with MSAA was the frame-rate killer
   SHADOWS: false,          // blob shadows always on; real shadows are a grown-up toggle
   MUSIC: true,
   IDLE_NUDGE_MS: 9000,
   STARS_PER_LETTER: 1,
+  LIST_LEN: 5,             // letters per shopping list
+  EXTRA_SFX: true,
   QUEST_TYPES: { name: 'name', sound: 'sound', first: 'first' },
   APRONS: {
     1: { label:'Green Apron',  color:'#3FD09B', minPrice:1, maxPrice:5,  padMax:5,  pay:'numeral', types:['name'] },
@@ -429,7 +578,7 @@ const CFG = {
 /* ---------------------------------------------------------------- LETTER DATA */
 const PAL = ['#FF5A3C','#FFC93C','#3FD09B','#3B6FE0','#8C5BE0','#FF8FB1','#4ECDC4','#FFA33C'];
 const LETTERS = [
-  ['A','short A — aaa, like in apple','apple','🍎'],
+  ['A','short A, aaa, like in apple','apple','🍎'],
   ['B','buh, like in ball','ball','⚽'],
   ['C','kuh, like in cat','cat','🐱'],
   ['D','duh, like in dog','dog','🐶'],
@@ -448,7 +597,7 @@ const LETTERS = [
   ['Q','kwuh, like in queen','queen','👑'],
   ['R','rrr, like in rain','rain','🌧️'],
   ['S','sss, like in sun','sun','☀️'],
-  ['T','tuh, like in tree','tree','🌳'],
+  ['T','tuh, like in tiger','tiger','🐯'],
   ['U','uh, like in umbrella','umbrella','☂️'],
   ['V','vvv, like in van','van','🚐'],
   ['W','wuh, like in web','web','🕸️'],
@@ -550,6 +699,28 @@ function traceHint(ch){
   return 'Trace along the dotted lines.';
 }
 
+/* First-sound quiz: two picture words per letter so the room stays fresh.
+   X is never the answer (no child-friendly initial-X word) but can appear as a choice. */
+const QUIZ_WORDS={
+  A:[['apple','🍎'],['ant','🐜']],      B:[['ball','⚽'],['bear','🐻']],
+  C:[['cat','🐱'],['cake','🎂']],       D:[['dog','🐶'],['duck','🦆']],
+  E:[['egg','🥚'],['elephant','🐘']],   F:[['fish','🐟'],['fox','🦊']],
+  G:[['goat','🐐'],['gift','🎁']],    H:[['hat','🎩'],['horse','🐴']],
+  I:[['igloo','🧊'],['insect','🐛']],   J:[['jam','🍯'],['jet','✈️']],
+  K:[['key','🔑'],['kangaroo','🦘']],   L:[['leaf','🍃'],['lion','🦁']],
+  M:[['moon','🌙'],['milk','🥛']],      N:[['nose','👃'],['net','🥅']],
+  O:[['octopus','🐙'],['ox','🐂']],     P:[['pig','🐷'],['pizza','🍕']],
+  Q:[['queen','👑'],['question','❓']], R:[['rain','🌧️'],['rabbit','🐰']],
+  S:[['sun','☀️'],['sock','🧦']],      T:[['tiger','🐯'],['tent','⛺']],
+  U:[['umbrella','☂️'],['up','⬆️']],    V:[['van','🚐'],['violin','🎻']],
+  W:[['web','🕸️'],['watch','⌚']],      Y:[['yarn','🧶'],['yellow','💛']],
+  Z:[['zebra','🦓']]
+};
+/* letters children genuinely mix up, so at least one choice is a real decision */
+const CONFUSE={ A:'EO', B:'DPR', C:'GKO', D:'BPO', E:'FA', F:'ET', G:'CJQ', H:'NKA',
+  I:'JLT', J:'IG', K:'CX', L:'IJT', M:'NW', N:'MH', O:'QCA', P:'QBR', Q:'OPG',
+  R:'BPK', S:'ZC', T:'FL', U:'VN', V:'UWY', W:'MVN', X:'KY', Y:'VXT', Z:'SN' };
+
 const CHEERS = ['NICE!','WOW!','YES!','SUPER!','GREAT!','AWESOME!','YAHOO!','PERFECT!'];
 const NPC_LOOKS = [
   {shirt:'#FF5A3C', hair:'#3A2A20', hat:false},
@@ -559,6 +730,27 @@ const NPC_LOOKS = [
   {shirt:'#FFC93C', hair:'#4B2E2A', hat:false},
   {shirt:'#FF8FB1', hair:'#2E2A45', hat:true}
 ];
+const CARTS=[
+  {id:'classic',  name:'Classic Cart',      cost:0,  icon:'🛒',
+   basket:0xE6ECF5, frame:0xFF5A3C, wheel:0x2B2140, speed:1.00, extra:null,
+   blurb:'The trusty shop cart you started with.'},
+  {id:'racer',    name:'Red Racer',         cost:6,  icon:'🏎️',
+   basket:0xFF6B4A, frame:0xFFD34E, wheel:0x2B2140, speed:1.12, extra:'spoiler',
+   blurb:'A bit quicker down the aisles.'},
+  {id:'sunny',    name:'Sunshine Wagon',    cost:9,  icon:'🌞',
+   basket:0xFFD34E, frame:0x3FD09B, wheel:0x8C5BE0, speed:1.00, extra:null,
+   blurb:'Bright and cheerful, with purple wheels.'},
+  {id:'trolley',  name:'Ice Cream Trolley', cost:14, icon:'🍦',
+   basket:0xFFF2F6, frame:0xFF8FB1, wheel:0xE6ECF5, speed:0.96, extra:'canopy',
+   blurb:'Has its own little striped canopy.'},
+  {id:'rocket',   name:'Rocket Sled',       cost:20, icon:'🚀',
+   basket:0xB9C3D4, frame:0x3B6FE0, wheel:0x2B2140, speed:1.28, extra:'nose',
+   blurb:'The fastest cart in the shop.'},
+  {id:'royal',    name:'Royal Carriage',    cost:28, icon:'👑',
+   basket:0xF6E4B0, frame:0x8C5BE0, wheel:0xFFD34E, speed:1.00, extra:'canopy',
+   blurb:'Shop like royalty. Gold wheels included.'}
+];
+const CARTMAP={}; CARTS.forEach(c=>CARTMAP[c.id]=c);
 const UPGRADES = [
   {id:'flag',   name:'Racing Flag', icon:'🚩', cost:3},
   {id:'balloon',name:'Balloons',    icon:'🎈', cost:4},
@@ -583,7 +775,7 @@ const Store = (()=>{
 function blankSave(avatar){
   const mastery = {}; LETTERS.forEach(l=>mastery[l.ch]={seen:0,ok:0,miss:0});
   const nums = {}; for(let i=1;i<=20;i++) nums[i]={ok:0,miss:0};
-  return { avatar, apron:1, stars:0, owned:[], carrying:[], mastery, nums, upgrades:[], plays:0, voice:true, music:true, gfx:'auto', traced:{} };
+  return { avatar, apron:1, stars:0, owned:[], carrying:[], mastery, nums, upgrades:[], plays:0, voice:true, music:true, gfx:'auto', traced:{}, tips:'on', voiceName:null, quiz:{ok:0,miss:0}, cart:'classic', carts:['classic'], name:'', list:[], listAll:[], listPrices:{}, listCount:0, streakMiss:0, sfx:true };
 }
 
 /* ---------------------------------------------------------------- AUDIO */
@@ -609,14 +801,41 @@ const Audio2 = (()=>{
     }
     unlocked=true;
   }
-  function pickVoice(){
-    if(!window.speechSynthesis) return;
-    const vs = speechSynthesis.getVoices()||[];
-    if(!vs.length) return;
-    const pref = [/samantha/i,/karen/i,/moira/i,/google us english/i,/zira/i,/aria/i,/en-us/i,/en[-_]gb/i];
-    for(const p of pref){ const f = vs.find(v=>p.test(v.name)||p.test(v.lang)); if(f){ voice=f; return; } }
-    voice = vs.find(v=>/^en/i.test(v.lang)) || vs[0];
+  /* Browser voice quality varies enormously. The legacy novelty voices (Fred,
+     Zarvox, Albert, eSpeak...) are the ones that sound robotic, so they are ruled
+     out entirely and the neural/premium voices are ranked to the top. */
+  const BAD=/albert|bad news|bells|boing|bubbles|cellos|deranged|fred|good news|hysterical|jester|junior|kathy|organ|pipe|princess|ralph|superstar|trinoids|whisper|wobble|zarvox|bahh|espeak|compact|veena|rishi/i;
+  function voiceScore(v){
+    if(!v || !/^en/i.test(v.lang||'')) return -1;
+    if(BAD.test(v.name||'')) return -1;
+    let s=0;
+    if(/natural|neural/i.test(v.name)) s+=70;
+    if(/google/i.test(v.name)) s+=48;
+    if(/(samantha|ava|allison|susan|zoe|joanna|nicky|siri)/i.test(v.name)) s+=44;
+    if(/(aria|jenny|michelle|emma|ana)/i.test(v.name)) s+=38;
+    if(/(karen|moira|serena|tessa|fiona)/i.test(v.name)) s+=24;
+    if(/(zira|hazel|catherine|linda)/i.test(v.name)) s+=16;
+    if(v.localService===false) s+=12;
+    if(/en[-_]?US/i.test(v.lang)) s+=10;
+    else if(/en[-_]?(GB|AU|CA)/i.test(v.lang)) s+=5;
+    return s;
   }
+  function englishVoices(){
+    if(!window.speechSynthesis) return [];
+    return (speechSynthesis.getVoices()||[])
+      .filter(v=>voiceScore(v)>=0)
+      .sort((a,b)=>voiceScore(b)-voiceScore(a));
+  }
+  function pickVoice(){
+    const list=englishVoices();
+    if(!list.length) return;
+    if(wantName){
+      const m=list.find(v=>v.name===wantName);
+      if(m){ voice=m; return; }
+    }
+    voice=list[0];
+  }
+  let wantName=null;
   if(window.speechSynthesis){
     pickVoice();
     speechSynthesis.onvoiceschanged = pickVoice;
@@ -631,7 +850,7 @@ const Audio2 = (()=>{
     if(!enabled || !window.speechSynthesis){ if(item.done) item.done(); next(); return; }
     speaking = true;
     let finished=false;
-    const fin=()=>{ if(finished) return; finished=true; speaking=false; if(item.done) item.done(); setTimeout(next,60); };
+    const fin=()=>{ if(finished) return; finished=true; speaking=false; if(item.done) item.done(); setTimeout(next,150); };
     try{
       const u = new SpeechSynthesisUtterance(item.text);
       if(voice) u.voice = voice;
@@ -715,7 +934,54 @@ const Audio2 = (()=>{
     if(musicTimer){ clearInterval(musicTimer); musicTimer=null; }
     if(on && ctx){ musicTimer = setInterval(musicStep, 900); }
   }
-  return { unlock, speak, shutUp, SFX, musicOn,
+  /* ---------- richer store audio (all synthesised, toggleable) ---------- */
+  let amb=null, ambGain=null, roll=null, rollGain=null, rollFilt=null, extra=true;
+  function noiseBuffer(sec){
+    const n=Math.floor(ctx.sampleRate*sec), b=ctx.createBuffer(1,n,ctx.sampleRate), d=b.getChannelData(0);
+    let last=0;
+    for(let i=0;i<n;i++){ const w=Math.random()*2-1; last=(last+0.02*w)/1.02; d[i]=last*3.5; }
+    return b;
+  }
+  function startAmbience(){
+    if(!ensure() || amb) return;
+    try{
+      amb=ctx.createBufferSource(); amb.buffer=noiseBuffer(3); amb.loop=true;
+      const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=520;
+      ambGain=ctx.createGain(); ambGain.gain.value=extra?0.05:0;
+      amb.connect(f); f.connect(ambGain); ambGain.connect(master); amb.start();
+      roll=ctx.createBufferSource(); roll.buffer=noiseBuffer(2); roll.loop=true;
+      rollFilt=ctx.createBiquadFilter(); rollFilt.type='bandpass';
+      rollFilt.frequency.value=260; rollFilt.Q.value=1.2;
+      rollGain=ctx.createGain(); rollGain.gain.value=0;
+      roll.connect(rollFilt); rollFilt.connect(rollGain); rollGain.connect(master); roll.start();
+    }catch(e){}
+  }
+  function wheels(speed01){
+    if(!rollGain || !extra){ if(rollGain) rollGain.gain.value=0; return; }
+    const s=Math.max(0,Math.min(1,speed01));
+    rollGain.gain.value = s*0.10;
+    if(rollFilt) rollFilt.frequency.value = 200 + s*420;
+  }
+  function chime(){
+    if(!extra) return;
+    tone(1568,0.16,'sine',0.13); tone(1047,0.2,'sine',0.12,0.14);
+  }
+  function sting(kind){
+    if(!extra) return;
+    const sets={ letters:[523,659,784], numbers:[587,740,880], quiz:[494,622,784],
+                 shop:[440,554,659] };
+    (sets[kind]||sets.shop).forEach((f,i)=>tone(f,0.24,'triangle',0.14,i*0.1));
+  }
+  function register(){
+    tone(1180,0.07,'square',0.16); tone(1570,0.07,'square',0.15,0.06);
+    tone(1980,0.2,'triangle',0.16,0.13);
+    if(extra){ noise(0.1,0.05,0.3,3000); noise(0.1,0.05,0.42,3000); }
+  }
+  return { unlock, speak, shutUp, SFX, musicOn, startAmbience, wheels, chime, sting, register,
+           setExtra(on){ extra=!!on; if(ambGain) ambGain.gain.value=on?0.05:0; if(!on) wheels(0); },
+           listVoices(){ return englishVoices().map(v=>({name:v.name, lang:v.lang})); },
+           currentVoice(){ return voice?voice.name:null; },
+           preferVoice(n){ wantName=n||null; pickVoice(); },
            setVoice(on){ enabled=on; if(!on) shutUp(); },
            setMusicVol(v){ if(musicGain) musicGain.gain.value=v; } };
 })();
@@ -742,6 +1008,21 @@ function tex(drawFn, size){
   const t = new THREE.CanvasTexture(c);
   t.anisotropy = 4;
   return t;
+}
+/* Text drawn on a 256px texture was running off the edge, which is why signs
+   read "HECKOU" and "EAK RO". This shrinks the font until the line actually fits. */
+function fitText(g, text, cx, cy, maxW, startPx, weight){
+  let px=startPx;
+  g.font=(weight||'bold')+' '+px+'px Arial Black, Impact, sans-serif';
+  let w=g.measureText(text).width;
+  let guard=0;
+  while(w>maxW && px>8 && guard++<60){
+    px=Math.max(8, Math.floor(px*Math.min(0.94, maxW/w)));
+    g.font=(weight||'bold')+' '+px+'px Arial Black, Impact, sans-serif';
+    w=g.measureText(text).width;
+  }
+  g.fillText(text, cx, cy);
+  return px;
 }
 function roundRect(g,x,y,w,h,r){
   g.beginPath();
@@ -920,23 +1201,45 @@ function flushBatches(){
 const PRODUCT_COLS=['#E8412F','#F5A623','#F7D14C','#5AC46A','#3FA9E0','#7B57D6','#F06CA0',
                     '#2FBFAE','#EF6C33','#C0D14A','#E4E1D6','#B0552F','#4C6FBF','#D94F86'];
 const OBSTACLES=[
-  {x1:-19.6,x2: 5.2,z1:-17.7,z2:-16.6},
+  {x1:-12.4,x2: 1.0,z1:-17.7,z2:-16.6},
   {x1:-25.5,x2:-24.0,z1: -6.0,z2:  2.0},
   {x1: 24.0,x2: 25.5,z1: -6.0,z2:  2.0},
-  {x1:-22.4,x2: -7.4,z1: 16.4,z2: 17.8},
-  {x1:  7.4,x2: 22.4,z1: 16.4,z2: 17.8},
+  {x1:-22.4,x2: -7.4,z1: 16.4,z2: 17.8},   // flower stand
+  {x1: 22.6,x2: 25.5,z1:  3.0,z2: 13.0},   // checkout desk on the right wall
+  {x1:-25.9,x2:-22.9,z1: 10.6,z2: 14.2},   // coffee kiosk
+  {x1: 18.3,x2: 20.9,z1: -2.7,z2:  0.7},   // toy display
+  {x1:  7.4,x2: 22.4,z1: 16.4,z2: 17.8},   // produce
   {x1: 21.6,x2: 24.4,z1:-15.2,z2: -13.2},  // (unused corner fixture)
-  /* the shop's back wall, with a wide doorway left open from x 7 to 21 */
-  {x1:-28.5,x2:  6.4,z1:-19.3,z2:-17.9},
-  {x1: 21.9,x2: 28.5,z1:-19.3,z2:-17.9},
-  /* dead space either side of the break room */
-  {x1:-28.5,x2:  5.9,z1:-28.5,z2:-19.0},
-  {x1: 22.1,x2: 28.5,z1:-28.5,z2:-19.0},
-  /* break-room furniture */
-  {x1:  9.0,x2: 13.2,z1:-23.8,z2:-21.6},
-  {x1: 16.4,x2: 20.6,z1:-23.8,z2:-21.6}
+  /* the shop's back wall, with three wide doorways cut into it */
+  {x1:-28.5,x2:-18.4,z1:-19.3,z2:-17.9},
+  {x1:-12.6,x2:  1.0,z1:-19.3,z2:-17.9},
+  {x1:  7.0,x2: 14.0,z1:-19.3,z2:-17.9},
+  {x1: 20.0,x2: 28.5,z1:-19.3,z2:-17.9},
+  /* dead space and partitions between the three rooms */
+  {x1:-28.5,x2:-21.9,z1:-28.5,z2:-19.0},
+  {x1: -9.1,x2: -2.9,z1:-28.5,z2:-19.0},
+  {x1:  9.6,x2: 10.4,z1:-28.5,z2:-19.0},
+  {x1: 22.9,x2: 28.5,z1:-28.5,z2:-19.0},
+  /* desks in each room */
+  {x1:-19.0,x2:-15.2,z1:-23.6,z2:-21.8},
+  {x1:-13.6,x2: -9.8,z1:-23.6,z2:-21.8},
+  {x1: -0.4,x2:  3.4,z1:-23.6,z2:-21.8},
+  {x1:  5.2,x2:  9.0,z1:-23.6,z2:-21.8},
+  {x1: 12.2,x2: 16.0,z1:-23.6,z2:-21.8},
+  {x1: 17.8,x2: 21.6,z1:-23.6,z2:-21.8}
 ];
-const BR={x1:6.4,x2:21.6,z1:-27.2,z2:-18.0,cx:14,cz:-23};
+const ROOMS=[
+  {id:'quiz', kind:'quiz', x1:-21.4, x2:-9.6, z1:-27.2, z2:-18.6, cx:-15.5, cz:-23,
+   col:0xFF8A3C, rug:0xFFD9BC, rug2:0xFFE8D6, ttl:'WORD ROOM', sub:'FIRST SOUNDS',
+   l1:'WHICH LETTER', l2:'BEGINS IT?', door:[-18.4,-12.6], frieze:['A','B','C','D','E','F']},
+  {id:'letters', kind:'trace', x1:-2.4, x2: 9.4, z1:-27.2, z2:-18.6, cx: 3.5, cz:-23,
+   col:0x8C5BE0, rug:0xF3B9C4, rug2:0xF7D2DA, ttl:'LETTER ROOM', sub:'TRACE A - Z',
+   l1:'A B C', l2:'a b c', door:[1.0,6.9], frieze:['A','B','C','D','E','F']},
+  {id:'numbers', kind:'trace', x1:10.6, x2:22.4, z1:-27.2, z2:-18.6, cx:16.5, cz:-23,
+   col:0x2FBFAE, rug:0xBFE6F7, rug2:0xD9EEF9, ttl:'NUMBER ROOM', sub:'TRACE 0 - 20',
+   l1:'1 2 3', l2:'4 5 6', door:[14.0,19.9], frieze:['1','2','3','4','5','6']}
+];
+const BR=ROOMS[0];
 /* walkable corridors, used for spoken + painted aisle numbers */
 const CORRIDORS=[{z:8,n:1},{z:2,n:2},{z:-4,n:3},{z:-10,n:4},{z:-16,n:5}];
 function corridorFor(z){
@@ -968,7 +1271,7 @@ function candidateSlots(){
     out.push({key:'prod'+i, x, y:1.42, z:16.6, ry:0, standX:x, standZ:15.2,
               where:'over by the fruit', short:'Produce'}); }
   /* cold cases along the back wall */
-  for(let x=-15.0;x<=1.0;x+=5.4){
+  for(let x=-11.0;x<=-2.0;x+=3.0){
     out.push({key:'fr'+x, x, y:1.75, z:-16.55, ry:0, standX:x, standZ:-15.2,
               where:'inside a cold case at the back', short:'Cold case'}); }
   /* bakery + deli counters */
@@ -1033,6 +1336,7 @@ function buildScene(){
   buildFrontOfStore();
   buildBreakRoom();
   buildCheckout();
+  buildNameBoard();
   LETTER_SLOTS.forEach(s=>{
     /* a small riser under each letter so it reads as stock sitting on the shelf */
     bBox(s.x, s.y-0.56, s.z, 1.10,0.16,0.52, 0xB0552F, s.ry||0);
@@ -1082,13 +1386,13 @@ function buildFloor(){
   const t = tex((g,s)=>{
     const n=2, k=s/n;
     for(let i=0;i<n;i++)for(let j=0;j<n;j++){
-      g.fillStyle=((i+j)%2)?'#F1EDE3':'#E7E1D4'; g.fillRect(i*k,j*k,k,k);
-      for(let p=0;p<160;p++){
-        g.fillStyle='rgba(120,110,95,'+(0.03+Math.random()*0.07)+')';
+      g.fillStyle=((i+j)%2)?'#93B7D2':'#88AEC9'; g.fillRect(i*k,j*k,k,k);
+      for(let p=0;p<170;p++){
+        g.fillStyle='rgba(255,255,255,'+(0.04+Math.random()*0.09)+')';
         g.fillRect(i*k+Math.random()*k, j*k+Math.random()*k, 2, 2);
       }
     }
-    g.strokeStyle='rgba(80,70,60,.14)'; g.lineWidth=3;
+    g.strokeStyle='rgba(40,70,100,.28)'; g.lineWidth=4;
     for(let i=0;i<=n;i++){ g.beginPath();g.moveTo(i*k,0);g.lineTo(i*k,s);g.stroke();
       g.beginPath();g.moveTo(0,i*k);g.lineTo(s,i*k);g.stroke(); }
   },256);
@@ -1097,11 +1401,15 @@ function buildFloor(){
   floorMesh.rotation.x=-Math.PI/2; floorMesh.receiveShadow=CFG.SHADOWS; floorMesh.name='floor';
   scene.add(floorMesh);
 
-  const runCols=[0xBFE6F7,0xFFE2A8,0xCDEFD2,0xE6D8F7,0xFFD5CE,0xD9EEF9];
+  const runCols=[0xEAF6FF,0xFFF0CE,0xF3E6FF,0xFFE4DC,0xE3F6FA,0xFFF6DC];
   W.aisles.forEach((z,i)=>bBox(0,0.012,z,46,0.02,2.4,runCols[i%runCols.length]));
-  bBox(0,0.014,0,4.6,0.02,34,0xF7E9C8);
-  bBox(-22.5,0.008,0,4.4,0.02,34,0xF7E9C8);
-  bBox( 22.5,0.008,0,4.4,0.02,34,0xF7E9C8);
+  bBox(0,0.014,0,4.6,0.02,34,0xFBF0D2);
+  bBox(-22.5,0.008,0,4.4,0.02,34,0xFBF0D2);
+  bBox( 22.5,0.008,0,4.4,0.02,34,0xFBF0D2);
+  /* car park outside the front doors, so the world stops looking like blank floor */
+  bBox(0,0.004,27.0, 74,0.02,16, 0x6F7885);
+  for(let x=-30;x<=30;x+=5) bBox(x,0.012,25.5, 0.24,0.02,9, 0xF2EEDF);
+  bBox(0,0.012,20.6, 74,0.3,0.5, 0xC8C2B4);
 
   /* aisle numbers painted flat on the floor: they guide without blocking the view */
   CORRIDORS.forEach(c=>{
@@ -1133,57 +1441,54 @@ function buildShell(){
   bBox( 17.5,H/2,W.maxZ+0.6, 19,H,0.6, WALL);
   bBox(0,H-1.05,W.maxZ+0.6, SX-0.24,1.6,0.72, BAND);
 
-  /* the wall between the shop floor and the break room, with a wide open doorway.
-     Kept as its own mesh so it can vanish while the player is in the back room -
-     otherwise a fixed overhead camera would just see the wall. */
+  /* The wall between the shop floor and the two back rooms. Two wide doorways,
+     no trim strip on top (that read as a stray blue carpet from above), and it is
+     its own mesh so it can vanish while the player is in a back room. */
   const BZ=W.storeBackZ-0.6, BH=5.0;
   wallBack=new THREE.Group();
   const wseg=(w,x)=>{
     const m=new THREE.Mesh(new THREE.BoxGeometry(w,BH,0.7), lam(0xFFF6E6));
     m.position.set(x,BH/2,BZ); wallBack.add(m);
-    const t=new THREE.Mesh(new THREE.BoxGeometry(w-0.2,0.6,0.8), lam(0x3B6FE0));
-    t.position.set(x,BH-0.3,BZ); wallBack.add(t);
   };
-  wseg(34.0,-10.6);
-  wseg( 9.2, 25.0);
-  /* doorway frame + header so the opening reads as a way through */
-  [6.6,21.4].forEach(x=>{
-    const j=new THREE.Mesh(new THREE.BoxGeometry(0.5,BH,0.9), lam(0x8C5BE0));
-    j.position.set(x,BH/2,BZ); wallBack.add(j);
+  wseg( 9.2,-23.0);
+  wseg(13.6, -5.8);
+  wseg( 7.0, 10.5);
+  wseg( 7.6, 23.8);
+  ROOMS.forEach(R=>{
+    const d=R.door;
+    [d[0],d[1]].forEach(x=>{
+      const j=new THREE.Mesh(new THREE.BoxGeometry(0.6,BH,0.9), lam(R.col));
+      j.position.set(x,BH/2,BZ); wallBack.add(j);
+    });
+    const hd=new THREE.Mesh(new THREE.BoxGeometry(d[1]-d[0]+0.6,1.0,0.9), lam(R.col));
+    hd.position.set((d[0]+d[1])/2,BH-0.5,BZ); wallBack.add(hd);
+    const t=tex((g,s)=>{
+      g.clearRect(0,0,s,s);
+      g.fillStyle='#'+R.col.toString(16).padStart(6,'0');
+      roundRect(g,8,8,s-16,s*0.56,30); g.fill();
+      g.strokeStyle='#2B2140'; g.lineWidth=16; g.stroke();
+      g.textAlign='center'; g.textBaseline='middle';
+      g.fillStyle='#fff';    fitText(g,R.ttl,s/2,s*0.20,s*0.84,140);
+      g.fillStyle='#FFD34E'; fitText(g,R.sub,s/2,s*0.44,s*0.84,96);
+    },512);
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(7.0,3.4), bas(0xffffff,{map:t,transparent:true}));
+    m.position.set((d[0]+d[1])/2,BH-0.6,BZ+0.5); wallBack.add(m);
   });
-  const hd=new THREE.Mesh(new THREE.BoxGeometry(15.4,0.9,0.9), lam(0x8C5BE0));
-  hd.position.set(14,BH-0.45,BZ); wallBack.add(hd);
   scene.add(wallBack);
-  const doorT=tex((g,s)=>{
-    g.clearRect(0,0,s,s);
-    g.fillStyle='#8C5BE0'; roundRect(g,4,4,s-8,s*0.62,26); g.fill();
-    g.strokeStyle='#2B2140'; g.lineWidth=10; g.stroke();
-    g.fillStyle='#fff'; g.font='bold 62px Arial Black, Impact, sans-serif';
-    g.textAlign='center'; g.textBaseline='middle';
-    g.fillText('BREAK ROOM',s/2,s*0.22);
-    g.fillStyle='#FFD34E'; g.font='bold 44px Arial Black, sans-serif';
-    g.fillText('WRITING PRACTICE',s/2,s*0.45);
-  },256);
-  wallBack.add((function(){
-    const m=new THREE.Mesh(new THREE.PlaneGeometry(11,4.4), bas(0xffffff,{map:doorT,transparent:true}));
-    m.position.set(14,BH-1.0,BZ+0.5); return m;
-  })());
 
   const signT = tex((g,s)=>{
     g.fillStyle='#3B6FE0'; g.fillRect(0,0,s,s);
-    g.fillStyle='#FFC93C'; g.font='bold 44px Arial Black, Impact, sans-serif';
-    g.textAlign='center'; g.textBaseline='middle'; g.fillText('ALPHA-MART',s/2,s*0.40);
-    g.fillStyle='#fff'; g.font='bold 23px Arial Black, Impact, sans-serif';
-    g.fillText('LETTERS  ★  NUMBERS',s/2,s*0.66);
-  },256);
+    g.textAlign='center'; g.textBaseline='middle';
+    g.fillStyle='#FFC93C'; fitText(g,'ALPHA-MART',s/2,s*0.40,s*0.88,104);
+    g.fillStyle='#fff';    fitText(g,'LETTERS ★ NUMBERS',s/2,s*0.68,s*0.86,52);
+  },512);
   signPlane(15,1.7,signT, 0,H-0.85,W.maxZ+0.28, Math.PI);
 
   const poster=(txt,col,x,z,ry)=>{
     const t=tex((g,s)=>{
       g.fillStyle=col; g.fillRect(0,0,s,s);
-      g.fillStyle='#fff'; g.font='bold 58px Arial Black, Impact, sans-serif';
-      g.textAlign='center'; g.textBaseline='middle';
-      txt.split('|').forEach((l,i,a)=>g.fillText(l, s/2, s*(0.5+(i-(a.length-1)/2)*0.26)));
+      g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+      txt.split('|').forEach((l,i,a)=>fitText(g,l,s/2,s*(0.5+(i-(a.length-1)/2)*0.28),s*0.86,64));
     },256);
     const p=new THREE.Mesh(new THREE.PlaneGeometry(3.6,3.6), bas(0xffffff,{map:t}));
     p.position.set(x,4.6,z); p.rotation.y=ry; detail(p); scene.add(p);
@@ -1192,6 +1497,31 @@ function buildShell(){
   poster('FRESH|1 2 3','#2FBFAE',25.6,-11,-Math.PI/2);
   poster('LOW|PRICES','#F5A623',-11,W.storeBackZ-0.95,0);
 
+  /* warm pools of light on the floor under each fixture, plus contact shadows
+     where the shelves meet it: cheap depth cues that stop the scene looking flat */
+  const poolT=tex((g,s)=>{
+    const gr=g.createRadialGradient(s/2,s/2,2,s/2,s/2,s/2);
+    gr.addColorStop(0,'rgba(255,246,214,.42)'); gr.addColorStop(0.55,'rgba(255,246,214,.16)');
+    gr.addColorStop(1,'rgba(255,246,214,0)');
+    g.fillStyle=gr; g.fillRect(0,0,s,s);
+  },128);
+  const contactT=tex((g,s)=>{
+    const gr=g.createLinearGradient(0,0,0,s);
+    gr.addColorStop(0,'rgba(20,25,45,.34)'); gr.addColorStop(1,'rgba(20,25,45,0)');
+    g.fillStyle=gr; g.fillRect(0,0,s,s);
+  },64);
+  W.aisles.forEach(z=>{
+    for(let x=-20;x<=20;x+=8.4)
+      bPlane('pool',9.0,9.0,poolT,{transparent:true,depthWrite:false}, x,0.05,z,-Math.PI/2,0);
+  });
+  W.shelfZ.forEach(sz=>{
+    W.segments.forEach(sg=>{
+      const len=sg[1]-sg[0], cx=(sg[0]+sg[1])/2;
+      [1,-1].forEach(dir=>
+        bPlane('contact',len,1.5,contactT,{transparent:true,depthWrite:false},
+               cx, 0.045, sz+dir*(W.shelfDepth+0.72), -Math.PI/2, dir<0?Math.PI:0));
+    });
+  });
   W.shelfZ.forEach(z=>{
     bBox(0,6.3,z, 42,0.16,0.16, 0x8E93A6);
     for(let x=-18;x<=18;x+=8.4) bBox(x,6.05,z, 4.4,0.14,0.9, 0xFFFDF0);
@@ -1255,7 +1585,7 @@ function tierProducts(xFrom, xTo, y, z, skipX){
 }
 
 function buildBackFridges(){
-  for(let x=-18.4;x<=4.2;x+=3.4){
+  for(let x=-11.4;x<=0.2;x+=3.4){
     bBox(x,1.8,-17.2, 3.3,3.6,1.0, 0xD9DEE8);
     bBox(x,1.85,-16.76, 3.0,3.1,0.06, 0xE8F6FB);
     for(let ty=0;ty<3;ty++) for(let i=0;i<5;i++)
@@ -1271,21 +1601,31 @@ function buildCounters(){
     for(let i=0;i<12;i++) BATCH.prod.push({t:'jar', x, y:1.45, z:-5.2+i*0.6, c:pick(foods), ry:0});
     for(let i=0;i<13;i++) bBox(x-face*0.3,3.4,-5.4+i*0.62, 1.9,0.09,0.6, i%2?0xE8412F:0xFFF6E6);
     const t=tex((g,s)=>{ g.fillStyle='#4A3A2A'; g.fillRect(0,0,s,s);
-      g.fillStyle='#FFF0C8'; g.font='bold 50px Arial Black, Impact, sans-serif';
-      g.textAlign='center'; g.textBaseline='middle'; g.fillText(label,s/2,s/2); },256);
+      g.fillStyle='#FFF0C8'; g.textAlign='center'; g.textBaseline='middle';
+      fitText(g,label,s/2,s/2,s*0.86,128); },512);
     signPlane(5.4,1.6,t, x-face*0.65,4.6,-2, face*Math.PI/2);
   };
   mk(-24.7, 1, 'BAKERY', 0xB0552F, ['#E9B24C','#C98A3E','#F2D9A0','#B4652C']);
   mk( 24.7,-1, 'DELI',   0xC0544F, ['#E8846F','#F4C9A0','#D46A5A','#F2E2C0']);
 }
 function buildFrontOfStore(){
-  for(let i=0;i<4;i++){
-    const x=-21.0+i*4.2;
-    bBox(x,0.58,17.1, 2.8,1.15,1.1, 0xFF8FB1);
-    bBox(x,1.18,17.1, 2.5,0.06,0.8, 0x3A3550);
-    bBox(x+0.95,1.5,17.1, 0.8,0.7,0.6, 0x2B2140);
-    bCyl(x,2.25,17.1, 0.05,1.7, 0x8E93A6);
+  /* flower stand where the old checkout lanes used to be */
+  const flower=['#E8412F','#F5A623','#F06CA0','#7B57D6','#FFD34E','#FF8FB1'];
+  for(let i=0;i<5;i++){
+    const x=-20.6+i*2.6;
+    bBox(x,0.45,17.1, 2.3,0.9,1.1, 0x8C5BE0);
+    bBox(x,1.02,17.05, 2.4,0.14,1.2, 0xB48CE8);
+    for(let r=0;r<3;r++) for(let k=0;k<4;k++){
+      bCyl(x-0.8+k*0.5,1.32,16.8+r*0.24, 0.05,0.5, 0x3E9A47);
+      BATCH.prod.push({t:'jar', x:x-0.8+k*0.5, y:1.66, z:16.8+r*0.24,
+                       c:flower[(i+r+k)%flower.length], ry:0});
+    }
   }
+  const ft=tex((g,s)=>{ g.fillStyle='#8C5BE0'; g.fillRect(0,0,s,s);
+    g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+    fitText(g,'FLOWERS',s/2,s/2,s*0.86,124); },512);
+  signPlane(5.4,1.6,ft, -15.0,3.4,17.1, 0);
+
   const fruit=['#E8412F','#F5A623','#5AC46A','#C0D14A','#7B57D6','#F06CA0'];
   for(let i=0;i<6;i++){
     const x=8.8+i*2.2;
@@ -1296,9 +1636,40 @@ function buildFrontOfStore(){
       BATCH.prod.push({t:'jar', x:x-0.5+k*0.5, y:1.12+r*0.2, z:16.75+r*0.22, c, ry:0});
   }
   const pt=tex((g,s)=>{ g.fillStyle='#2FBFAE'; g.fillRect(0,0,s,s);
-    g.fillStyle='#fff'; g.font='bold 50px Arial Black, Impact, sans-serif';
-    g.textAlign='center'; g.textBaseline='middle'; g.fillText('PRODUCE',s/2,s/2); },256);
+    g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+    fitText(g,'PRODUCE',s/2,s/2,s*0.86,124); },512);
   signPlane(5.6,1.6,pt, 14.5,3.4,17.1, 0);
+
+  /* coffee kiosk just inside the doors */
+  bBox(-24.4,1.0,12.4, 2.6,2.0,3.4, 0xB0552F);
+  bBox(-24.4,2.12,12.4, 2.9,0.24,3.7, 0x6B4A2A);
+  bBox(-22.9,1.25,12.4, 0.3,0.7,2.4, 0xE9D3AE);
+  bCyl(-23.1,1.75,11.6, 0.16,0.26, 0xFFFFFF);
+  bCyl(-23.1,1.75,13.2, 0.16,0.26, 0xFFFFFF);
+  const kt=tex((g,s)=>{ g.fillStyle='#6B4A2A'; g.fillRect(0,0,s,s);
+    g.fillStyle='#FFF0C8'; g.textAlign='center'; g.textBaseline='middle';
+    fitText(g,'COFFEE',s/2,s/2,s*0.86,124); },512);
+  signPlane(3.4,1.3,kt, -23.0,3.1,12.4, Math.PI/2);
+
+  /* helium balloon stand */
+  bCyl(19.4,0.5,11.0, 0.5,1.0, 0x8E93A6);
+  [[0xFF5A3C,-0.5,0],[0x3B6FE0,0.3,0.4],[0xFFC93C,0.6,-0.4],[0x3FD09B,-0.2,0.6],[0xFF8FB1,0.1,-0.6]]
+    .forEach((b,i)=>{
+      bSph(19.4+b[1],2.5+i*0.22,11.0+b[2], 0.36, b[0]);
+      bCyl(19.4+b[1]*0.6,1.7+i*0.11,11.0+b[2]*0.6, 0.018,1.5, 0xFFFFFF);
+    });
+
+  /* toy display with a big teddy on top */
+  bBox(19.6,0.7,-1.0, 2.4,1.4,3.2, 0xF06CA0);
+  bBox(19.6,1.46,-1.0, 2.7,0.16,3.5, 0xFFD34E);
+  bSph(19.6,2.05,-1.0, 0.52, 0xB0552F);
+  bSph(19.6,2.75,-1.0, 0.38, 0xB0552F);
+  bSph(19.3,3.02,-1.0, 0.14, 0xB0552F);
+  bSph(19.9,3.02,-1.0, 0.14, 0xB0552F);
+  const tt=tex((g,s)=>{ g.fillStyle='#F06CA0'; g.fillRect(0,0,s,s);
+    g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle';
+    fitText(g,'TOYS',s/2,s/2,s*0.86,140); },512);
+  signPlane(3.0,1.3,tt, 18.2,2.6,-1.0, -Math.PI/2);
 
   bBox(0,0.02,17.4, 7.0,0.02,2.4, 0x3A3550);
   [-3.6,3.6].forEach(px=>{
@@ -1313,115 +1684,223 @@ function buildFrontOfStore(){
 }
 
 
-/* ------------------------------ break room: a real room behind the shop ------------------------------ */
-let breakRoom=null;
+/* ------------------------------ two writing rooms behind the shop ------------------------------ */
+let breakRoom=null, roomList=[];
 function buildBreakRoom(){
-  const cx=BR.cx, cz=BR.cz;
-  /* room walls, deliberately low so the overhead camera can see inside */
-  const RH=3.4;
-  bBox(BR.x1-0.9,RH/2,cz-0.4, 0.7,RH,(BR.z2-BR.z1)+0.6, 0xFFF1DC);
-  bBox(BR.x2+0.9,RH/2,cz-0.4, 0.7,RH,(BR.z2-BR.z1)+0.6, 0xFFF1DC);
-  bBox(cx,RH/2,BR.z1-0.5, (BR.x2-BR.x1)+2.4,RH,0.7, 0xFFF1DC);
-  bBox(BR.x1-0.9,RH-0.25,cz-0.4, 0.74,0.5,(BR.z2-BR.z1)+0.55, 0x8C5BE0);
-  bBox(BR.x2+0.9,RH-0.25,cz-0.4, 0.74,0.5,(BR.z2-BR.z1)+0.55, 0x8C5BE0);
-  bBox(cx,RH-0.25,BR.z1-0.5, (BR.x2-BR.x1)+2.3,0.5,0.74, 0x8C5BE0);
-  /* wood floor + rug */
-  bBox(cx,0.010,cz-0.3, (BR.x2-BR.x1)-0.4,0.02,(BR.z2-BR.z1)-1.2, 0xE9D3AE);
-  bBox(cx,0.016,cz-0.6, 9.6,0.02,5.2, 0xF3B9C4);
-  bBox(cx,0.022,cz-0.6, 8.2,0.02,4.0, 0xF7D2DA);
+  roomList=[];
+  ROOMS.forEach(R=>{
+    const cx=R.cx, cz=R.cz, RH=3.4, wDepth=(R.z2-R.z1)+0.6, wWidth=(R.x2-R.x1)+2.0;
+    /* low walls so the overhead camera can see inside */
+    bBox(R.x1-0.7,RH/2,cz-0.4, 0.6,RH,wDepth, 0xFFF1DC);
+    bBox(R.x2+0.7,RH/2,cz-0.4, 0.6,RH,wDepth, 0xFFF1DC);
+    bBox(cx,RH/2,R.z1-0.5, wWidth,RH,0.7, 0xFFF1DC);
+    bBox(cx,RH-0.22,R.z1-0.5, wWidth-0.1,0.44,0.74, R.col);
+    /* floor + rug */
+    bBox(cx,0.010,cz-0.3, (R.x2-R.x1)-0.3,0.02,(R.z2-R.z1)-1.0, 0xE9D3AE);
+    bBox(cx,0.016,cz-0.7, 8.4,0.02,5.0, R.rug);
+    bBox(cx,0.022,cz-0.7, 7.0,0.02,3.8, R.rug2);
 
-  /* two big chalkboards on the back wall */
-  const boardT=tex((g,s)=>{
-    g.fillStyle='#2F4A3C'; g.fillRect(0,0,s,s);
-    g.strokeStyle='rgba(255,255,255,.12)'; g.lineWidth=3;
-    for(let i=1;i<4;i++){ g.beginPath(); g.moveTo(0,i*s/4); g.lineTo(s,i*s/4); g.stroke(); }
-    g.fillStyle='#FFF6E4'; g.font='bold 74px Arial Black, Impact, sans-serif';
-    g.textAlign='center'; g.textBaseline='middle';
-    g.fillText('A B C', s/2, s*0.26);
-    g.fillText('1 2 3', s/2, s*0.52);
-    g.fillStyle='#FFD34E'; g.font='bold 40px Arial Black, sans-serif';
-    g.fillText('COME AND WRITE!', s/2, s*0.80);
-  },256);
-  bBox(cx,2.35,BR.z1+0.16, 12.4,3.9,0.3, 0x6B4A2A);
-  const bd=new THREE.Mesh(new THREE.PlaneGeometry(11.6,3.3), bas(0xffffff,{map:boardT}));
-  bd.position.set(cx,2.4,BR.z1+0.33); scene.add(bd);
-  bBox(cx,0.62,BR.z1+0.34, 12.0,0.18,0.4, 0xC9A46A);
-  [-3.2,-1.0,1.4,3.6].forEach((dx,i)=>bBox(cx+dx,0.78,BR.z1+0.40, 0.5,0.16,0.16, i===1?0xFFD34E:0xFFFFFF));
+    /* the big chalkboard */
+    const line1=R.l1, line2=R.l2;
+    const boardT=tex((g,s)=>{
+      g.fillStyle='#2F4A3C'; g.fillRect(0,0,s,s);
+      g.strokeStyle='rgba(255,255,255,.12)'; g.lineWidth=3;
+      for(let i=1;i<4;i++){ g.beginPath(); g.moveTo(0,i*s/4); g.lineTo(s,i*s/4); g.stroke(); }
+      g.textAlign='center'; g.textBaseline='middle';
+      g.fillStyle='#FFF6E4'; fitText(g,line1, s/2, s*0.26, s*0.84, 172);
+                             fitText(g,line2, s/2, s*0.52, s*0.84, 172);
+      g.fillStyle='#FFD34E'; fitText(g,'COME AND WRITE!', s/2, s*0.80, s*0.84, 88);
+    },512);
+    const bw=Math.min(10.0,(R.x2-R.x1)-1.4);
+    bBox(cx,2.35,R.z1+0.16, bw+0.8,3.9,0.3, 0x6B4A2A);
+    const bd=new THREE.Mesh(new THREE.PlaneGeometry(bw,3.2), bas(0xffffff,{map:boardT}));
+    bd.position.set(cx,2.4,R.z1+0.33); scene.add(bd);
+    bBox(cx,0.62,R.z1+0.34, bw+0.4,0.18,0.4, 0xC9A46A);
+    [-2.4,-0.8,0.9,2.5].forEach((dx,i)=>bBox(cx+dx,0.78,R.z1+0.40, 0.5,0.16,0.16, i===1?0xFFD34E:0xFFFFFF));
 
-  /* two writing desks with stools */
-  [[-3.1,0],[4.4,0]].forEach(o=>{
-    const tx=cx+o[0], tz=cz-1.7;
-    bBox(tx,0.80,tz, 4.0,0.18,2.0, 0xD8A96A);
-    [[-1.6,-0.8],[1.6,-0.8],[-1.6,0.8],[1.6,0.8]].forEach(q=>bCyl(tx+q[0],0.40,tz+q[1], 0.09,0.8, 0xB0855A));
-    [-1.1,1.1].forEach(sx=>{
-      bCyl(tx+sx,0.26,tz+1.9, 0.38,0.52, 0x8C5BE0);
-      bCyl(tx+sx,0.13,tz+1.9, 0.09,0.26, 0x8E93A6);
+    /* two desks with stools */
+    [[-2.0,0],[3.3,0]].forEach(o=>{
+      const tx=cx+o[0], tz=cz-1.7;
+      bBox(tx,0.80,tz, 3.4,0.18,1.6, 0xD8A96A);
+      [[-1.3,-0.6],[1.3,-0.6],[-1.3,0.6],[1.3,0.6]].forEach(q=>bCyl(tx+q[0],0.40,tz+q[1], 0.09,0.8, 0xB0855A));
+      [-0.9,0.9].forEach(sx=>{
+        bCyl(tx+sx,0.26,tz+1.7, 0.36,0.52, R.col);
+        bCyl(tx+sx,0.13,tz+1.7, 0.09,0.26, 0x8E93A6);
+      });
+      bBox(tx-0.6,0.90,tz, 1.2,0.04,0.9, 0xFFFDF5);
+      bCyl(tx+0.9,0.92,tz-0.25, 0.05,0.9, 0xF5A623, 'x');
+      bCyl(tx+0.9,0.92,tz+0.25, 0.05,0.9, 0xE8412F, 'x');
     });
-    bBox(tx-0.7,0.90,tz, 1.4,0.04,1.0, 0xFFFDF5);
-    bCyl(tx+1.0,0.92,tz-0.3, 0.05,1.0, 0xF5A623, 'x');
-    bCyl(tx+1.0,0.92,tz+0.3, 0.05,1.0, 0xE8412F, 'x');
+
+    /* frieze of the room's own symbols along the top of the back wall */
+    const items = R.frieze || 'ABCDEF'.split('');
+    const frT=tex((g,s)=>{
+      g.clearRect(0,0,s,s);
+      const cols=['#FF5A3C','#FFC93C','#3FD09B','#3B6FE0','#8C5BE0','#FF8FB1'];
+      items.forEach((c,i)=>{
+        g.fillStyle=cols[i]; roundRect(g,i*42+4,s*0.28,36,s*0.44,10); g.fill();
+        g.fillStyle='#2B2140'; g.textAlign='center'; g.textBaseline='middle';
+        fitText(g,c,i*42+22,s*0.5,32,34);
+      });
+    },256);
+    frT.wrapS=THREE.RepeatWrapping; frT.repeat.set(4,1);
+    const fr=new THREE.Mesh(new THREE.PlaneGeometry((R.x2-R.x1)-0.6,0.9),
+      bas(0xffffff,{map:frT,transparent:true}));
+    fr.position.set(cx,3.05,R.z1+0.36); scene.add(fr);
+
+    /* cubbies + plant */
+    bBox(R.x1-0.2,1.0,cz+1.6, 0.42,2.0,2.6, 0xC98A3E);
+    for(let i=0;i<3;i++) bBox(R.x1-0.2,0.5+i*0.66,cz+1.6, 0.48,0.08,2.5, 0xE9D3AE);
+    bCyl(R.x2-0.7,0.35,R.z1+1.2, 0.42,0.7, 0xB0552F);
+    for(let i=0;i<4;i++) bSph(R.x2-0.7+rnd(-0.3,0.3),1.0+i*0.24,R.z1+1.2+rnd(-0.25,0.25), 0.42, 0x3E9A47);
+
+    /* floor arrow on the shop side pointing into this doorway */
+    const doorX = (R.door[0]+R.door[1])/2;
+    const at=tex((g,s)=>{
+      g.clearRect(0,0,s,s);
+      g.fillStyle = 'rgba('+((R.col>>16)&255)+','+((R.col>>8)&255)+','+(R.col&255)+',.45)';
+      g.beginPath(); g.moveTo(s*0.5,s*0.9); g.lineTo(s*0.86,s*0.45);
+      g.lineTo(s*0.66,s*0.45); g.lineTo(s*0.66,s*0.1); g.lineTo(s*0.34,s*0.1);
+      g.lineTo(s*0.34,s*0.45); g.lineTo(s*0.14,s*0.45); g.closePath(); g.fill();
+    },128);
+    bPlane('arrow_'+R.id,4.4,4.4,at,{transparent:true,depthWrite:false}, doorX,0.035,-15.6,-Math.PI/2,0);
+
+    const hit=new THREE.Mesh(new THREE.BoxGeometry(bw+1.0,4.4,2.6), new THREE.MeshBasicMaterial({visible:false}));
+    hit.position.set(cx,2.2,R.z1+1.2); hit.userData.board=R.id; scene.add(hit);
+    const rec={id:R.id, kind:R.kind, board:hit, stand:{x:cx, z:R.z1+2.6}, cx:cx, cz:cz,
+               x1:R.x1, x2:R.x2, z1:R.z1, z2:R.z2, mode:R.id, ttl:R.ttl};
+    roomList.push(rec);
+    if(R.kind==='trace' && !breakRoom) breakRoom=rec;
   });
-
-  /* alphabet frieze around the top of the room */
-  const frT=tex((g,s)=>{
-    g.clearRect(0,0,s,s);
-    const cols=['#FF5A3C','#FFC93C','#3FD09B','#3B6FE0','#8C5BE0','#FF8FB1'];
-    'ABCDEF'.split('').forEach((c,i)=>{
-      g.fillStyle=cols[i]; roundRect(g,i*42+4,s*0.28,36,s*0.44,10); g.fill();
-      g.fillStyle='#2B2140'; g.font='bold 34px Arial Black, sans-serif';
-      g.textAlign='center'; g.textBaseline='middle'; g.fillText(c,i*42+22,s*0.5);
-    });
-  },256);
-  frT.wrapS=THREE.RepeatWrapping; frT.repeat.set(5,1);
-  const fr=new THREE.Mesh(new THREE.PlaneGeometry((BR.x2-BR.x1)+1.6,0.9),
-    bas(0xffffff,{map:frT,transparent:true}));
-  fr.position.set(cx,2.95,BR.z1+0.36); scene.add(fr);
-
-  /* cubbies, plant, rug-side bookshelf */
-  bBox(BR.x1-0.35,1.0,cz+1.4, 0.5,2.0,3.0, 0xC98A3E);
-  for(let i=0;i<3;i++) bBox(BR.x1-0.35,0.5+i*0.66,cz+1.4, 0.56,0.08,2.9, 0xE9D3AE);
-  bCyl(BR.x2-0.6,0.35,BR.z1+1.3, 0.42,0.7, 0xB0552F);
-  for(let i=0;i<4;i++) bSph(BR.x2-0.6+rnd(-0.3,0.3),1.0+i*0.24,BR.z1+1.3+rnd(-0.25,0.25), 0.42, 0x3E9A47);
-
-  /* painted arrow on the shop floor pointing into the doorway */
-  const at=tex((g,s)=>{
-    g.clearRect(0,0,s,s);
-    g.fillStyle='rgba(140,91,224,.45)';
-    g.beginPath(); g.moveTo(s*0.5,s*0.9); g.lineTo(s*0.86,s*0.45);
-    g.lineTo(s*0.66,s*0.45); g.lineTo(s*0.66,s*0.1); g.lineTo(s*0.34,s*0.1);
-    g.lineTo(s*0.34,s*0.45); g.lineTo(s*0.14,s*0.45); g.closePath(); g.fill();
-  },128);
-  bPlane('brArrow',4.6,4.6,at,{transparent:true,depthWrite:false}, 14,0.035,-15.4,-Math.PI/2,0);
-
-  const hit=new THREE.Mesh(new THREE.BoxGeometry(12.6,4.4,2.6), new THREE.MeshBasicMaterial({visible:false}));
-  hit.position.set(cx,2.2,BR.z1+1.2); hit.userData.board=1; scene.add(hit);
-  breakRoom={board:hit, stand:{x:cx, z:BR.z1+2.6}, cx:cx, cz:cz};
 }
 
-/* ------------------------------ checkout: where letters get handed in ------------------------------ */
-let checkout=null;
+/* ------------------------------ checkout: a service desk on the side wall ------------------------------ */
+let checkout=null, wallTiles={}, letterTexCache={};
+function letterTex(ch,col){
+  return letterTexCache[ch] || (letterTexCache[ch]=letterTexture(ch,col));
+}
 function buildCheckout(){
-  const t=tex((g,s)=>{
-    g.fillStyle='#FF5A3C'; roundRect(g,6,6,s-12,s-12,30); g.fill();
-    g.strokeStyle='#2B2140'; g.lineWidth=12; g.stroke();
-    g.fillStyle='#fff'; g.font='bold 56px Arial Black, Impact, sans-serif';
+  const WX=25.0, CZ=8.0;          // against the right wall, clear of the entrance
+  /* counter, conveyor, register, card reader */
+  bBox(WX-0.6,0.62,CZ, 1.7,1.24,9.0, 0xFF8FB1);
+  bBox(WX-0.6,1.28,CZ, 1.5,0.10,8.4, 0x3A3550);
+  bBox(WX-0.6,1.46,CZ-3.4, 0.9,0.36,0.9, 0x2B2140);
+  bBox(WX-1.1,1.34,CZ-2.5, 0.5,0.10,0.6, 0x6FE3B0);
+  bBox(WX-0.6,1.40,CZ+3.6, 0.7,0.26,1.4, 0xE6ECF5);
+  /* bag stand and a stack of baskets */
+  bCyl(WX-1.4,0.9,CZ+4.4, 0.1,1.8, 0x8E93A6);
+  for(let i=0;i<3;i++) bBox(WX-1.5,0.28+i*0.34,CZ-4.6, 1.0,0.3,1.3, 0xD8DEE8);
+
+  /* THE ALPHABET WALL: 26 empty slots that physically fill in as letters arrive */
+  const boardT=tex((g,s)=>{
+    g.fillStyle='#3B6FE0'; g.fillRect(0,0,s,s);
+    g.fillStyle='rgba(255,255,255,.10)';
+    for(let r=0;r<3;r++) for(let c=0;c<9;c++){
+      const w=s/10, h=s/4.6;
+      roundRect(g, s*0.045+c*w, s*0.20+r*h*1.02, w*0.86, h*0.82, 10); g.fill();
+    }
+    g.fillStyle='#FFD34E'; g.textAlign='center'; g.textBaseline='middle';
+    fitText(g,'OUR ALPHABET WALL', s/2, s*0.10, s*0.9, 60);
+  },512);
+  const board=new THREE.Mesh(new THREE.PlaneGeometry(11.0,5.4), bas(0xffffff,{map:boardT}));
+  board.position.set(26.22,3.5,CZ); board.rotation.y=-Math.PI/2; scene.add(board);
+  bBox(26.5,3.5,CZ, 0.4,5.9,11.4, 0x2B2140);
+
+  const tileGeo=new THREE.PlaneGeometry(0.86,0.86);
+  wallTiles={};
+  LETTERS.forEach((L,i)=>{
+    const col=i%9, row=Math.floor(i/9);
+    const z=CZ - 4.35 + col*1.09;
+    const y=4.62 - row*1.24;
+    const m=new THREE.Mesh(tileGeo, bas(0xffffff,{map:letterTex(L.ch,L.color)}));
+    m.position.set(26.16,y,z); m.rotation.y=-Math.PI/2;
+    m.visible=false; scene.add(m);
+    wallTiles[L.ch]=m;
+  });
+
+  /* wall-mounted sign, sized to the wall rather than floating in front of the camera */
+  const st=tex((g,s)=>{
+    g.fillStyle='#FF5A3C'; roundRect(g,8,8,s-16,s-16,40); g.fill();
+    g.strokeStyle='#2B2140'; g.lineWidth=16; g.stroke();
     g.textAlign='center'; g.textBaseline='middle';
-    g.fillText('CHECKOUT',s/2,s*0.36);
-    g.fillStyle='#FFD34E'; g.font='bold 36px Arial Black, sans-serif';
-    g.fillText('BRING YOUR',s/2,s*0.62); g.fillText('LETTERS HERE',s/2,s*0.82);
-  },256);
-  signPlane(6.4,6.4,t, -15,4.9,16.2, 0);
+    g.fillStyle='#fff';    fitText(g,'CHECKOUT',s/2,s*0.40,s*0.82,150);
+    g.fillStyle='#FFD34E'; fitText(g,'BRING LETTERS HERE',s/2,s*0.70,s*0.82,70);
+  },512);
+  const sg=new THREE.Mesh(new THREE.PlaneGeometry(6.6,3.0), bas(0xffffff,{map:st,transparent:true}));
+  sg.position.set(26.18,6.4,CZ); sg.rotation.y=-Math.PI/2; scene.add(sg);
+  bCyl(26.3,6.4,CZ-3.4, 0.05,0.9, 0x8E93A6, 'z');
+
+  /* painted arrow on the floor leading in */
   const at=tex((g,s)=>{
     g.clearRect(0,0,s,s);
-    g.fillStyle='rgba(255,90,60,.42)';
-    g.beginPath(); g.moveTo(s*0.5,s*0.12); g.lineTo(s*0.86,s*0.55);
-    g.lineTo(s*0.66,s*0.55); g.lineTo(s*0.66,s*0.9); g.lineTo(s*0.34,s*0.9);
-    g.lineTo(s*0.34,s*0.55); g.lineTo(s*0.14,s*0.55); g.closePath(); g.fill();
+    g.fillStyle='rgba(255,90,60,.45)';
+    g.beginPath(); g.moveTo(s*0.9,s*0.5); g.lineTo(s*0.45,s*0.18);
+    g.lineTo(s*0.45,s*0.36); g.lineTo(s*0.1,s*0.36); g.lineTo(s*0.1,s*0.64);
+    g.lineTo(s*0.45,s*0.64); g.lineTo(s*0.45,s*0.82); g.closePath(); g.fill();
   },128);
-  bPlane('coArrow',4.4,4.4,at,{transparent:true,depthWrite:false}, -15,0.035,14.0,-Math.PI/2,0);
-  const hit=new THREE.Mesh(new THREE.BoxGeometry(15.0,4.2,3.2), new THREE.MeshBasicMaterial({visible:false}));
-  hit.position.set(-15,2.1,16.6); hit.userData.checkout=1; scene.add(hit);
-  checkout={mesh:hit, stand:{x:-15, z:15.2}};
+  bPlane('coArrow',4.6,4.6,at,{transparent:true,depthWrite:false}, 20.6,0.035,CZ,-Math.PI/2,0);
+
+  const hit=new THREE.Mesh(new THREE.BoxGeometry(3.4,4.6,10.5), new THREE.MeshBasicMaterial({visible:false}));
+  hit.position.set(WX-1.2,2.2,CZ); hit.userData.checkout=1; scene.add(hit);
+  checkout={mesh:hit, stand:{x:22.4, z:CZ}, z:CZ};
+}
+let tilePops=[];
+let nameBoard=null, nameCanvas=null, nameCtx=null;
+function buildNameBoard(){
+  nameCanvas=document.createElement('canvas'); nameCanvas.width=512; nameCanvas.height=256;
+  nameCtx=nameCanvas.getContext('2d');
+  const t=new THREE.CanvasTexture(nameCanvas);
+  nameBoard=signPlane(9.0,4.5,t, -11.0,3.6,18.0, Math.PI);
+  nameBoard.visible=false;
+  nameBoard.userData.tex=t;
+  paintNameBoard();
+}
+function paintNameBoard(){
+  if(!nameCtx || !S) return;
+  if(!S.name){ if(nameBoard) nameBoard.visible=false; return; }
+  if(nameBoard) nameBoard.visible=true;
+  const g=nameCtx, W2=512, H2=256;
+  g.clearRect(0,0,W2,H2);
+  g.fillStyle='#FFF6E4'; roundRect(g,6,6,W2-12,H2-12,26); g.fill();
+  g.strokeStyle='#2B2140'; g.lineWidth=14; g.stroke();
+  g.fillStyle='#3B6FE0'; g.textAlign='center'; g.textBaseline='middle';
+  fitText(g, S.name.toUpperCase()+"'S LETTERS", W2/2, 52, W2*0.86, 54);
+  const letters=S.name.toUpperCase().split('').filter(c=>LMAP[c]);
+  const n=Math.max(letters.length,1);
+  const box=Math.min(74, (W2-60)/n - 8), y=150;
+  const startX=W2/2 - (n*(box+8)-8)/2;
+  letters.forEach((ch,i)=>{
+    const x=startX + i*(box+8);
+    const got=S.owned.indexOf(ch)>=0;
+    g.fillStyle = got ? LMAP[ch].color : 'rgba(43,33,64,.08)';
+    roundRect(g,x,y-box/2,box,box,14); g.fill();
+    g.strokeStyle='#2B2140'; g.lineWidth=8; g.stroke();
+    g.fillStyle = got ? '#2B2140' : 'rgba(43,33,64,.22)';
+    fitText(g, ch, x+box/2, y+2, box*0.8, Math.round(box*0.72));
+  });
+  if(nameBoard && nameBoard.userData.tex) nameBoard.userData.tex.needsUpdate=true;
+}
+function paintCheckoutWall(pop){
+
+  if(!wallTiles || !S) return;
+  LETTERS.forEach(L=>{
+    const m=wallTiles[L.ch];
+    if(!m) return;
+    const on=S.owned.indexOf(L.ch)>=0;
+    if(on && !m.visible && pop){ tilePops.push({m:m,t:0}); }
+    m.visible=on;
+    if(!on) m.scale.setScalar(1);
+  });
+}
+function updateTilePops(dt){
+  if(!tilePops.length) return;
+  tilePops=tilePops.filter(p=>{
+    p.t+=dt;
+    const k=Math.min(1,p.t/0.55);
+    p.m.scale.setScalar(0.2+1.15*k - 0.35*Math.sin(k*Math.PI));
+    if(k>=1){ p.m.scale.setScalar(1); return false; }
+    return true;
+  });
 }
 
 let tapMark=null;
@@ -1442,30 +1921,53 @@ function buildCart(){
     for(let i=1;i<7;i++){ g.beginPath(); g.moveTo(i*s/7,0); g.lineTo(i*s/7,s); g.stroke(); }
     for(let i=1;i<4;i++){ g.beginPath(); g.moveTo(0,i*s/4); g.lineTo(s,i*s/4); g.stroke(); }
   },128);
-  const basket = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.95,1.9), lam(0xffffff,{map:basketTex}));
+  /* dedicated materials so recolouring the cart cannot tint the whole shop */
+  const mBasket=new THREE.MeshLambertMaterial({color:0xffffff, map:basketTex});
+  const mFrame =new THREE.MeshLambertMaterial({color:0xFF5A3C});
+  const mWheel =new THREE.MeshLambertMaterial({color:0x2B2140});
+  cartBits.mats={basket:mBasket, frame:mFrame, wheel:mWheel};
+  const basket = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.95,1.9), mBasket);
   basket.position.y=0.95; cartGroup.add(basket);
-  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.18,2.0), lam(0xFF5A3C));
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.18,2.0), mFrame);
   frame.position.y=1.45; cartGroup.add(frame);
-  const handle = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.16,0.16), lam(0xFF5A3C));
+  const handle = new THREE.Mesh(new THREE.BoxGeometry(1.5,0.16,0.16), mFrame);
   handle.position.set(0,1.7,1.0); cartGroup.add(handle);
-  const wheelGeo=new THREE.CylinderGeometry(0.28,0.28,0.18,10), wheelMat=lam(0x2B2140);
+  const wheelGeo=new THREE.CylinderGeometry(0.28,0.28,0.18,10), wheelMat=mWheel;
   cartBits.wheels=[];
   [[-0.65,0.9],[0.65,0.9],[-0.65,-0.9],[0.65,-0.9]].forEach(p=>{
     const w=new THREE.Mesh(wheelGeo,wheelMat); w.rotation.z=Math.PI/2;
     w.position.set(p[0],0.28,p[1]); cartGroup.add(w); cartBits.wheels.push(w);
   });
+  /* only the mouth lives in the texture now; the eyes are real geometry */
   const faceTex = tex((g,s)=>{
     g.clearRect(0,0,s,s);
-    [[s*0.33,s*0.42],[s*0.67,s*0.42]].forEach(p=>{
-      g.beginPath();g.arc(p[0],p[1],s*0.13,0,7);g.fillStyle='#fff';g.fill();
-      g.strokeStyle='#2B2140';g.lineWidth=9;g.stroke();
-      g.beginPath();g.arc(p[0],p[1]+s*0.03,s*0.05,0,7);g.fillStyle='#2B2140';g.fill();
-    });
-    g.strokeStyle='#2B2140'; g.lineWidth=12; g.lineCap='round';
-    g.beginPath(); g.arc(s*0.5,s*0.62,s*0.16,0.25,Math.PI-0.25); g.stroke();
+    g.strokeStyle='#2B2140'; g.lineWidth=13; g.lineCap='round';
+    g.beginPath(); g.arc(s*0.5,s*0.60,s*0.17,0.25,Math.PI-0.25); g.stroke();
   },256);
   const face = new THREE.Mesh(new THREE.PlaneGeometry(1.2,1.0), bas(0xffffff,{map:faceTex,transparent:true}));
   face.position.set(0,1.0,-1.01); face.rotation.y=Math.PI; cartGroup.add(face);
+  /* real eyes, so they can blink and follow whatever we are looking for */
+  cartBits.eyes=[]; cartBits.pupils=[];
+  [-0.22,0.22].forEach(dx=>{
+    const w=new THREE.Mesh(new THREE.CircleGeometry(0.15,14), bas(0xffffff,{}));
+    w.position.set(dx,1.13,-1.03); w.rotation.y=Math.PI; cartGroup.add(w);
+    const pu=new THREE.Mesh(new THREE.CircleGeometry(0.062,12), bas(0x2B2140,{}));
+    pu.position.set(dx,1.13,-1.05); pu.rotation.y=Math.PI; cartGroup.add(pu);
+    cartBits.eyes.push(w); cartBits.pupils.push(pu);
+  });
+  /* dust puffs when we stop */
+  const puffTex=tex((g,s)=>{
+    const gr=g.createRadialGradient(s/2,s/2,2,s/2,s/2,s/2);
+    gr.addColorStop(0,'rgba(255,255,255,.85)'); gr.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=gr; g.fillRect(0,0,s,s);
+  },64);
+  cartBits.puffs=[];
+  for(let i=0;i<4;i++){
+    const pf=new THREE.Mesh(new THREE.PlaneGeometry(0.9,0.9),
+      bas(0xffffff,{map:puffTex,transparent:true,depthWrite:false,opacity:0}));
+    pf.rotation.x=-Math.PI/2; pf.position.y=0.12; pf.visible=false;
+    scene.add(pf); cartBits.puffs.push({m:pf,life:0});
+  }
 
   const flag=new THREE.Group();
   const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1.6,6), lam(0xC9C2B4));
@@ -1502,12 +2004,58 @@ function buildCart(){
   const crown=new THREE.Mesh(new THREE.CylinderGeometry(0.42,0.5,0.35,7), lam(0xFFD34E));
   crown.position.set(0,1.85,-0.2); crown.visible=false; cartGroup.add(crown); cartBits.crown=crown;
 
+  /* body kits for the different carts */
+  const canopy=new THREE.Group();
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(1.9,0.12,2.2), lam(0xFFFFFF,{}));
+  roof.position.set(0,2.35,0); canopy.add(roof);
+  for(let i=0;i<6;i++){
+    const st=new THREE.Mesh(new THREE.BoxGeometry(0.3,0.14,2.24), lam(i%2?0xE8412F:0xFFFFFF,{}));
+    st.position.set(-0.8+i*0.32,2.42,0); canopy.add(st);
+  }
+  [[-0.72,-0.95],[0.72,-0.95],[-0.72,0.95],[0.72,0.95]].forEach(q=>{
+    const post=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,0.9,6), lam(0xC9C2B4,{}));
+    post.position.set(q[0],1.85,q[1]); canopy.add(post);
+  });
+  canopy.visible=false; cartGroup.add(canopy); cartBits.canopy=canopy;
+
+  const nose=new THREE.Group();
+  const cone=new THREE.Mesh(new THREE.ConeGeometry(0.55,1.1,12), lam(0xE8412F,{}));
+  cone.rotation.x=-Math.PI/2; cone.position.set(0,0.95,-1.6); nose.add(cone);
+  [[-0.8,0],[0.8,0]].forEach(q=>{
+    const fin=new THREE.Mesh(new THREE.BoxGeometry(0.1,0.55,0.8), lam(0xFFD34E,{}));
+    fin.position.set(q[0],0.7,1.15); nose.add(fin);
+  });
+  nose.visible=false; cartGroup.add(nose); cartBits.nose=nose;
+
+  const spoiler=new THREE.Group();
+  const wing=new THREE.Mesh(new THREE.BoxGeometry(1.9,0.1,0.5), lam(0x2B2140,{}));
+  wing.position.set(0,1.95,1.15); spoiler.add(wing);
+  [-0.7,0.7].forEach(x=>{
+    const up=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.5,0.12), lam(0x2B2140,{}));
+    up.position.set(x,1.7,1.15); spoiler.add(up);
+  });
+  spoiler.visible=false; cartGroup.add(spoiler); cartBits.spoiler=spoiler;
+
   cartGroup.position.set(0,0,16);
   scene.add(cartGroup);
-  cart = { pos:new THREE.Vector3(0,0,16), path:[], pi:0, heading:Math.PI, speed:7.6, moving:false };
+  cart = { pos:new THREE.Vector3(0,0,16), path:[], pi:0, heading:Math.PI, speed:7.6,
+           baseSpeed:7.6, moving:false, blink:0, nextBlink:2, lean:0, squash:0, wasMoving:false, turnRate:0 };
 }
 
 /* ------------------------------ letters: one double-sided card each ------------------------------ */
+let _googly=null;
+function googlyTex(){
+  if(_googly) return _googly;
+  _googly = tex((g,s)=>{
+    g.clearRect(0,0,s,s);
+    [[s*0.31,s*0.5],[s*0.69,s*0.5]].forEach(p=>{
+      g.beginPath(); g.arc(p[0],p[1],s*0.19,0,7); g.fillStyle='#fff'; g.fill();
+      g.strokeStyle='#2B2140'; g.lineWidth=14; g.stroke();
+      g.beginPath(); g.arc(p[0],p[1]+s*0.05,s*0.075,0,7); g.fillStyle='#2B2140'; g.fill();
+    });
+  },128);
+  return _googly;
+}
 function buildLetters(){
   const cardGeo=new THREE.PlaneGeometry(1.0,1.0);
   const hitGeo=new THREE.BoxGeometry(1.9,1.9,1.3);
@@ -1521,6 +2069,13 @@ function buildLetters(){
     cardB.rotation.y=Math.PI; cardB.position.z=-0.04;
     g.add(card); g.add(cardB);
 
+    /* googly eyes that only appear when the letter comes alive */
+    const eyes=new THREE.Mesh(new THREE.PlaneGeometry(0.9,0.5),
+      bas(0xffffff,{map:googlyTex(), transparent:true, depthWrite:false}));
+    eyes.position.set(0,0.22,0.05); eyes.visible=false; g.add(eyes);
+    const eyesB=new THREE.Mesh(new THREE.PlaneGeometry(0.9,0.5),
+      bas(0xffffff,{map:googlyTex(), transparent:true, depthWrite:false}));
+    eyesB.position.set(0,0.22,-0.05); eyesB.rotation.y=Math.PI; eyesB.visible=false; g.add(eyesB);
     const hit=new THREE.Mesh(hitGeo, invis);
     hit.userData.letter=L.ch; g.add(hit);
     const halo=new THREE.Mesh(haloGeo, bas(0xFFC93C,{transparent:true,opacity:0.9,side:THREE.DoubleSide}));
@@ -1528,7 +2083,7 @@ function buildLetters(){
     g.position.set(slot.x, slot.y, slot.z);
     g.rotation.y = slot.ry||0;
     scene.add(g);
-    letterObjs[L.ch]={ group:g, box:hit, face:card, halo, letter:L,
+    letterObjs[L.ch]={ group:g, box:hit, face:card, halo, letter:L, eyes:[eyes,eyesB],
                        standX:slot.standX, standZ:slot.standZ, baseY:slot.y,
                        where:slot.where, short:slot.short, phase:Math.random()*6.28 };
   });
@@ -1537,7 +2092,7 @@ function buildLetters(){
 /* ------------------------------ shoppers: batched, chatty, and tappable ------------------------------ */
 let npcParts=[], npcBubble=null;
 function buildNPCs(){
-  const spots=[[-13,8],[12,8],[-9,2],[14,2],[-15,-4],[7,-4],[-6,-10],[16,-10],[0,6],[-22,-8],[7.6,-20.4]];
+  const spots=[[-13,8],[12,8],[-9,2],[14,2],[-15,-4],[7,-4],[-6,-10],[16,-10],[0,6],[-22,-8],[-1.4,-20.2],[21.4,-20.2],[25.6,8],[-20.6,-20.2]];
   const invis=new THREE.MeshBasicMaterial({visible:false});
   const hitGeo=new THREE.BoxGeometry(2.6,4.2,2.6);
   spots.forEach((s,i)=>{
@@ -1584,6 +2139,9 @@ function updateNPCs(t,dt){
   if(!npcParts.length) return;
   npcs.forEach((n,i)=>{
     if(n.talk>0) n.talk-=dt;
+    /* a slow pace back and forth, so the shop looks lived in */
+    if(n.pace===undefined){ n.pace=(i%3)?1.1:0; n.homeX=n.x; }
+    if(n.pace) n.x = n.homeX + Math.sin(t*0.28 + n.phase)*n.pace;
     const bob=Math.abs(Math.sin(t*1.5+n.phase))*0.07;
     const wob=n.talk>0?Math.sin(t*20)*0.09:0;
     npcParts.forEach(p=>{
@@ -1600,37 +2158,28 @@ function updateNPCs(t,dt){
   npcParts.forEach(p=>{ p.mesh.instanceMatrix.needsUpdate=true; });
   npcBubble.instanceMatrix.needsUpdate=true;
 }
-/* shoppers greet you when you roll past, so they feel alive without a tap */
-let lastGreet=0;
 /* driving through the doorway is enough to start writing practice */
 let roomCool=0;
+function enterRoom(R){
+  if(!R) return;
+  Audio2.chime();
+  Audio2.sting(R.kind==='quiz' ? 'quiz' : R.mode);
+  if(R.kind==='quiz') openQuiz();
+  else openTrace(R.mode);
+}
 function roomCheck(){
-  if(!started || !breakRoom) return;
+  if(!started || !roomList.length) return;
   if(document.querySelector('.layer.on')) return;
-  const inRoom = cart.pos.z < W.storeBackZ-1.6 && cart.pos.x>BR.x1 && cart.pos.x<BR.x2;
-  if(inRoom && Date.now()>roomCool){
+  let inAny=null;
+  for(const R of roomList){
+    if(cart.pos.z < W.storeBackZ-1.6 && cart.pos.x>R.x1 && cart.pos.x<R.x2){ inAny=R; break; }
+  }
+  if(inAny && Date.now()>roomCool){
     roomCool=Date.now()+30000;
-    openTrace();
+    enterRoom(inAny);
   }
-  if(!inRoom && cart.pos.z > W.storeBackZ+1.5) roomCool=0;
+  if(!inAny && cart.pos.z > W.storeBackZ+1.5) roomCool=0;
 }
-function npcProximity(){
-  if(!started || quest===null && !S) return;
-  if(document.querySelector('.layer.on')) return;
-  const now=Date.now();
-  if(now-lastGreet < 9000) return;
-  for(let i=0;i<npcs.length;i++){
-    const n=npcs[i];
-    const d=Math.hypot(n.x-cart.pos.x, n.z-cart.pos.z);
-    if(d<3.6 && now-(n.greeted||0) > 45000){
-      n.greeted=now; lastGreet=now;
-      Audio2.SFX.pop();
-      npcSay(n);
-      return;
-    }
-  }
-}
-
 /* ------------------------------ target beacon ------------------------------ */
 function buildBeacon(){
   beacon = new THREE.Group();
@@ -1640,6 +2189,15 @@ function buildBeacon(){
   const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.22,0.22,5,10),
     new THREE.MeshBasicMaterial({color:0xFFC93C, depthTest:false, transparent:true, opacity:0.28}));
   pillar.position.y=3.1; beacon.add(pillar);
+  const bloomT=tex((g,s)=>{
+    const gr=g.createRadialGradient(s/2,s/2,2,s/2,s/2,s/2);
+    gr.addColorStop(0,'rgba(255,220,120,.85)'); gr.addColorStop(0.4,'rgba(255,201,60,.35)');
+    gr.addColorStop(1,'rgba(255,201,60,0)');
+    g.fillStyle=gr; g.fillRect(0,0,s,s);
+  },128);
+  const bloom=new THREE.Mesh(new THREE.PlaneGeometry(3.4,3.4),
+    new THREE.MeshBasicMaterial({map:bloomT, transparent:true, depthTest:false, depthWrite:false}));
+  bloom.position.y=0; beacon.add(bloom); beacon.userData.bloom=bloom;
   beacon.renderOrder=999; beacon.traverse(o=>{ o.renderOrder=999; });
   beacon.visible=false; scene.add(beacon);
 }
@@ -1662,6 +2220,8 @@ function layer(id,on){
   if(on){ keys.l=keys.r=keys.u=keys.d=0; ptr.down=false; ptr.vx=ptr.vy=0; hideStick(); }
   return r;
 }
+const titleCase = s => String(s).charAt(0).toUpperCase()+String(s).slice(1);
+const oneOf = a => a[Math.floor(Math.random()*a.length)];
 const numWords = ['zero','one','two','three','four','five','six','seven','eight','nine','ten',
   'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
 
@@ -1676,49 +2236,116 @@ function weightedPick(items, weightFn){
   for(let i=0;i<items.length;i++){ r-=w[i]; if(r<=0) return items[i]; }
   return items[items.length-1];
 }
-function pickLetter(){
-  const pool = LETTERS.filter(l=>S.owned.indexOf(l.ch)<0);
+function nameLetters(){
+  if(!S || !S.name) return [];
+  const out=[];
+  S.name.toUpperCase().split('').forEach(c=>{ if(LMAP[c] && out.indexOf(c)<0) out.push(c); });
+  return out;
+}
+/* One shopping list at a time, so there is always an end in sight. */
+function ensureList(){
+  if(S.list && S.list.length) return true;
+  const pool = LETTERS.filter(l=>S.owned.indexOf(l.ch)<0).map(l=>l.ch);
+  if(!pool.length) return false;
+  let picks=[];
+  if(!S.listCount){                                   // the very first list spells their name
+    picks = nameLetters().filter(ch=>pool.indexOf(ch)>=0).slice(0, CFG.LIST_LEN);
+  }
+  let guard=0;
+  while(picks.length < Math.min(CFG.LIST_LEN, pool.length) && guard++<200){
+    const L=pickLetter(picks);
+    if(!L) break;
+    if(picks.indexOf(L.ch)<0) picks.push(L.ch);
+  }
+  S.list=picks.slice(); S.listAll=picks.slice(); S.listPrices={};
+  paintList();
+  return picks.length>0;
+}
+function paintList(){
+  const bar=$('listBar');
+  if(!S.listAll || !S.listAll.length){ bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+  bar.innerHTML='<span class="cap">List</span>';
+  S.listAll.forEach(ch=>{
+    const d=document.createElement('div');
+    const done=S.list.indexOf(ch)<0;
+    const now=!done && quest && quest.L.ch===ch;
+    d.className='lt'+(done?' done':'')+(now?' now':'');
+    d.textContent=ch;
+    if(done) d.style.background=LMAP[ch].color;
+    bar.appendChild(d);
+  });
+}
+function pickLetter(exclude){
+  const skip=exclude||[];
+  const pool = LETTERS.filter(l=>S.owned.indexOf(l.ch)<0 && skip.indexOf(l.ch)<0);
   if(!pool.length) return null;
   return weightedPick(pool, l=>{
     const m = S.mastery[l.ch] || {seen:0,miss:0};
     return 1 + m.miss*2.5 + (m.seen===0?1.5:0);
   });
 }
-function pickPrice(){
+function pickPrice(L){
   const a = apron(); const opts=[];
-  for(let i=a.minPrice;i<=a.maxPrice;i++) opts.push(i);
+  /* after a couple of stumbles, keep the numbers small until they recover */
+  const ceiling = (S.streakMiss>=2) ? Math.min(a.maxPrice, 3) : a.maxPrice;
+  for(let i=a.minPrice;i<=ceiling;i++) opts.push(i);
   return weightedPick(opts, n=>{
     const m = S.nums[n] || {ok:0,miss:0};
     return 1 + m.miss*2.5 + (m.ok===0?1.2:0);
   });
 }
 function pickType(L){
+  const m=S.mastery[L.ch]||{miss:0};
+  /* a shaky letter, or a shaky run, drops back to the easiest question form */
+  if(S.streakMiss>=2 || (m.miss||0)>=1.5) return 'name';
   let types = apron().types.filter(t=> t!=='first' || L.firstOk );
   // keep letter-name questions frequent early on for confidence
   return weightedPick(types, t => t==='name'?3: t==='sound'?2.2:1.8);
 }
 
 function newQuest(){
-  const L = pickLetter();
-  if(!L){ finaleAllLetters(); return; }
-  quest = { L:L, price:pickPrice(), type:pickType(L), tries:0 };
+  if(!ensureList()){ finaleAllLetters(); return; }
+  const ch=S.list[0];
+  const L=LMAP[ch];
+  if(!L){ S.list.shift(); newQuest(); return; }
+  quest = { L:L, price:pickPrice(L), type:pickType(L), tries:0 };
   S.mastery[L.ch].seen++;
-  paintQuest();
+  paintQuest(); paintList();
   announce();
   saveNow();
+}
+/* Queue several short utterances instead of one long run-on sentence: the pauses
+   between them are what make synthesised speech sound human. */
+function speakLines(lines, opts){
+  opts=opts||{};
+  lines.filter(Boolean).forEach((l,i)=>{
+    Audio2.speak(l, i===0 ? {flush:opts.flush!==false, rate:opts.rate} : {rate:opts.rate});
+  });
+}
+function letterLine(ch){
+  const L=LMAP[ch];
+  return L ? `${ch} says ${L.sound}.` : '';
 }
 function aisleHint(){
   const o=letterObjs[quest.L.ch];
   if(!o||!o.where) return '';
   return ` Look ${o.where}.`;
 }
-function questSpeech(){
-  const q=quest, L=q.L, p=numWords[q.price];
-  const buy=` Buy it for ${p} dollars.`;
-  if(q.type==='name')  return `Attention shoppers! We need the letter ${L.ch}.${aisleHint()}${buy}`;
-  if(q.type==='sound') return `Attention shoppers! We need the letter that says ${L.sound}.${aisleHint()}${buy}`;
-  return `Attention shoppers! We need the letter that starts the word ${L.word}. ${L.word}.${aisleHint()}${buy}`;
+function questLines(){
+  const q=quest; if(!q) return [];
+  const L=q.L, o=letterObjs[L.ch];
+  const open=oneOf(['Attention shoppers!','Hello, shoppers!','Attention, please!']);
+  let ask;
+  if(q.type==='name')       ask=oneOf([`We need the letter ${L.ch}.`, `Can you find the letter ${L.ch}?`]);
+  else if(q.type==='sound') ask=`We need the letter that says ${L.sound}.`;
+  else                      ask=`We need the letter that starts the word ${L.word}. ${L.word}.`;
+  const where = (o && o.where) ? `It's ${o.where}.` : '';
+  const price = oneOf([`It costs ${numWords[q.price]} dollars.`,
+                       `Please buy it for ${numWords[q.price]} dollars.`]);
+  return [open, ask, where, price];
 }
+function questSpeech(){ return questLines().join(' '); }
 function paintQuest(){
   if(mode==='deliver' || !quest){
     const held=(S&&S.carrying&&S.carrying.length)?S.carrying.join(' '):'';
@@ -1758,10 +2385,10 @@ function openIntercom(){
   if(q.type==='name'){ card.textContent=L.ch; card.style.background=L.color; }
   else { card.textContent=L.emoji; card.style.background='#fff'; }
   $('icLine').textContent=icText();
-  $('icPrice').textContent='for $'+q.price;
+  $('icPrice').textContent='for '+numWords[q.price]+' dollars';
   layer('intercom', true);
   Audio2.SFX.sparkle();
-  Audio2.speak(questSpeech(), {flush:true});
+  speakLines(questLines());
 }
 
 /* ---------------------------------------------------------------- ROLLY HINTS */
@@ -1776,8 +2403,10 @@ function rolly(text, on, speakIt){
 }
 function idleCheck(){
   if(!started || !quest) return;
+  if(!S || S.tips==='off') return;
   if(document.querySelector('.layer.on')) return;
-  if(Date.now()-lastInput < CFG.IDLE_NUDGE_MS) return;
+  const waitFor = S.tips==='few' ? 28000 : CFG.IDLE_NUDGE_MS;
+  if(Date.now()-lastInput < waitFor) return;
   lastInput = Date.now();
   const q=quest;
   const o=letterObjs[q.L.ch];
@@ -1833,9 +2462,9 @@ function pickAt(cx, cy){
   if(lh) return {kind:'letter', ch:lh.object.userData.letter};
   const nh = raycaster.intersectObjects(npcs.map(n=>n.hit),false)[0];
   if(nh) return {kind:'npc', i:nh.object.userData.npc};
-  if(breakRoom){
-    const dh = raycaster.intersectObject(breakRoom.board,false)[0];
-    if(dh) return {kind:'board'};
+  for(const R of roomList){
+    const dh = raycaster.intersectObject(R.board,false)[0];
+    if(dh) return {kind:'board', room:R};
   }
   if(checkout){
     const ch = raycaster.intersectObject(checkout.mesh,false)[0];
@@ -1857,13 +2486,15 @@ function worldTap(cx, cy){
   const r = pickAt(cx, cy);
   if(!r) return;
   if(r.kind==='letter'){ tapLetter(r.ch); return; }
-  if(r.kind==='npc'){ const n=npcs[r.i]; Audio2.SFX.pop(); npcSay(n);
-    n.greeted=Date.now(); lastGreet=Date.now(); return; }
+  if(r.kind==='npc'){ const n=npcs[r.i]; Audio2.SFX.pop(); npcSay(n); return; }
   if(r.kind==='board'){
+    const R=r.room||roomList[0];
     Audio2.SFX.pop();
-    Audio2.speak('The break room! Let us practice writing.',{flush:true});
-    if(goTo(breakRoom.stand.x, breakRoom.stand.z)) markTap(breakRoom.stand.x, breakRoom.stand.z);
-    cart.onArrive = openTrace;
+    Audio2.speak(R.kind==='quiz' ? 'The word room! Let us play a listening game.'
+      : R.mode==='numbers' ? 'The number room! Let us practice writing numbers.'
+                           : 'The letter room! Let us practice writing letters.', {flush:true});
+    if(goTo(R.stand.x, R.stand.z)) markTap(R.stand.x, R.stand.z);
+    cart.onArrive = ()=>enterRoom(R);
     return;
   }
   if(r.kind==='checkout'){
@@ -1932,12 +2563,12 @@ function pressA(){
       if(d<5.0){ tapLetter(quest.L.ch); return; }
     }
   }
-  if(breakRoom){
-    const d=Math.hypot(breakRoom.cx-cart.pos.x, breakRoom.cz-cart.pos.z);
-    if(d<6.0){ Audio2.SFX.pop(); openTrace(); return; }
+  for(const R of roomList){
+    const d=Math.hypot(R.cx-cart.pos.x, R.cz-cart.pos.z);
+    if(d<6.5){ Audio2.SFX.pop(); enterRoom(R); return; }
   }
   const n=nearest(npcs, 5.0);
-  if(n){ Audio2.SFX.pop(); npcSay(n); n.greeted=Date.now(); lastGreet=Date.now(); return; }
+  if(n){ Audio2.SFX.pop(); npcSay(n); return; }
   const lv=[];
   for(const k in letterObjs){ const o=letterObjs[k];
     if(o.group.visible) lv.push({x:o.standX, z:o.standZ, ch:k}); }
@@ -1952,7 +2583,7 @@ function pressB(){
   Audio2.SFX.pop();
   if(mode==='deliver'){
     const held=(S.carrying||[]).join(' and ');
-    Audio2.speak(`Take the ${held} to the checkout counter. Follow the red arrow!`,{flush:true});
+    speakLines([`Let's take the ${held} to the checkout.`, 'Just follow the red arrow!']);
     rolly(`Take the ${held} to the checkout!`, true);
   } else if(quest){
     openIntercom();
@@ -1979,17 +2610,19 @@ function tapLetter(ch){
   if(!quest){ Audio2.SFX.pop(); Audio2.speak(`${ch}. ${L.sound}.`,{flush:true}); return; }
   if(ch === quest.L.ch){
     Audio2.SFX.sparkle();
-    Audio2.speak(`You found it! The letter ${ch}!`, {flush:true});
+    Audio2.speak(oneOf([`You found it! The letter ${ch}.`, `That's the ${ch}! Nice spotting.`,
+                        `Yes! There's the ${ch}.`]), {flush:true});
     goToLetter(ch, openWallet);
   } else {
     Audio2.SFX.pop();
     quest.tries++;
     S.mastery[ch].miss += 0.4;
+    S.streakMiss=(S.streakMiss||0)+1;
     const q = quest;
-    Audio2.speak(`That's the ${ch}. ${L.sound}.`, {flush:true});
-    if(q.type==='name') Audio2.speak(`We're shopping for the ${q.L.ch}. Keep looking!`);
-    else if(q.type==='sound') Audio2.speak(`We want the letter that says ${q.L.sound}.`);
-    else Audio2.speak(`We want the letter that starts ${q.L.word}.`);
+    speakLines([`That one's the ${ch}.`, letterLine(ch),
+      q.type==='name'  ? `We're shopping for the ${q.L.ch}. Keep looking!`
+    : q.type==='sound' ? `We want the letter that says ${q.L.sound}.`
+                       : `We want the letter that starts ${q.L.word}.`]);
     rolly(`That's ${ch}! We need ${q.type==='name'?q.L.ch:'the one from the clue'}.`, true);
     if(quest.tries>=3){ letterObjs[q.L.ch].halo.visible = true; }
     saveNow();
@@ -2004,15 +2637,19 @@ function openWallet(){
   pay = { stage:'numeral', tray:[], sum:0, misses:0, done:false };
   $('letterGlyph').textContent = L.ch;
   $('letterCard').style.background = L.color;
-  $('priceBig').textContent = '$'+q.price;
-  $('askLine').textContent = 'Which one says ' + q.price + '?';
+  /* The numeral is deliberately NOT shown: the child hears "five dollars" and has
+     to recognise the 5. The Help button is what reveals it. */
+  $('priceBig').textContent = titleCase(numWords[q.price]) + ' dollars';
+  $('askLine').textContent = 'Which one says ' + numWords[q.price] + ' dollars?';
   $('coinArea').classList.add('hidden');
   $('numPad').classList.remove('hidden');
   buildPriceOptions();
   layer('wallet', true);
   Audio2.SFX.pop();
-  Audio2.speak(`I am the letter ${L.ch}. ${L.sound}. I cost ${numWords[q.price]} dollars.`, {flush:true});
-  Audio2.speak(`Tap the ${numWords[q.price]}.`);
+  speakLines([ oneOf([`Hi! I'm the letter ${L.ch}.`, `Hello! I'm the letter ${L.ch}.`]),
+               letterLine(L.ch),
+               `I cost ${numWords[q.price]} dollars.`,
+               `Which one says ${numWords[q.price]} dollars?` ]);
 }
 function priceChoices(price){
   const a=apron(), lo=a.minPrice, hi=a.padMax;
@@ -2045,14 +2682,16 @@ function tapNumeral(n, btn){
   if(n===price){
     btn.classList.add('good'); Audio2.SFX.coin();
     S.nums[price].ok++;
-    Audio2.speak(`${numWords[n]}! That's right.`, {flush:true});
+    Audio2.speak(oneOf([`${numWords[n]}. That's right!`, `${numWords[n]}. Perfect!`,
+                        `Yes, ${numWords[n]}. Well done!`]), {flush:true});
     const mode = apron().pay;
     if(mode==='numeral'){ pay.done=true; setTimeout(purchase, 700); }
     else setTimeout(()=>startCoinStage(mode), 800);
   } else {
     btn.classList.add('meh'); Audio2.SFX.err();
     pay.misses++; S.nums[n].miss += 0.5; S.nums[price].miss += 0.5;
-    Audio2.speak(`That's ${numWords[n]}. We need ${numWords[price]}.`, {flush:true});
+    S.streakMiss=(S.streakMiss||0)+1;
+    speakLines([`That one's ${numWords[n]}.`, `We need ${numWords[price]}.`]);
     countAloud(price);
     setTimeout(()=>btn.classList.remove('meh'), 900);
     if(pay.misses>=2){
@@ -2062,9 +2701,10 @@ function tapNumeral(n, btn){
   }
 }
 function countAloud(n){
-  let s='Let me count. ';
-  for(let i=1;i<=Math.min(n,20);i++) s += numWords[i]+'. ';
-  Audio2.speak(s, {rate:0.72});
+  Audio2.speak(oneOf(['Let\u2019s count together.','Count with me.']));
+  let s='';
+  for(let i=1;i<=Math.min(n,20);i++) s += numWords[i]+', ';
+  Audio2.speak(s.replace(/, $/,'.'), {rate:CFG.SPEECH_RATE_SLOW});
 }
 function startCoinStage(mode){
   pay.stage = mode; pay.tray=[]; pay.sum=0;
@@ -2075,9 +2715,9 @@ function startCoinStage(mode){
     : `Now make $${quest.price} with your coins`;
   buildPurse(mode);
   renderTray();
-  Audio2.speak(mode==='count'
-    ? `Now count ${numWords[quest.price]} coins into the tray.`
-    : `Now make ${numWords[quest.price]} dollars. The green coins are worth five!`, {flush:true});
+  speakLines(mode==='count'
+    ? [`Now, count ${numWords[quest.price]} coins into the tray.`]
+    : [`Now let's make ${numWords[quest.price]} dollars.`, 'The green coins are worth five.']);
 }
 function buildPurse(mode){
   const p=$('coinPurse'); p.innerHTML='';
@@ -2122,11 +2762,12 @@ function check(){
   const val = pay.stage==='count' ? pay.tray.length : pay.sum;
   if(val===price){
     Audio2.SFX.chaching();
-    Audio2.speak(`${numWords[price]} dollars! Perfect!`, {flush:true});
+    Audio2.speak(oneOf([`${numWords[price]} dollars. Perfect!`,
+                        `That's exactly ${numWords[price]} dollars. Lovely.`]), {flush:true});
     pay.done=true; setTimeout(purchase, 900);
   } else if(val>price){
     Audio2.SFX.err();
-    Audio2.speak(`Ooh, that's too much. Tap a coin in the tray to take it back.`, {flush:true});
+    speakLines(['Ooh, that\u2019s a bit too much.', 'Tap a coin in the tray to take it back.']);
   }
 }
 function walletHint(){
@@ -2134,7 +2775,8 @@ function walletHint(){
   if(pay.stage==='numeral'){
     const t=document.querySelector('.priceBtn[data-n="'+price+'"]');
     if(t) t.classList.add('hintGlow');
-    Audio2.speak(`Look for the glowing number. It's ${numWords[price]}.`, {flush:true});
+    speakLines([`The one that says ${numWords[price]} dollars is glowing.`,
+                `It's this one: ${numWords[price]}.`]);
     countAloud(price);
   } else if(pay.stage==='count'){
     const left = price - pay.tray.length;
@@ -2148,22 +2790,69 @@ function walletHint(){
 }
 
 /* ---------------------------------------------------------------- PURCHASE + REWARD */
+let letterAnim=null;
+function startLetterAnim(ch){
+  const o=letterObjs[ch];
+  if(!o) return;
+  o.group.visible=true;
+  if(o.eyes) o.eyes.forEach(e=>e.visible=true);
+  letterAnim={ ch:ch, t:0,
+               from:{x:o.group.position.x, y:o.group.position.y, z:o.group.position.z},
+               baseRy:o.group.rotation.y };
+}
+function updateLetterAnim(dt){
+  if(!letterAnim) return;
+  const o=letterObjs[letterAnim.ch];
+  if(!o){ letterAnim=null; return; }
+  letterAnim.t+=dt;
+  const t=letterAnim.t, f=letterAnim.from, g=o.group;
+  if(t<0.35){                                   // hop up off the shelf
+    const k=t/0.35;
+    g.position.set(f.x, f.y+Math.sin(k*Math.PI)*0.55, f.z);
+    g.scale.setScalar(1+0.18*Math.sin(k*Math.PI));
+  } else if(t<1.65){                            // a little dance
+    const k=(t-0.35)/1.3;
+    g.position.set(f.x, f.y+0.35+Math.abs(Math.sin(k*Math.PI*3))*0.28, f.z);
+    g.rotation.y=letterAnim.baseRy+Math.sin(k*Math.PI*6)*0.5;
+    g.scale.setScalar(1.12);
+  } else if(t<2.55){                            // arc into the cart
+    const k=(t-1.65)/0.9;
+    const cx=cart.pos.x, cz=cart.pos.z;
+    g.position.set(f.x+(cx-f.x)*k, f.y+0.35+Math.sin(k*Math.PI)*2.2+(1.4-(f.y+0.35))*k,
+                   f.z+(cz-f.z)*k);
+    g.rotation.y=letterAnim.baseRy+k*8;
+    g.scale.setScalar(1.12-0.85*k);
+    if(k>0.72 && !letterAnim.sparked){ letterAnim.sparked=true; Audio2.SFX.sparkle(); }
+  } else {                                      // gone into the basket
+    g.visible=false;
+    g.scale.setScalar(1);
+    g.rotation.y=letterAnim.baseRy;
+    g.position.set(f.x,f.y,f.z);
+    if(o.eyes) o.eyes.forEach(e=>e.visible=false);
+    letterAnim=null;
+  }
+}
 function purchase(){
   if(!quest) return;
   const q=quest, L=q.L;
   layer('wallet', false);
   S.carrying = S.carrying || [];
   S.carrying.push(L.ch);
+  S.listPrices=S.listPrices||{}; S.listPrices[L.ch]=q.price;
   S.mastery[L.ch].ok++;
   S.plays++;
   lastBonus = (q.tries===0 && pay && pay.misses===0) ? 1 : 0;
+  if(q.tries===0 && pay && pay.misses===0) S.streakMiss=0;
+  else S.streakMiss=Math.max(0,(S.streakMiss||0)-1);
   const o=letterObjs[L.ch];
-  if(o){ o.halo.visible=false; o.group.visible=false; }
+  if(o){ o.halo.visible=false; startLetterAnim(L.ch); }
   quest=null; pay=null; mode='deliver';
   paintHUD(); paintQuest();
   cheer();
   Audio2.SFX.chaching();
-  Audio2.speak(`You bought the ${L.ch}! ${L.ch} says ${L.sound}. Now take it to the checkout counter.`, {flush:true});
+  speakLines([ oneOf([`Nice work! You bought the ${L.ch}.`, `You did it! The ${L.ch} is ours.`]),
+               letterLine(L.ch),
+               oneOf(['Now let\u2019s take it to the checkout.', 'Off to the checkout counter!']) ]);
   rolly(`Take the ${L.ch} to the checkout! Follow the light.`, true);
   saveNow();
 }
@@ -2175,24 +2864,65 @@ function deliverLetters(){
   if(!S.carrying || !S.carrying.length) return;
   const list=S.carrying.slice();
   S.carrying.length=0;
-  list.forEach(ch=>{ if(S.owned.indexOf(ch)<0) S.owned.push(ch); });
+  list.forEach(ch=>{
+    if(S.owned.indexOf(ch)<0) S.owned.push(ch);
+    const i=S.list.indexOf(ch); if(i>=0) S.list.splice(i,1);
+  });
+  paintList();
   S.stars += list.length * CFG.STARS_PER_LETTER + lastBonus;
   lastBonus=0; mode='shop';
-  paintHUD();
-  Audio2.SFX.chaching(); Audio2.SFX.fanfare();
-  confetti(90);
-  bigWord(CHEERS[Math.floor(Math.random()*CHEERS.length)]);
-  Audio2.speak(`${list.join(' and ')} goes on the wall! You have ${numWords[Math.min(S.owned.length,20)]||S.owned.length} letters now.`, {flush:true});
+  paintHUD(); paintCheckoutWall(true); paintNameBoard(); paintList();
+  Audio2.register();
+  celebrate(S.owned.length);
+  speakLines([ oneOf([`There we go! The ${list.join(' and ')} is on the wall.`,
+                      `Beautiful. The ${list.join(' and ')} is done.`]),
+               `That's ${numWords[Math.min(S.owned.length,20)]||S.owned.length} letters.`,
+               S.owned.length<26 ? oneOf(['Keep going!','What\u2019s next?','You\u2019re doing great.']) : '' ]);
   saveNow();
   if(S.owned.length>=26){ setTimeout(finaleAllLetters, 2600); return; }
+  if(S.listAll && S.listAll.length && !S.list.length){
+    S.listCount=(S.listCount||0)+1; saveNow();
+    setTimeout(showReceipt, 2400);
+    return;
+  }
   const bumped = maybeApronUp();
   setTimeout(()=>{
     if(bumped) return;
-    if(S.owned.length%5===0 && S.stars>=3){
+    if(S.tips!=='off' && S.owned.length%5===0 && S.stars>=3){
       rolly(`You have ${S.stars} stars! Tap the tools to upgrade your cart.`, true, true);
       setTimeout(newQuest, 3200);
     } else newQuest();
   }, 2800);
+}
+function showCertificate(){
+  $('certName').textContent = S.name || 'Alpha-Mart Shopper';
+  const tr=Object.keys(S.traced||{}).length, qz=(S.quiz&&S.quiz.ok)||0;
+  $('certMeta').innerHTML =
+    '26 letters bought &nbsp;\u00b7&nbsp; \u2605 '+S.stars+' stars<br>'+
+    tr+' letters &amp; numbers traced &nbsp;\u00b7&nbsp; '+qz+' word puzzles solved';
+  layer('cert', true);
+}
+function showReceipt(){
+  const lines=$('recLines'); lines.innerHTML='';
+  let total=0;
+  (S.listAll||[]).forEach(ch=>{
+    const pr=(S.listPrices&&S.listPrices[ch])||0;
+    total+=pr;
+    const d=document.createElement('div');
+    d.className='rline';
+    d.innerHTML='<span>Letter '+ch+' '+ch.toLowerCase()+'</span><span>$'+pr+'</span>';
+    lines.appendChild(d);
+  });
+  $('recTotal').textContent='$'+total;
+  $('recWho').textContent = S.name ? `Great shopping, ${S.name}!` : 'Great shopping!';
+  layer('receipt', true);
+  Audio2.SFX.chaching(); Audio2.SFX.fanfare();
+  confetti(110);
+  speakLines([ 'That is the whole list!',
+               S.name ? `Great shopping, ${S.name}.` : 'Great shopping.',
+               `The total is ${numWords[Math.min(total,20)]||total} dollars.`,
+               'Shall we get another list?' ]);
+  maybeApronUp();
 }
 function maybeApronUp(){
   const n=S.owned.length;
@@ -2214,15 +2944,20 @@ function finaleAllLetters(){
   bigWord('ALL 26!');
   Audio2.SFX.fanfare();
   setTimeout(()=>Audio2.SFX.fanfare(), 700);
-  Audio2.speak(`You did it! You bought every letter from A to Z! You are an Alpha-Mart champion!`, {flush:true});
-  confetti(140);
+  setTimeout(()=>Audio2.SFX.fanfare(), 1500);
+  speakLines([ 'You did it!', 'You bought every letter from A to Z.',
+               S.name ? `${S.name}, you are an Alpha-Mart champion!` : 'You are an Alpha-Mart champion!' ]);
+  confetti(200); balloons(20);
+  setTimeout(showCertificate, 2200);
   setTimeout(()=>{
     S.owned=[]; S.carrying=[]; mode='shop'; S.stars+=5;
+    S.list=[]; S.listAll=[]; S.listPrices={}; paintList();
     LETTERS.forEach(l=>{ const o=letterObjs[l.ch]; if(o) o.group.visible=true; });
+    paintCheckoutWall();
     paintHUD(); saveNow();
     Audio2.speak(`The manager restocked the shelves. Let's shop again!`);
     newQuest();
-  }, 6500);
+  }, 9000);
 }
 
 /* ---------------------------------------------------------------- CELEBRATION FX */
@@ -2242,6 +2977,43 @@ function bigWord(txt){
   const b=$('bigWord'); b.querySelector('span').textContent=txt;
   b.style.display='grid';
   setTimeout(()=>{ b.style.display='none'; }, 1800);
+}
+function balloons(n){
+  const box=$('confetti'), ems=['\ud83c\udf88','\ud83c\udf89','\u2b50','\ud83c\udf8a'];
+  for(let i=0;i<(n||10);i++){
+    const d=document.createElement('div');
+    d.className='balloon';
+    d.textContent=ems[i%ems.length];
+    d.style.left=(4+Math.random()*90)+'vw';
+    d.style.animationDuration=(3.4+Math.random()*2.4)+'s';
+    d.style.animationDelay=(Math.random()*0.9)+'s';
+    box.appendChild(d);
+    setTimeout(()=>d.remove(), 7000);
+  }
+}
+/* the size of the party scales with how far they have come */
+function celebrate(count){
+  if(count>=26){ return; }                       // the finale handles itself
+  if(count===13){
+    Audio2.SFX.fanfare(); confetti(150); balloons(14);
+    bigWord('HALFWAY!');
+    npcs.forEach(n=>{ n.talk=2.6; });            // the shoppers give a little cheer
+    speakLines([ 'Wow! Look at that!',
+                 S.name ? `${S.name}, you are halfway through the whole alphabet.` :
+                          'You are halfway through the whole alphabet.',
+                 'Thirteen letters on the wall!' ]);
+    return;
+  }
+  if(count>0 && count%5===0){
+    Audio2.SFX.fanfare(); confetti(110); balloons(8);
+    bigWord(count+' LETTERS!');
+    speakLines([ 'Attention shoppers!',
+                 S.name ? `${S.name} has ${numWords[Math.min(count,20)]||count} letters!`
+                        : `That is ${numWords[Math.min(count,20)]||count} letters!`,
+                 'What a shopper!' ]);
+    return;
+  }
+  cheer();
 }
 function cheer(){ confetti(80); bigWord(CHEERS[Math.floor(Math.random()*CHEERS.length)]); }
 
@@ -2267,8 +3039,19 @@ function paintStrip(){
     host.appendChild(d);
   });
 }
+function applyCart(){
+  if(!cart || !cartBits.mats || !S) return;
+  const C=CARTMAP[S.cart||'classic'] || CARTS[0];
+  cartBits.mats.basket.color.setHex(C.basket);
+  cartBits.mats.frame.color.setHex(C.frame);
+  cartBits.mats.wheel.color.setHex(C.wheel);
+  ['canopy','nose','spoiler'].forEach(k=>{ if(cartBits[k]) cartBits[k].visible = (C.extra===k); });
+  cart.speed = (cart.baseSpeed||7.6) * (C.speed||1);
+}
 function applyUpgrades(){
+  applyCart();
   Object.keys(cartBits).forEach(k=>{
+    if(k==='mats'||k==='canopy'||k==='nose'||k==='spoiler') return;
     if(k==='wheels') return;
     if(cartBits[k]) cartBits[k].visible = S.upgrades.indexOf(k)>=0;
   });
@@ -2290,7 +3073,53 @@ function openWall(){
   layer('wallLayer', true);
   Audio2.speak(`Your alphabet wall. You have ${numWords[Math.min(S.owned.length,20)]||S.owned.length} letters. Tap a letter to hear it.`,{flush:true});
 }
+let garTab='carts';
 function openGarage(){
+  layer('garage', true);
+  paintGarage();
+  Audio2.speak(`Welcome to the cart garage. You have ${numWords[Math.min(S.stars,20)]||S.stars} stars.`,{flush:true});
+}
+function paintGarage(){
+  $('tabCarts').classList.toggle('sel', garTab==='carts');
+  $('tabDecor').classList.toggle('sel', garTab==='decor');
+  $('cartGrid').classList.toggle('hidden', garTab!=='carts');
+  $('upGrid').classList.toggle('hidden', garTab!=='decor');
+  $('garHint').textContent = garTab==='carts'
+    ? 'Pick a cart, or buy a new one with stars'
+    : 'Spend your stars to decorate your cart';
+  if(garTab==='carts') buildCartGrid(); else buildDecorGrid();
+}
+function buildCartGrid(){
+  const g=$('cartGrid'); g.innerHTML='';
+  CARTS.forEach(C=>{
+    const owned=(S.carts||[]).indexOf(C.id)>=0 || C.cost===0;
+    const using=(S.cart||'classic')===C.id;
+    const can=S.stars>=C.cost;
+    const d=document.createElement('div');
+    d.className='cartCard'+(using?' using':(owned?' owned':(can?'':' locked')));
+    const tag = using ? 'Driving this' : (owned ? 'Tap to drive' : '\u2605 '+C.cost);
+    const fast = C.speed>1.05 ? ' \u00b7 fast' : (C.speed<1 ? ' \u00b7 steady' : '');
+    d.innerHTML='<div class="ic">'+C.icon+'</div><div class="nm">'+C.name+'</div>'+
+                '<div class="bl">'+C.blurb+'</div><div class="cost">'+tag+fast+'</div>';
+    d.addEventListener('click',()=>{
+      if(using){ Audio2.SFX.pop(); Audio2.speak('You are already driving that one!',{flush:true}); return; }
+      if(!owned){
+        if(S.stars<C.cost){
+          Audio2.SFX.err();
+          speakLines([`That cart costs ${numWords[Math.min(C.cost,20)]||C.cost} stars.`,
+                      'Buy more letters to earn stars!']);
+          return;
+        }
+        S.stars-=C.cost; S.carts=S.carts||[]; S.carts.push(C.id);
+        Audio2.SFX.chaching(); confetti(60);
+      } else Audio2.SFX.pop();
+      S.cart=C.id; saveNow(); paintHUD(); paintGarage();
+      speakLines([`Nice choice! The ${C.name}.`, C.blurb]);
+    });
+    g.appendChild(d);
+  });
+}
+function buildDecorGrid(){
   const g=$('upGrid'); g.innerHTML='';
   UPGRADES.forEach(u=>{
     const owned=S.upgrades.indexOf(u.id)>=0;
@@ -2298,19 +3127,18 @@ function openGarage(){
     const d=document.createElement('div');
     d.className='upCard'+(owned?' owned':(can?'':' locked'));
     d.innerHTML=`<div class="ic">${u.icon}</div><div class="nm">${u.name}</div>
-      <div class="cost">${owned?'Got it!':'★ '+u.cost}</div>`;
+      <div class="cost">${owned?'Got it!':'\u2605 '+u.cost}</div>`;
     d.addEventListener('click',()=>{
       if(owned){ Audio2.SFX.pop(); Audio2.speak('You already have that one!',{flush:true}); return; }
       if(S.stars<u.cost){ Audio2.SFX.err();
-        Audio2.speak(`That costs ${numWords[Math.min(u.cost,20)]} stars. Buy more letters to earn stars!`,{flush:true}); return; }
-      S.stars-=u.cost; S.upgrades.push(u.id); saveNow(); paintHUD(); openGarage();
+        speakLines([`That costs ${numWords[Math.min(u.cost,20)]||u.cost} stars.`,
+                    'Buy more letters to earn stars!']); return; }
+      S.stars-=u.cost; S.upgrades.push(u.id); saveNow(); paintHUD(); paintGarage();
       Audio2.SFX.chaching(); confetti(50);
-      Audio2.speak(`${u.name} added to your cart! Awesome!`,{flush:true});
+      Audio2.speak(`${u.name} added to your cart!`,{flush:true});
     });
     g.appendChild(d);
   });
-  layer('garage', true);
-  Audio2.speak(`Welcome to the cart garage. You have ${numWords[Math.min(S.stars,20)]||S.stars} stars.`,{flush:true});
 }
 
 /* ---------------------------------------------------------------- SETTINGS */
@@ -2328,6 +3156,13 @@ function buildSettings(){
    <div class="row"><label>Apron level</label><div class="seg" id="segApron"></div></div>
    <div class="row"><label>Voice</label><div class="seg" id="segVoice"></div></div>
    <div class="row"><label>Music</label><div class="seg" id="segMusic"></div></div>
+   <div class="row"><label>Store sounds (ambience, wheels, chimes)</label><div class="seg" id="segSfx"></div></div>
+   <div class="row"><label>Helper tips</label><div class="seg" id="segTips"></div></div>
+   <div class="row" style="display:block"><label>Voice</label>
+     <div id="voiceList"></div>
+     <div style="font-size:15px;font-weight:600;color:#7b7191;margin-top:6px">
+       Tap a voice to hear it. Neural and Google voices sound the most natural.</div>
+   </div>
    <div class="row"><label>Graphics</label><div class="seg" id="segGfx"></div></div>
    <div class="row"><label>Real shadows</label><div class="seg" id="segShadow"></div></div>
    <div class="row"><label>Frame rate right now</label><div style="font-size:22px;font-weight:800;color:#3B6FE0" id="fpsLine">—</div></div>
@@ -2348,6 +3183,12 @@ function buildSettings(){
     if(quest){ quest=null; newQuest(); }});
   seg('segVoice',[{t:'On',v:true},{t:'Off',v:false}],S.voice,v=>{S.voice=v;Audio2.setVoice(v);saveNow();});
   seg('segMusic',[{t:'On',v:true},{t:'Off',v:false}],S.music,v=>{S.music=v;Audio2.musicOn(v);saveNow();});
+  seg('segSfx',[{t:'On',v:true},{t:'Off',v:false}],S.sfx!==false,v=>{S.sfx=v;Audio2.setExtra(v);saveNow();});
+  seg('segTips',[{t:'On',v:'on'},{t:'Fewer',v:'few'},{t:'Off',v:'off'}],S.tips||'on',v=>{
+    S.tips=v; saveNow();
+    if(v==='off') $('rolly').classList.remove('on');
+  });
+  buildVoiceList();
   seg('segGfx',[{t:'Auto',v:'auto'},{t:'Low',v:'low'},{t:'High',v:'high'}],S.gfx||'auto',v=>{
     S.gfx=v; saveNow(); applyGfx();
   });
@@ -2356,8 +3197,9 @@ function buildSettings(){
     Store.set('am_shadows',v);
   });
   const tr=Object.keys(S.traced||{}).length;
+  const qz=(S.quiz&&S.quiz.ok)||0;
   $('progLine').title = 'Alpha-Mart build '+BUILD;
-  $('progLine').textContent = `${S.owned.length}/26 letters · ★${S.stars} · ${S.plays} buys · ${tr} traced`;
+  $('progLine').textContent = `${S.owned.length}/26 letters · ★${S.stars} · ${S.plays} buys · ${tr} traced \u00b7 ${qz} quiz`;
   const shaky = LETTERS.filter(l=>(S.mastery[l.ch].miss||0)>=1).map(l=>l.ch);
   const numShaky = Object.keys(S.nums).filter(n=>(S.nums[n].miss||0)>=1);
   $('masteryBox').innerHTML =
@@ -2382,6 +3224,38 @@ function buildSettings(){
 }
 
 /* ---------------------------------------------------------------- PROFILES */
+function buildVoiceList(){
+  const host=$('voiceList'); if(!host) return;
+  const list=Audio2.listVoices();
+  host.innerHTML='';
+  if(!list.length){
+    host.innerHTML='<div style="font-size:16px;font-weight:700;color:#9a8fb5">'+
+      'No voices reported yet \u2014 reopen this panel in a moment.</div>';
+    return;
+  }
+  const cur=Audio2.currentVoice();
+  host.style.display='flex'; host.style.flexWrap='wrap'; host.style.gap='6px';
+  host.style.maxHeight='150px'; host.style.overflow='auto'; host.style.marginTop='6px';
+  list.slice(0,14).forEach(v=>{
+    const b=document.createElement('button');
+    b.className='btn'+(v.name===cur?' sel':'');
+    b.style.minHeight='46px'; b.style.fontSize='15px'; b.style.padding='6px 12px';
+    b.style.borderRadius='14px';
+    b.style.background = v.name===cur ? 'var(--blueberry)' : '#fff';
+    b.style.color = v.name===cur ? '#fff' : 'var(--ink)';
+    b.textContent=v.name.replace(/\s*\(.*?\)\s*/g,' ').replace(/Microsoft|Online|Natural/g,'').trim()
+                  || v.name;
+    b.title=v.name+' \u00b7 '+v.lang;
+    b.addEventListener('click',()=>{
+      Audio2.preferVoice(v.name);
+      S.voiceName=v.name; saveNow();
+      buildVoiceList();
+      Audio2.speak('Hello! I am Rolly. Let us buy the letter B.',{flush:true});
+    });
+    host.appendChild(b);
+  });
+}
+let pendingSlot=0;
 function openProfiles(){
   const row=$('slotRow'); row.innerHTML='';
   for(let i=0;i<3;i++){
@@ -2389,7 +3263,15 @@ function openProfiles(){
     const el=document.createElement('div'); el.className='slot';
     el.innerHTML=`<div class="face">${d?d.avatar:AVATARS[i]}</div>
       <div class="cnt">${d? d.owned.length+'/26 · ★'+d.stars : 'New game'}</div>`;
-    el.addEventListener('click',()=>{ Audio2.SFX.pop(); startGame(i, d); });
+    el.addEventListener('click',()=>{
+      Audio2.SFX.pop();
+      if(d){ startGame(i, d); return; }
+      pendingSlot=i;
+      layer('profiles', false);
+      $('nameInput').value='';
+      layer('nameAsk', true);
+      Audio2.speak('A grown-up can type the child\u2019s name, or tap skip.',{flush:true});
+    });
     row.appendChild(el);
   }
   layer('profiles', true);
@@ -2412,6 +3294,19 @@ function startGame(i, data){
   if(!S.gfx) S.gfx='auto';
   if(!S.traced) S.traced={};
   if(!S.carrying) S.carrying=[];
+  if(!S.tips) S.tips='on';
+  if(!S.quiz) S.quiz={ok:0,miss:0};
+  if(!S.cart) S.cart='classic';
+  if(!S.carts || !S.carts.length) S.carts=['classic'];
+  if(!S.list) S.list=[];
+  if(!S.listAll) S.listAll=[];
+  if(!S.listPrices) S.listPrices={};
+  if(S.listCount==null) S.listCount=0;
+  if(S.name==null) S.name='';
+  if(S.sfx==null) S.sfx=true;
+  Audio2.setExtra(S.sfx);
+  Audio2.startAmbience();
+  if(S.voiceName) Audio2.preferVoice(S.voiceName);
   applyGfx();
   saveNow();
   Audio2.setVoice(S.voice);
@@ -2423,14 +3318,42 @@ function startGame(i, data){
   cart.pos.set(0,0,16); cartGroup.position.copy(cart.pos); cart.path=[]; cart.moving=false;
   layer('profiles', false);
   $('hud').classList.remove('hidden');
+  camPos.set(cart.pos.x, 34, cart.pos.z+30); camIntro=2.4;
   started = true;
-  paintHUD();
-  Audio2.speak(`Welcome to Alpha-Mart, ${S.avatar==='🦊'?'Fox':S.avatar==='🐼'?'Panda':'Dino'} shopper! I'm Rolly, your cart. Let's buy some letters!`, {flush:true});
+  paintHUD(); paintCheckoutWall(); paintNameBoard();
+  speakLines([ S.name ? `Welcome to Alpha-Mart, ${S.name}!` : 'Welcome to Alpha-Mart!',
+               `I'm Rolly, your shopping cart.`,
+               S.name && !S.listCount ? `Our first list is the letters in your name.`
+                                      : `Let's go and buy some letters.` ]);
+  $('soundBtn').textContent = S.voice ? '🔊' : '🔇';
   setTimeout(openTutorial, 450);
 }
 
+function puffDust(){
+  if(!cartBits.puffs) return;
+  let n=0;
+  cartBits.puffs.forEach(p=>{
+    if(p.life>0 || n>=2) return;
+    n++;
+    p.m.visible=true; p.life=0.55;
+    p.m.position.set(cart.pos.x+(n===1?-0.6:0.6), 0.12, cart.pos.z+0.7);
+    p.m.scale.setScalar(0.5);
+    p.m.material.opacity=0.75;
+  });
+}
+function updatePuffs(dt){
+  if(!cartBits.puffs) return;
+  cartBits.puffs.forEach(p=>{
+    if(p.life<=0) return;
+    p.life-=dt;
+    const k=1-Math.max(0,p.life)/0.55;
+    p.m.scale.setScalar(0.5+k*1.5);
+    p.m.material.opacity=Math.max(0,0.75*(1-k));
+    if(p.life<=0) p.m.visible=false;
+  });
+}
 function beaconTarget(){
-  if(mode==='deliver' && checkout) return {x:checkout.stand.x, y:4.2, z:checkout.stand.z-0.6};
+  if(mode==='deliver' && checkout) return {x:checkout.stand.x+1.0, y:4.0, z:checkout.z};
   if(quest){
     const o=letterObjs[quest.L.ch];
     if(o && o.group.visible) return {x:o.group.position.x, y:(o.baseY||2.5)+1.15, z:o.group.position.z};
@@ -2464,7 +3387,7 @@ function updateEdgeArrow(){
   el.style.textShadow='0 0 0 #2B2140,2px 2px 0 #2B2140,-2px 2px 0 #2B2140,2px -2px 0 #2B2140,-2px -2px 0 #2B2140';
 }
 
-let camPos=new THREE.Vector3(0,17,30), camLook=new THREE.Vector3(0,1,16);
+let camPos=new THREE.Vector3(0,34,52), camLook=new THREE.Vector3(0,1,16), camIntro=0;
 function animate(){
   requestAnimationFrame(animate);
   step(Math.min(clock.getDelta(),0.05), clock.elapsedTime);
@@ -2480,7 +3403,8 @@ function step(dt,t){
     const want=Math.atan2(nx,nz);
     let df=want-cart.heading;
     while(df>Math.PI) df-=Math.PI*2; while(df<-Math.PI) df+=Math.PI*2;
-    cart.heading+=df*Math.min(1,dt*9);
+    const turn2=df*Math.min(1,dt*9);
+    cart.heading+=turn2; cart.turnRate=turn2/Math.max(dt,0.001);
     cartBits.wheels.forEach(w=>w.rotation.x-=sp*3.4);
     cart.steering=true;
   } else cart.steering=false;
@@ -2511,12 +3435,51 @@ function step(dt,t){
       const want=Math.atan2(dir.x,dir.z);
       let diff=want-cart.heading;
       while(diff>Math.PI) diff-=Math.PI*2; while(diff<-Math.PI) diff+=Math.PI*2;
-      cart.heading+=diff*Math.min(1,dt*9);
+      const turn=diff*Math.min(1,dt*9);
+      cart.heading+=turn; cart.turnRate=turn/Math.max(dt,0.001);
       cartBits.wheels.forEach(w=>w.rotation.x-=step*3.4);
     }
   }
+  /* ---- Rolly's little performance ---- */
+  const rolling = !!(cart.moving || cart.steering);
+  cart.nextBlink-=dt;
+  if(cart.nextBlink<=0){ cart.blink=0.13; cart.nextBlink=2.2+Math.random()*3.4; }
+  if(cart.blink>0) cart.blink-=dt;
+  const lid = cart.blink>0 ? 0.12 : 1;
+  if(cartBits.eyes) cartBits.eyes.forEach(e=>{ e.scale.y=lid; });
+  if(cartBits.pupils){
+    const tg=beaconTarget();
+    let px=0, py=0;
+    if(tg){
+      const dx=tg.x-cart.pos.x, dz=tg.z-cart.pos.z;
+      const d=Math.hypot(dx,dz)||1;
+      const fwd=Math.sin(cart.heading)*dx/d + Math.cos(cart.heading)*dz/d;
+      const side=Math.cos(cart.heading)*dx/d - Math.sin(cart.heading)*dz/d;
+      px=THREE.MathUtils.clamp(-side*0.055,-0.055,0.055);
+      py=THREE.MathUtils.clamp(fwd*0.028,-0.028,0.028);
+    }
+    cartBits.pupils.forEach((pu,i)=>{
+      pu.position.x = (i?0.22:-0.22)+px;
+      pu.position.y = 1.13+py;
+      pu.scale.y = lid;
+    });
+  }
+  /* lean into the turn, and squash the wheels when braking */
+  const tr = (typeof cart.turnRate==='number' && isFinite(cart.turnRate)) ? cart.turnRate : 0;
+  cart.lean += ((rolling ? -tr*0.9 : 0) - (cart.lean||0)) * Math.min(1,dt*6);
+  if(!isFinite(cart.lean)) cart.lean=0;
+  if(cart.wasMoving && !rolling){ cart.squash=0.22; puffDust(); }
+  cart.wasMoving=rolling;
+  if(cart.squash>0) cart.squash=Math.max(0,cart.squash-dt*1.4);
+  cartBits.wheels.forEach(w=>{ w.scale.x=1-cart.squash*0.5; w.scale.z=1+cart.squash*0.35; });
+  Audio2.wheels(rolling ? Math.min(1, (cart.speed||7.6)/9) : 0);
+  updatePuffs(dt);
+  updateLetterAnim(dt);
+  updateTilePops(dt);
+
   cartGroup.position.copy(cart.pos);
   cartGroup.rotation.y=cart.heading;
+  cartGroup.rotation.z=THREE.MathUtils.clamp(cart.lean,-0.16,0.16);
   cartGroup.position.y=Math.sin(t*9)*((cart.moving||cart.steering)?0.035:0.012);
   if(cartBits.balloon.visible) cartBits.balloon.rotation.z=Math.sin(t*1.6)*0.12;
   if(cartBits.flag.visible) cartBits.flag.rotation.y=Math.sin(t*3)*0.25;
@@ -2536,6 +3499,10 @@ function step(dt,t){
       beacon.visible=true;
       beacon.position.set(tg.x, tg.y+Math.sin(t*3)*0.22, tg.z);
       beacon.rotation.y=t*1.5;
+    if(beacon.userData.bloom){
+      beacon.userData.bloom.rotation.y=-t*1.5;         // keep the glow facing the camera
+      beacon.userData.bloom.scale.setScalar(1+Math.sin(t*4)*0.10);
+    }
     } else beacon.visible=false;
   }
 
@@ -2544,11 +3511,13 @@ function step(dt,t){
   const want=new THREE.Vector3().copy(cart.pos).add(preset.off);
   want.x=THREE.MathUtils.clamp(want.x, W.minX+7, W.maxX-7);
   want.z=THREE.MathUtils.clamp(want.z, W.minZ+5, W.maxZ+15);
-  camPos.lerp(want, Math.min(1,dt*3.2));
+  if(camIntro>0) camIntro=Math.max(0,camIntro-dt);
+  const ease = camIntro>0 ? 0.85 : 3.2;                // drift in gently at the start
+  camPos.lerp(want, Math.min(1,dt*ease));
   camLook.lerp(new THREE.Vector3().copy(cart.pos).add(preset.look), Math.min(1,dt*4.2));
   camera.position.copy(camPos); camera.lookAt(camLook);
 
-  npcProximity();
+  if(started){ const bb=$('boot'); if(bb && !bb.classList.contains('gone')) bb.classList.add('gone'); }
   if(wallBack) wallBack.visible = cart.pos.z > W.storeBackZ-0.2;
   roomCheck();
   perfTune(dt);
@@ -2603,7 +3572,7 @@ const TUT=[
   {ic:'\ud83d\udcb0', txt:"Then pay for it. Tap the price that matches the number you hear."},
   {ic:'\ud83e\uddfe', txt:"Then bring the letter back to the checkout counter and put it on the wall at the bottom."},
   {ic:'👋', txt:"Say hello to the shoppers. They give good tips!"},
-  {ic:'\u270f\ufe0f', txt:"And drive into the Break Room in the back corner to practice writing letters and numbers."}
+  {ic:'\u270f\ufe0f', txt:"There are three rooms at the back. Drive in to trace letters, trace numbers, or play the listening game."}
 ];
 let tutI=0;
 function openTutorial(){ tutI=0; layer('tut',true); paintTut(); }
@@ -2622,6 +3591,96 @@ function closeTut(){
   if(started && !quest) setTimeout(newQuest,250);
 }
 
+/* ================================================================ WORD ROOM: FIRST SOUNDS */
+const QUIZ={ans:null, word:'', emoji:'', opts:[], misses:0, streak:0, locked:false};
+function quizPool(){ return LETTERS.filter(l=>l.firstOk && QUIZ_WORDS[l.ch]); }
+function openQuiz(){
+  layer('quiz', true);
+  QUIZ.streak=0;
+  newQuizQuestion();
+  Audio2.speak("Welcome to the word room! I'll say a word, and you find the letter it begins with.",{flush:true});
+}
+function newQuizQuestion(){
+  const pool=quizPool();
+  const L=weightedPick(pool, l=>{
+    const m=(S && S.mastery[l.ch]) || {seen:0,miss:0};
+    return 1 + (m.miss||0)*2.5 + ((m.seen||0)===0 ? 1.5 : 0);
+  });
+  const w=oneOf(QUIZ_WORDS[L.ch]);
+  QUIZ.ans=L.ch; QUIZ.word=w[0]; QUIZ.emoji=w[1];
+  QUIZ.misses=0; QUIZ.locked=false;
+  const opts=[L.ch];
+  const conf=(CONFUSE[L.ch]||'').split('').filter(c=>LMAP[c] && c!==L.ch);
+  if(conf.length) opts.push(oneOf(conf));
+  let guard=0;
+  while(opts.length<4 && guard++<200){
+    const c=LETTERS[Math.floor(Math.random()*LETTERS.length)].ch;
+    if(opts.indexOf(c)<0) opts.push(c);
+  }
+  QUIZ.opts=shuffle(opts);
+  paintQuiz();
+  speakQuizQuestion();
+}
+function paintQuiz(){
+  $('quizEmoji').textContent=QUIZ.emoji;
+  $('quizAsk').textContent='Which letter begins this word?';
+  $('quizWord').textContent=QUIZ.word;
+  $('quizWord').classList.add('hidden');     // the word stays hidden: listen and look
+  $('quizFeedback').textContent='Listen, then choose!';
+  const host=$('quizOpts'); host.innerHTML='';
+  QUIZ.opts.forEach(ch=>{
+    const b=document.createElement('button');
+    b.className='optBtn'; b.dataset.n=ch;
+    b.innerHTML='<span class="up">'+ch+'</span><span class="lo">'+ch.toLowerCase()+'</span>';
+    b.addEventListener('click',()=>answerQuiz(ch,b));
+    host.appendChild(b);
+  });
+}
+function speakQuizQuestion(){
+  speakLines([`Which letter begins the word ${QUIZ.word}?`, `${QUIZ.word}.`]);
+}
+function answerQuiz(ch, btn){
+  if(QUIZ.locked) return;
+  lastInput=Date.now();
+  const ans=QUIZ.ans, L=LMAP[ans];
+  if(ch===ans){
+    QUIZ.locked=true;
+    btn.classList.add('good');
+    QUIZ.streak++;
+    if(S){
+      S.mastery[ans].ok++; S.quiz=S.quiz||{ok:0,miss:0}; S.quiz.ok++;
+      if(QUIZ.streak%3===0){ S.stars+=1; paintHUD(); }
+      saveNow();
+    }
+    Audio2.SFX.chaching(); confetti(50);
+    $('quizWord').classList.remove('hidden');
+    $('quizFeedback').textContent = `Yes! ${QUIZ.word} begins with ${ans} ${ans.toLowerCase()}.`;
+    speakLines([ oneOf(['That\u2019s right!','Yes!','Well done!']),
+                 `${titleCase(QUIZ.word)} begins with ${ans}.`,
+                 letterLine(ans) ]);
+    setTimeout(()=>{ if($('quiz').classList.contains('on')) newQuizQuestion(); }, 3000);
+  } else {
+    btn.classList.add('meh');
+    QUIZ.misses++;
+    if(S){ S.mastery[ch].miss += 0.4; S.quiz=S.quiz||{ok:0,miss:0}; S.quiz.miss++; saveNow(); }
+    Audio2.SFX.err();
+    $('quizFeedback').textContent = `That's ${ch} ${ch.toLowerCase()}. Try again!`;
+    speakLines([`That one\u2019s ${ch}.`, letterLine(ch),
+                `We want the letter that begins ${QUIZ.word}.`]);
+    setTimeout(()=>btn.classList.remove('meh'), 900);
+    if(QUIZ.misses>=2) quizHint();
+  }
+}
+function quizHint(){
+  const ans=QUIZ.ans, L=LMAP[ans];
+  const b=document.querySelector('.optBtn[data-n="'+ans+'"]');
+  if(b) b.classList.add('hintGlow');
+  $('quizWord').classList.remove('hidden');   // Help is what shows the spelling
+  $('quizFeedback').textContent = `${QUIZ.word} starts with the sound "${L.sound.split(',')[0]}".`;
+  speakLines([`Listen carefully. ${QUIZ.word}.`, `${QUIZ.word} starts with ${L.sound}.`,
+              'It\u2019s the glowing one.']);
+}
+
 /* ================================================================ BREAK ROOM: TRACING */
 const TRACE={ mode:'letters', glyph:'A', size:0, drawing:false, lx:0, ly:0,
               mask:null, maskCount:0, ink:null, inkCtx:null, cv:null, ctx:null,
@@ -2631,12 +3690,21 @@ function traceGlyphs(){
   const out=['0']; for(let i=1;i<=20;i++) out.push(String(i));
   return out;
 }
-function openTrace(){
+function openTrace(which){
+  if(which==='letters' || which==='numbers'){
+    TRACE.mode=which;
+    if(which==='numbers' && !/^[0-9]+$/.test(TRACE.glyph)) TRACE.glyph='1';
+    if(which==='letters' && /^[0-9]+$/.test(TRACE.glyph)) TRACE.glyph='A';
+  }
   layer('trace',true);
   sizeTrace();
   buildTracePicker();
   setGlyph(TRACE.glyph);
-  Audio2.speak("Welcome to the break room! Pick a letter or a number, then trace it with your finger.",{flush:true});
+  $('traceTitle').textContent = TRACE.mode==='numbers' ? 'Number Room \u00b7 Write 0 to 20'
+                                                      : 'Letter Room \u00b7 Write A to Z';
+  speakLines(TRACE.mode==='numbers'
+    ? ['Welcome to the number room!', 'Pick a number, then trace it with your finger.']
+    : ['Welcome to the letter room!', 'Pick a letter, then trace it with your finger.']);
 }
 function sizeTrace(){
   const s=Math.round(Math.min(window.innerWidth*0.80, window.innerHeight*0.46, 430));
@@ -2680,9 +3748,8 @@ function setGlyph(ch){
   const L=LMAP[ch];
   const hint=traceHint(ch);
   $('traceTip').textContent=hint;
-  Audio2.speak(L ? `Trace the letter ${ch}. ${ch} says ${L.sound}.`
-                 : `Trace the number ${ch}.`, {flush:true});
-  Audio2.speak(hint);
+  speakLines(L ? [`Let's trace the letter ${ch}.`, letterLine(ch), hint]
+               : [`Let's trace the number ${ch}.`, hint]);
 }
 function drawTrace(eyes){
   const s=TRACE.size, g=TRACE.ctx;
@@ -2780,8 +3847,9 @@ function traceWin(off){
     saveNow(); paintHUD();
   }
   const L=LMAP[TRACE.glyph];
-  Audio2.speak(L ? `You wrote the letter ${TRACE.glyph}! ${TRACE.glyph} says ${L.sound}.`
-                 : `You wrote the number ${TRACE.glyph}!`, {flush:true});
+  speakLines(L ? [oneOf([`You wrote the letter ${TRACE.glyph}!`, `Beautiful ${TRACE.glyph}!`]),
+                  letterLine(TRACE.glyph)]
+               : [oneOf([`You wrote the number ${TRACE.glyph}!`, `That's a lovely ${TRACE.glyph}.`])]);
   if(off>0.55) Audio2.speak("Next time try to stay on the lines.");
   buildTracePicker();
   setTimeout(()=>{ if($('trace').classList.contains('on')) traceNext(); }, 2800);
@@ -2802,13 +3870,16 @@ function traceErase(){
 
 /* ---------------------------------------------------------------- WIRE UP */
 function decorateBoot(){
-  const host=$('bootLetters');
-  'ABCDEFGHIJKLM'.split('').forEach((ch,i)=>{
-    const s=document.createElement('span');
-    s.textContent=ch; s.style.background=PAL[i%PAL.length];
-    s.style.animationDelay=(i*0.09)+'s';
-    host.appendChild(s);
-  });
+  /* the mark cycles a few letters so the start screen feels alive without
+     leaving a row of letters floating over the game */
+  const m=$('bootMark'); if(!m) return;
+  let i=0;
+  setInterval(()=>{
+    if(started){ return; }
+    i=(i+1)%LETTERS.length;
+    m.textContent=LETTERS[i].ch;
+    m.style.background=LETTERS[i].color;
+  }, 900);
 }
 function wire(){
   window.addEventListener('resize', ()=>{ if(renderer) resize(); });
@@ -2857,17 +3928,47 @@ function wire(){
     b.addEventListener('touchstart',on,{passive:false});
     b.addEventListener('touchend',off);
   });
+  $('rolly').addEventListener('click',()=>{ $('rolly').classList.remove('on'); Audio2.shutUp(); });
+  $('soundBtn').addEventListener('click',()=>{
+    S.voice=!S.voice; S.music=S.voice;
+    Audio2.setVoice(S.voice); Audio2.musicOn(S.music && CFG.MUSIC);
+    $('soundBtn').textContent = S.voice ? '🔊' : '🔇';
+    saveNow();
+    if(S.voice){ Audio2.SFX.pop(); Audio2.speak('Sound is on!',{flush:true}); }
+  });
   $('btnA').addEventListener('click', pressA);
   $('btnB').addEventListener('click', pressB);
   $('icGo').addEventListener('click',()=>{ layer('intercom',false); Audio2.shutUp();
     rolly('Follow the glowing light!', true); });
-  $('icAgain').addEventListener('click',()=>{ if(quest) Audio2.speak(questSpeech(),{flush:true}); });
+  $('icAgain').addEventListener('click',()=>{ if(quest) speakLines(questLines()); });
   $('repeatBtn').removeEventListener('click',()=>{});
+  $('nameGo').addEventListener('click',()=>{
+    const v=($('nameInput').value||'').replace(/[^A-Za-z ]/g,'').trim().slice(0,12);
+    const s=blankSave(AVATARS[pendingSlot]);
+    s.name = v ? v.charAt(0).toUpperCase()+v.slice(1).toLowerCase() : '';
+    layer('nameAsk', false);
+    startGame(pendingSlot, s);
+  });
+  $('nameSkip').addEventListener('click',()=>{
+    layer('nameAsk', false);
+    startGame(pendingSlot, blankSave(AVATARS[pendingSlot]));
+  });
+  $('nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('nameGo').click(); });
+  $('certDone').addEventListener('click',()=>{ layer('cert',false); Audio2.shutUp(); });
+  $('recNext').addEventListener('click',()=>{ layer('receipt',false); Audio2.shutUp();
+    S.list=[]; S.listAll=[]; S.listPrices={}; saveNow(); setTimeout(newQuest,250); });
+  $('recDone').addEventListener('click',()=>{ layer('receipt',false); Audio2.shutUp();
+    S.list=[]; S.listAll=[]; S.listPrices={}; saveNow();
+    rolly('Have a look around! Press B when you are ready for a new list.', true); });
   $('helpBtn').addEventListener('click', openTutorial);
   $('tutNext').addEventListener('click', tutNext);
   $('tutSkip').addEventListener('click', closeTut);
   $('tabLetters').addEventListener('click',()=>{ TRACE.mode='letters'; setGlyph('A'); buildTracePicker(); });
   $('tabNumbers').addEventListener('click',()=>{ TRACE.mode='numbers'; setGlyph('1'); buildTracePicker(); });
+  $('quizAgain').addEventListener('click', speakQuizQuestion);
+  $('quizHelp').addEventListener('click', quizHint);
+  $('quizDone').addEventListener('click',()=>{ layer('quiz',false); Audio2.shutUp();
+    rolly('Great listening! Back to shopping.', true); });
   $('traceErase').addEventListener('click', traceErase);
   $('traceSkip').addEventListener('click', traceNext);
   $('traceHear').addEventListener('click',()=>{ const L=LMAP[TRACE.glyph];
@@ -2885,6 +3986,8 @@ function wire(){
   window.addEventListener('resize',()=>{ if($('trace').classList.contains('on')){ sizeTrace(); setGlyph(TRACE.glyph); } });
   $('wallBtn').addEventListener('click', openWall);
   $('garageBtn').addEventListener('click', openGarage);
+  $('tabCarts').addEventListener('click',()=>{ garTab='carts'; paintGarage(); });
+  $('tabDecor').addEventListener('click',()=>{ garTab='decor'; paintGarage(); });
   $('setBtn').addEventListener('click', openSettings);
   $('walletBack').addEventListener('click',()=>{ layer('wallet',false); Audio2.shutUp(); cart.onArrive=null;
     rolly('Come back when you are ready to buy!', true); });
@@ -2901,20 +4004,35 @@ function wire(){
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) Audio2.shutUp(); });
 }
 
-const BUILD='v7 \u00b7 2026-08-08';
+const BUILD='v8';
+let startArmed=false;
+function beginPlay(){
+  if(startArmed) return;
+  startArmed=true;
+  try{ Audio2.unlock(); Audio2.SFX.chaching(); }catch(e){}
+  const b=$('boot'); b.style.display='none'; b.classList.add('gone');
+  setTimeout(openProfiles, 120);
+}
 function boot(){
+  /* arm the start control FIRST so it can never be left dead by a later failure,
+     and let a tap anywhere on the start screen begin play */
+  const startEl=$('startBtn'), bootEl=$('boot');
+  if(startEl) startEl.addEventListener('click', beginPlay);
+  if(bootEl){
+    bootEl.addEventListener('pointerdown', beginPlay);
+    bootEl.addEventListener('click', beginPlay);
+    bootEl.addEventListener('touchstart', beginPlay, {passive:true});
+  }
   decorateBoot();
-  const vb=$('verBadge'); if(vb) vb.textContent='Build '+BUILD;
+  const sh = Store.get('am_shadows', null);
+  if(sh!==null) CFG.SHADOWS = sh;
   window.addEventListener('error', ev=>{
     const box=$('loading');
     if(!box) return;
     box.style.display='grid';
-    box.innerHTML='<div style="padding:24px;text-align:center;font-size:18px">'+
-      'Something went wrong.<br><br><small style="opacity:.75">'+
-      (ev.message||'unknown')+'</small><br><br>Build '+BUILD+'</div>';
+    box.innerHTML='<div style="padding:24px;text-align:center;font-size:18px">Something went wrong.'+
+      '<br><br><small style="opacity:.75">'+(ev.message||'unknown')+'</small></div>';
   });
-  const sh = Store.get('am_shadows', null);
-  if(sh!==null) CFG.SHADOWS = sh;
   try{
     buildGrid();
     buildScene();
@@ -2924,18 +4042,11 @@ function boot(){
     $('loading').style.display='none';
   }catch(err){
     $('loading').innerHTML = '<div style="padding:24px;text-align:center;font-size:20px">'+
-      'Oops — this browser could not start the 3D store.<br><br>'+
+      'This browser could not start the 3D store.<br><br>'+
       'Try Chrome, Safari, Edge or Firefox with hardware acceleration on.<br><br>'+
       '<small style="opacity:.6">'+(err&&err.message?err.message:'unknown error')+'</small></div>';
     console.error(err);
-    return;
   }
-  $('startBtn').addEventListener('click',()=>{
-    Audio2.unlock();
-    Audio2.SFX.chaching();
-    $('boot').style.display='none';
-    setTimeout(openProfiles, 120);
-  });
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
