@@ -43,13 +43,22 @@ canvas{display:block;width:100%;height:100%}
 
 /* ---------- boot ---------- */
 #boot.gone{display:none!important}
-#boot{background:radial-gradient(circle at 50% 35%,#8FE0FF 0%,#3B6FE0 60%,#2A1F53 100%);
+/* This was a static box, so its z-index did nothing and the fixed canvas painted
+   straight over the whole start screen.  The only part that showed through was
+   the letter badge -- its animation gives it a stacking context of its own -- so
+   the badge in the corner was the one and only way to start the game. */
+#boot{position:fixed;inset:0;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 35%,#8FE0FF 0%,#3B6FE0 60%,#2A1F53 100%);
   flex-direction:column;gap:18px;z-index:90;display:flex;text-align:center;padding:20px}
 #boot h1{font-size:clamp(44px,12vw,110px);color:#fff;text-shadow:0 8px 0 var(--tomato),0 12px 24px rgba(0,0,0,.4);letter-spacing:2px}
 #boot .sub{font-size:clamp(18px,4.5vw,28px);color:#FFF0B8;font-weight:600}
-#bootMark{display:grid;place-items:center;width:clamp(88px,22vw,120px);height:clamp(88px,22vw,120px);
-  border-radius:26px;border:6px solid var(--ink);background:var(--butter);color:var(--ink);
-  font-size:clamp(54px,14vw,76px);font-weight:800;animation:bob 2s ease-in-out infinite}
+#bootMark{display:grid;place-items:center;width:clamp(120px,30vw,180px);height:clamp(120px,30vw,180px);
+  border-radius:32px;border:8px solid var(--ink);background:var(--butter);color:var(--ink);
+  font-size:clamp(74px,19vw,116px);font-weight:800;animation:bob 2s ease-in-out infinite;
+  box-shadow:0 10px 0 rgba(43,33,64,.35)}
+#startBtn{animation:pressMe 1.4s ease-in-out infinite}
+@keyframes pressMe{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#bootHand{font-size:clamp(32px,8vw,46px);animation:bob 1.1s ease-in-out infinite;margin-top:-6px}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
 
 /* ---------- profiles ---------- */
@@ -57,7 +66,8 @@ canvas{display:block;width:100%;height:100%}
 #nameInput{font-family:var(--font);font-size:34px;font-weight:800;text-align:center;
   width:min(80%,320px);border:5px solid var(--ink);border-radius:20px;padding:10px;margin-top:16px;
   color:var(--ink);text-transform:capitalize}
-#listBar{position:absolute;top:96px;left:50%;transform:translateX(-50%);display:flex;gap:6px;
+#listBar{position:absolute;top:96px;left:0;right:0;margin:0 auto;width:fit-content;
+  max-width:94vw;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
   align-items:center;background:var(--cream);border:5px solid var(--ink);border-radius:20px;
   padding:6px 12px;box-shadow:var(--shadow)}
 #listBar .lt{width:38px;height:38px;border-radius:11px;border:4px solid var(--ink);display:grid;
@@ -101,7 +111,11 @@ canvas{display:block;width:100%;height:100%}
 /* ---------- HUD ---------- */
 #hud{position:fixed;inset:0;pointer-events:none;z-index:20}
 #hud > *{pointer-events:auto}
-#questBar{position:absolute;top:10px;left:50%;transform:translateX(-50%);
+/* Centred with left/right:0 + auto margins rather than left:50% + translate.
+   A shrink-to-fit absolute box offset by 50% only gets HALF the screen as its
+   available width, so on a phone the quest text was collapsing to one word per
+   line.  The same trick is used for every centred bar below. */
+#questBar{position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;
   display:flex;align-items:center;gap:12px;background:var(--cream);border:5px solid var(--ink);
   border-radius:26px;padding:8px 16px;box-shadow:var(--shadow);max-width:min(94vw,620px)}
 #questIcon{width:60px;height:60px;border-radius:16px;border:4px solid var(--ink);display:grid;
@@ -111,13 +125,31 @@ canvas{display:block;width:100%;height:100%}
 #repeatBtn{flex:0 0 auto;min-height:56px;min-width:56px;padding:6px 12px;font-size:26px;border-radius:18px}
 
 #topRight{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:8px}
-#topLeft{position:absolute;top:84px;left:10px;display:flex;flex-direction:column;gap:8px}
+#topLeft{position:absolute;top:84px;left:10px;display:flex;flex-direction:column;gap:8px;
+  max-height:calc(100vh - 190px);flex-wrap:wrap}
 .iconbtn{width:62px;height:62px;font-size:30px;padding:0;border-radius:20px;display:grid;place-items:center}
 #starPill{background:var(--grape);color:#fff;border:4px solid var(--ink);border-radius:20px;
   padding:6px 14px;font-size:24px;font-weight:800;box-shadow:var(--shadow);text-align:center}
-#edgeArrow{position:absolute;width:76px;height:76px;display:none;place-items:center;font-size:44px;
+#edgeArrow{position:absolute;width:104px;height:104px;display:none;place-items:center;font-size:56px;
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));z-index:19;pointer-events:none}
-#rolly{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);cursor:pointer;
+/* A label pinned over whatever the player is meant to touch next: the letter on
+   the shelf, or the checkout once it is in the basket.  Playtesting showed a
+   three-year-old had no idea the letter itself was the thing to tap. */
+#worldTag{position:absolute;display:none;transform:translate(-50%,-100%);z-index:23;
+  pointer-events:none;white-space:nowrap}
+#worldTag span{display:inline-block;background:var(--butter);color:var(--ink);
+  border:5px solid var(--ink);border-radius:20px;padding:7px 15px;
+  font-family:var(--font);font-size:clamp(17px,3.6vw,23px);font-weight:800;
+  box-shadow:var(--shadow);animation:tagBob 1s ease-in-out infinite}
+#worldTag.deliver span{background:var(--tomato);color:#fff}
+#worldTag::after{content:'';position:absolute;left:50%;bottom:-13px;margin-left:-9px;
+  border:9px solid transparent;border-top-color:var(--ink)}
+@keyframes tagBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.05)}}
+/* The bottom of the screen is a stack, not a pile: the A-Z strip owns the very
+   bottom, Rolly's hint bubble sits directly above it, and the driving controls
+   start above both.  Previously the hint bubble was laid straight over the
+   strip and the controls. */
+#rolly{position:absolute;bottom:56px;left:0;right:0;margin:0 auto;cursor:pointer;
   width:min(94vw,660px);background:#fff;border:5px solid var(--ink);border-radius:20px;
   padding:10px 16px;font-size:clamp(15px,3.6vw,19px);line-height:1.25;font-weight:800;
   color:var(--ink);box-shadow:var(--shadow);display:none;text-align:center;z-index:24;
@@ -137,12 +169,8 @@ canvas{display:block;width:100%;height:100%}
 #askLine{font-size:26px;font-weight:800;color:var(--ink);margin:12px 0 4px}
 #priceBig{font-size:44px;font-weight:800;color:var(--tomato);margin-bottom:8px}
 #numPad{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:6px}
-.numBtn{width:76px;height:76px;font-size:38px;font-weight:800;border:5px solid var(--ink);border-radius:22px;
-  background:#fff;color:var(--ink);box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center}
-.numBtn:active{transform:translateY(4px)}
-.numBtn.good{background:var(--mint);animation:cheer .5s ease}
-.numBtn.meh{background:#ffd9d1}
-.numBtn.hintGlow{animation:glow 1s ease-in-out infinite}
+/* the till's buttons are .priceBtn, defined with the intercom's; the old
+   .numBtn rules here styled nothing */
 @keyframes glow{0%,100%{box-shadow:var(--shadow)}50%{box-shadow:0 0 0 8px rgba(255,201,60,.85),var(--shadow)}}
 @keyframes cheer{0%{transform:scale(1)}45%{transform:scale(1.25) rotate(6deg)}100%{transform:scale(1)}}
 #coinArea{margin-top:6px}
@@ -179,6 +207,8 @@ canvas{display:block;width:100%;height:100%}
 .cartCard .nm{font-size:17px;font-weight:800;color:var(--ink);margin-top:2px}
 .cartCard .bl{font-size:13px;font-weight:600;color:#7b7191;line-height:1.2;margin-top:2px}
 .cartCard .cost{font-size:17px;font-weight:800;color:var(--grape);margin-top:4px}
+/* the power-up, called out above the flavour text so it reads as the reason to buy */
+.cartCard .pw{font-size:13px;font-weight:800;color:var(--tomato);margin-top:3px;line-height:1.15}
 .cartCard.owned{background:#EAFBF3}
 .cartCard.using{background:var(--mint);box-shadow:0 0 0 5px rgba(63,208,155,.45),var(--shadow)}
 .cartCard.locked{opacity:.6}
@@ -224,19 +254,20 @@ canvas{display:block;width:100%;height:100%}
 .sl.got{border-color:var(--ink);color:var(--ink)}
 .sl.hold{border-color:#FFD34E;color:#FFD34E;animation:glow 1s ease-in-out infinite}
 
-#dpad{position:absolute;left:10px;bottom:96px;width:186px;height:186px;z-index:22}
+#dpad{position:absolute;left:10px;bottom:140px;width:186px;height:186px;z-index:22}
 .dbtn{position:absolute;width:60px;height:60px;font-size:26px;font-weight:800;font-family:var(--font);
   border:4px solid var(--ink);border-radius:16px;background:var(--cream);color:var(--ink);
   box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center}
 .dbtn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(43,33,64,.35)}
 .dbtn[data-k="u"]{left:63px;top:0} .dbtn[data-k="l"]{left:0;top:63px}
 .dbtn[data-k="r"]{left:126px;top:63px} .dbtn[data-k="d"]{left:63px;top:126px}
-#abpad{position:absolute;right:12px;bottom:100px;display:flex;gap:12px;align-items:flex-end;z-index:22}
+#abpad{position:absolute;right:12px;bottom:144px;display:flex;gap:12px;align-items:flex-end;z-index:22}
 .abtn{width:86px;height:86px;border-radius:50%;border:5px solid var(--ink);background:var(--mint);
   color:var(--ink);font-family:var(--font);font-size:34px;font-weight:800;box-shadow:var(--shadow);cursor:pointer}
 .abtn.b{width:68px;height:68px;font-size:26px;background:var(--butter)}
 .abtn:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(43,33,64,.35)}
-#carryPill{position:absolute;left:50%;transform:translateX(-50%);bottom:98px;background:var(--butter);border:5px solid var(--ink);
+#carryPill{position:absolute;left:0;right:0;margin:0 auto;width:fit-content;max-width:94vw;
+  bottom:142px;background:var(--butter);border:5px solid var(--ink);text-align:center;
   border-radius:24px;padding:8px 16px;font-size:19px;font-weight:800;color:var(--ink);box-shadow:var(--shadow)}
 
 #intercom{background:rgba(20,14,40,.75);z-index:78}
@@ -290,39 +321,138 @@ canvas{display:block;width:100%;height:100%}
 #traceTabs{display:flex;gap:10px;justify-content:center;margin:8px 0}
 #traceTabs .btn{min-height:52px;font-size:21px;padding:8px 20px}
 #traceTabs .btn.sel{background:var(--blueberry);color:#fff}
-#tracePicker{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:104px;overflow:auto;
-  margin:6px 0 10px;padding:4px}
-.chip{min-width:46px;min-height:46px;font-family:var(--font);font-size:22px;font-weight:800;
-  border:4px solid var(--ink);border-radius:14px;background:#fff;color:var(--ink);cursor:pointer}
+#tracePicker{display:flex;flex-wrap:nowrap;gap:6px;justify-content:flex-start;
+  max-height:58px;overflow-x:auto;overflow-y:hidden;margin:6px 0 8px;padding:4px;
+  scrollbar-width:thin}
+.chip{min-width:46px;min-height:46px;flex:0 0 auto;font-family:var(--font);font-size:22px;
+  font-weight:800;border:4px solid var(--ink);border-radius:14px;background:#fff;
+  color:var(--ink);cursor:pointer}
 .chip.sel{background:var(--butter)}
 .chip.didit{background:var(--mint)}
-#traceCv{border:6px solid var(--ink);border-radius:22px;touch-action:none;display:block;margin:0 auto;
-  box-shadow:var(--shadow);background:#2F4A3C}
+#traceCv{border:7px solid var(--ink);border-radius:22px;touch-action:none;display:block;margin:0 auto;
+  box-shadow:0 0 0 5px rgba(255,201,60,.55), var(--shadow);background:#2F4A3C;cursor:crosshair}
 #traceMeter{height:20px;border:4px solid var(--ink);border-radius:12px;background:#fff;margin:12px auto 4px;
   max-width:420px;overflow:hidden}
 #traceFill{height:100%;width:0;background:linear-gradient(90deg,var(--butter),var(--mint));transition:width .2s}
 #traceHint{font-size:19px;font-weight:800;color:var(--ink)}
 #traceBtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-#traceBtns .btn{min-height:56px;font-size:19px;padding:8px 16px}
+/* trimmed so the four buttons sit on one row, leaving the tracing board taller */
+#traceBtns .btn{min-height:50px;font-size:15px;padding:6px 9px}
+#traceBtns .btn.goback{min-height:56px;font-size:18px;padding:8px 14px}
 .btn.butter{background:var(--butter)}
 #loading{position:fixed;inset:0;background:#2A1F53;color:#fff;display:grid;place-items:center;
   font-size:28px;font-weight:800;z-index:95}
 @media (max-width:520px){
-  #dpad{width:150px;height:150px;bottom:88px}
+  #dpad{width:150px;height:150px;bottom:132px}
   .dbtn{width:48px;height:48px;font-size:21px}
   .dbtn[data-k="u"]{left:51px;top:0} .dbtn[data-k="l"]{left:0;top:51px}
   .dbtn[data-k="r"]{left:102px;top:51px} .dbtn[data-k="d"]{left:51px;top:102px}
   .abtn{width:68px;height:68px;font-size:27px}
   .abtn.b{width:54px;height:54px;font-size:21px}
-  #abpad{bottom:92px}
-  #rolly{bottom:6px;max-height:66px}
-  #questBar{padding:6px 10px} #questText{font-size:17px} #questPrice{font-size:15px}
+  #abpad{bottom:136px}
+  #carryPill{bottom:134px}
+  #rolly{bottom:62px;max-height:66px}
+  /* centre the quest bar in the gap between the two icon rails instead of the
+     whole screen, or its speaker button ends up underneath the star count */
+  #questBar{padding:6px 10px;left:8px;right:80px;max-width:none}
+  #questText{font-size:17px} #questPrice{font-size:15px}
   #questIcon{width:46px;height:46px;font-size:26px}
   #listBar{top:88px;padding:4px 8px;gap:4px}
   #listBar .lt{width:28px;height:28px;font-size:15px;border-width:3px}
   #listBar .cap{display:none}
 }
-@media (max-height:520px){ #dpad{bottom:74px} #abpad{bottom:78px} }
+/* A landscape phone has no spare height at the bottom, so the controls stay low
+   and the hint bubble moves up under the quest bar instead of fighting them. */
+@media (max-height:520px){
+  #dpad{bottom:74px} #abpad{bottom:78px} #carryPill{bottom:76px}
+  #rolly{bottom:auto;top:80px;max-height:56px}
+}
+/* ---------- short screens (a phone held sideways) ----------
+   There is barely 375px of height to work with, and the panels were overflowing
+   by 150-300px, which pushed "Back to shopping" below the fold.  A three-year-old
+   will not scroll a dialog to find the way out, so everything gets compact and
+   the panels' own close buttons stay on screen. */
+@media (max-height:520px){
+  .iconbtn{width:48px;height:48px;font-size:23px;border-radius:15px}
+  #topLeft{top:70px;gap:6px;max-height:calc(100vh - 120px)}
+  #topRight{gap:6px}
+  .panel{border-width:5px;border-radius:26px}
+  .title{font-size:22px} .title.sm{font-size:17px}
+  .btn{min-height:52px;font-size:20px;padding:8px 16px}
+  .btn.big{min-height:60px;font-size:24px}
+
+  #quizPanel{padding:10px 14px 12px}
+  #quizStage{gap:2px;margin:2px 0}
+  #quizEmoji{font-size:clamp(48px,13vh,72px)}
+  #quizAsk{font-size:15px} #quizWord{font-size:24px}
+  .optBtn{width:clamp(58px,13vh,78px);height:clamp(58px,13vh,78px)}
+  .optBtn .up{font-size:26px} .optBtn .lo{font-size:20px}
+  #quizFeedback{font-size:15px;margin-top:6px;min-height:18px}
+  #quizBtns{margin-top:6px} #quizBtns .btn{min-height:44px;font-size:15px;padding:6px 10px}
+
+  #tracePanel{padding:8px 12px 10px}
+  #traceTitle{font-size:18px}
+  #traceTabs{margin:4px 0} #traceTabs .btn{min-height:40px;font-size:17px;padding:5px 14px}
+  #tracePicker{max-height:52px;margin:4px 0 6px}
+  .chip{min-width:38px;min-height:38px;font-size:18px;border-width:3px}
+  #traceMeter{height:14px;margin:6px auto 2px}
+  #traceHint{font-size:15px}
+  /* the shape hint is spoken aloud, so the printed copy is the first thing to
+     go when there is no height for it */
+  #traceTip{display:none}
+  #traceBtns{margin-top:6px} #traceBtns .btn{min-height:44px;font-size:15px;padding:6px 9px}
+
+  #walletPanel{padding:10px 14px 12px}
+  #letterCard{width:72px;height:72px;font-size:44px;border-width:5px}
+  #askLine{font-size:18px;margin:6px 0 2px} #priceBig{font-size:26px;margin-bottom:4px}
+  .priceBtn{width:clamp(56px,13vh,74px);height:clamp(56px,13vh,74px);font-size:24px}
+  .coin{width:48px;height:48px;font-size:19px} .coin.small{width:36px;height:36px;font-size:14px}
+  #tray{min-height:60px;margin:6px 0} #trayCount{font-size:22px}
+
+  #garagePanel,#wallPanel,#setPanel{padding:12px 14px}
+  #wallGrid{grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:6px;margin-top:8px}
+  .wtile{font-size:20px;border-width:4px;border-radius:12px}
+  #upGrid,#cartGrid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:8px}
+  .cartCard .ic,.upCard .ic{font-size:30px}
+  .cartCard .nm,.upCard .nm{font-size:14px} .cartCard .bl{display:none}
+
+  #tutPanel{padding:14px 16px} #tutIcon{font-size:clamp(40px,12vh,64px)}
+  #tutText{font-size:17px;margin-top:8px}
+  #icPanel{padding:12px 16px} #icSpeaker{font-size:clamp(34px,10vh,52px)}
+  #icCard{width:64px;height:64px;font-size:40px;margin:4px 0}
+  #icLine{font-size:18px} #icPrice{font-size:22px} #icBtns{margin-top:8px}
+  #recPaper,#certPaper{padding:12px 16px 14px}
+  #certStar{font-size:34px} #certTitle{font-size:22px} #certName{font-size:26px}
+}
+/* When a panel does have to scroll -- the cart garage and the alphabet wall are
+   long by nature -- its way out must not scroll away with it.  Pinning the
+   action row to the bottom of the panel keeps "Back to shopping" on screen at
+   any height, which matters when the player cannot read and will not think to
+   scroll a dialog. */
+#traceBtns,#quizBtns,#garagePanel > .btn,#wallPanel > .btn{
+  position:sticky;bottom:0;z-index:2;
+  background:var(--cream);padding-top:8px;padding-bottom:2px}
+#garagePanel > .btn,#wallPanel > .btn{
+  box-shadow:0 -10px 12px var(--cream), var(--shadow)}
+
+/* A big red X in the corner of every panel.  A three-year-old who cannot read
+   "Back to shopping" still knows what an X means, and in playtesting the way
+   out of the tracing room was the thing he could not find. */
+.panel,#recPaper,#certPaper{position:relative}
+.closeX{position:absolute;top:-16px;right:-16px;width:62px;height:62px;z-index:5;
+  border:5px solid var(--ink);border-radius:50%;background:var(--tomato);color:#fff;
+  font-family:var(--font);font-size:32px;font-weight:800;line-height:1;
+  box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center;padding:0}
+.closeX:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(43,33,64,.35)}
+.closeX:focus-visible{outline:5px solid #fff;outline-offset:3px}
+@media (max-width:520px){ .closeX{width:52px;height:52px;font-size:27px;top:-12px;right:-12px} }
+@media (max-height:520px){ .closeX{width:46px;height:46px;font-size:24px;top:-10px;right:-10px} }
+/* the panels sit a touch inside the screen so the X is never clipped */
+#tracePanel,#quizPanel,#garagePanel,#wallPanel,#walletPanel{margin:18px}
+
+/* the way home is the biggest, greenest thing in the row */
+.btn.goback{background:var(--mint);font-size:21px;min-height:62px;
+  box-shadow:0 0 0 4px rgba(63,208,155,.35), var(--shadow)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -338,13 +468,15 @@ canvas{display:block;width:100%;height:100%}
   <div id="topRight">
     <div id="starPill">★ 0</div>
     <button id="wallBtn" class="btn iconbtn mint" aria-label="Alphabet wall">🧱</button>
-    <button id="garageBtn" class="btn iconbtn grape" aria-label="Cart garage">🛠️</button>
+    <button id="garageBtn" class="btn iconbtn grape" aria-label="Cart shop">🏪</button>
     <button id="setBtn" class="btn iconbtn cream" aria-label="Grown-ups">⚙️</button>
   </div>
   <div id="topLeft">
     <button id="hornBtn" class="btn iconbtn tom" aria-label="Horn">📣</button>
     <button id="helpBtn" class="btn iconbtn blue" aria-label="How to play">❓</button>
     <button id="soundBtn" class="btn iconbtn butter" aria-label="Sound on or off">🔊</button>
+    <button id="traceBtn" class="btn iconbtn grape" aria-label="Practice writing">✏️</button>
+    <button id="quizBtn" class="btn iconbtn mint" aria-label="Listening game">👂</button>
   </div>
   <div id="carryPill" class="hidden"></div>
   <div id="dpad">
@@ -360,12 +492,14 @@ canvas{display:block;width:100%;height:100%}
   <div id="listBar" class="hidden"></div>
   <div id="alphaStrip"></div>
   <div id="edgeArrow">⬆️</div>
+  <div id="worldTag"><span id="worldTagText"></span></div>
   <div id="rolly"></div>
   <div id="stick"><div id="knob"></div></div>
 </div>
 
 <div id="wallet" class="layer">
   <div id="walletPanel" class="panel">
+    <button class="closeX" id="walletX" aria-label="Close">&#10005;</button>
     <div id="letterCard"><span class="eyes"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span><span id="letterGlyph">A</span></div>
     <div id="askLine">How much?</div>
     <div id="priceBig">$3</div>
@@ -384,16 +518,18 @@ canvas{display:block;width:100%;height:100%}
 
 <div id="wallLayer" class="layer">
   <div id="wallPanel" class="panel">
+    <button class="closeX" data-close="wallLayer" aria-label="Close">&#10005;</button>
     <div class="title">My Alphabet Wall</div>
     <div class="title sm" id="wallCount">0 of 26</div>
     <div id="wallGrid"></div>
-    <button class="btn mint" style="margin-top:16px" data-close="wallLayer">Back to shopping</button>
+    <button class="btn goback" style="margin-top:16px" data-close="wallLayer">↩︎ Back to shopping</button>
   </div>
 </div>
 
 <div id="garage" class="layer">
   <div id="garagePanel" class="panel">
-    <div class="title">Cart Garage</div>
+    <button class="closeX" data-close="garage" aria-label="Close">&#10005;</button>
+    <div class="title">Cart Shop</div>
     <div id="garTabs">
       <button id="tabCarts" class="btn cream sel">Carts</button>
       <button id="tabDecor" class="btn cream">Decorations</button>
@@ -401,7 +537,7 @@ canvas{display:block;width:100%;height:100%}
     <div class="title sm" id="garHint">Pick a cart, or buy a new one with stars</div>
     <div id="cartGrid"></div>
     <div id="upGrid" class="hidden"></div>
-    <button class="btn mint" style="margin-top:16px" data-close="garage">Back to shopping</button>
+    <button class="btn goback" style="margin-top:16px" data-close="garage">↩︎ Back to shopping</button>
   </div>
 </div>
 
@@ -446,7 +582,8 @@ canvas{display:block;width:100%;height:100%}
   <div id="bootMark">A</div>
   <h1>ALPHA-MART</h1>
   <div class="sub">Letters &amp; Numbers Adventure</div>
-  <button id="startBtn" class="btn big tom" style="margin-top:14px">▶ TAP ANYWHERE TO START</button>
+  <div id="bootHand">👇</div>
+  <button id="startBtn" class="btn big tom" style="margin-top:4px">▶ TAP ANYWHERE TO START</button>
 </div>
 
 <div id="intercom" class="layer">
@@ -503,6 +640,7 @@ canvas{display:block;width:100%;height:100%}
 
 <div id="quiz" class="layer">
   <div id="quizPanel" class="panel">
+    <button class="closeX" id="quizX" aria-label="Close">&#10005;</button>
     <div class="title" id="quizTitle">Word Room · First Sounds</div>
     <div id="quizStage">
       <div id="quizEmoji">&#128054;</div>
@@ -516,13 +654,14 @@ canvas{display:block;width:100%;height:100%}
     <div id="quizBtns">
       <button id="quizAgain" class="btn cream">&#128266; Say it again</button>
       <button id="quizHelp" class="btn cream">&#128161; Help me</button>
-      <button id="quizDone" class="btn mint">↩︎ Back to shopping</button>
+      <button id="quizDone" class="btn goback">↩︎ Back to shopping</button>
     </div>
   </div>
 </div>
 
 <div id="trace" class="layer">
   <div id="tracePanel" class="panel">
+    <button class="closeX" id="traceX" aria-label="Close">&#10005;</button>
     <div class="title" id="traceTitle">Practice Writing</div>
     <div id="traceTabs">
       <button id="tabLetters" class="btn cream sel">A B C</button>
@@ -535,9 +674,9 @@ canvas{display:block;width:100%;height:100%}
     <div id="traceTip"></div>
     <div id="traceBtns">
       <button id="traceHear" class="btn cream">🔊 Hear it</button>
-      <button id="traceErase" class="btn cream">🧽 Start over</button>
-      <button id="traceSkip" class="btn butter">➡ Another one</button>
-      <button id="traceDone" class="btn mint">↩︎ Back to shopping</button>
+      <button id="traceErase" class="btn cream">🧽 Erase</button>
+      <button id="traceSkip" class="btn butter">➡ Next one</button>
+      <button id="traceDone" class="btn goback">↩︎ Back to shopping</button>
     </div>
   </div>
 </div>
@@ -580,82 +719,134 @@ const CFG = {
 
 /* ---------------------------------------------------------------- LETTER DATA */
 const PAL = ['#FF5A3C','#FFC93C','#3FD09B','#3B6FE0','#8C5BE0','#FF8FB1','#4ECDC4','#FFA33C'];
-const LETTERS = [
-  ['A','short A, aaa, like in apple','apple','🍎'],
-  ['B','buh, like in ball','ball','⚽'],
-  ['C','kuh, like in cat','cat','🐱'],
-  ['D','duh, like in dog','dog','🐶'],
-  ['E','eh, like in egg','egg','🥚'],
-  ['F','ffff, like in fish','fish','🐟'],
-  ['G','guh, like in goat','goat','🐐'],
-  ['H','hhh, like in hat','hat','🎩'],
-  ['I','ih, like in igloo','igloo','🧊'],
-  ['J','juh, like in jam','jam','🍯'],
-  ['K','kuh, like in key','key','🔑'],
-  ['L','llll, like in leaf','leaf','🍃'],
-  ['M','mmm, like in moon','moon','🌙'],
-  ['N','nnn, like in nose','nose','👃'],
-  ['O','ah, like in octopus','octopus','🐙'],
-  ['P','puh, like in pig','pig','🐷'],
-  ['Q','kwuh, like in queen','queen','👑'],
-  ['R','rrr, like in rain','rain','🌧️'],
-  ['S','sss, like in sun','sun','☀️'],
-  ['T','tuh, like in tiger','tiger','🐯'],
-  ['U','uh, like in umbrella','umbrella','☂️'],
-  ['V','vvv, like in van','van','🚐'],
-  ['W','wuh, like in web','web','🕸️'],
-  ['X','kss, like the end of box','box','📦'],
-  ['Y','yuh, like in yarn','yarn','🧶'],
-  ['Z','zzz, like in zebra','zebra','🦓']
-].map((r,i)=>({ ch:r[0], sound:r[1], word:r[2], emoji:r[3], color:PAL[i%PAL.length], firstOk:r[0]!=='X' }));
-const LMAP = {}; LETTERS.forEach(l=>LMAP[l.ch]=l);
 
-const NPC_TIPS = [
-  "Hi there! Look at the letter B — it has a big belly, like a bee's tummy!",
-  "Psst. The letter O is a perfect circle. Just like a doughnut!",
-  "M has two mountains. Mmmmm mountains!",
-  "Number 3 has two little bumps. Can you trace them with your finger?",
-  "S wiggles like a snake. Ssssss!",
-  "When you count, touch each coin. One. Two. Three.",
-  "The letter T looks like a table. Tuh, tuh, table!",
-  "Number 8 looks like a snowman. Two circles!",
-  "Y is like a tree with two branches reaching up.",
-  "Every letter has a sound. Tap a letter and it will tell you!",
-  "Number 1 is just one straight line. Easy peasy!",
-  "The letter L looks like the corner of a big step."
-];
-/* short, spoken, age-appropriate things the shoppers say when tapped */
+/* ---------------------------------------------------------------- PHONICS
+   Every spoken letter sound goes through a speech synthesiser, and synthesisers
+   are unforgiving about invented spellings.  Each token below was rendered
+   through Apple's voice (the harshest common case) and checked against the same
+   text spelled out letter by letter; identical audio means the engine read it as
+   an acronym rather than as a sound.  What that testing showed:
+
+     * THREE repeated consonants are read as an acronym.  "S says sss" came out
+       as "S says ESS ESS ESS", and "Z says zzz" as "Z says ZEE ZEE ZEE".  FOUR
+       or more are sounded out properly, and four and five render identically,
+       so four is the canonical form.
+     * Bare vowel spellings are dictionary lookups, not letter-to-sound rules.
+       "eh" is the interjection and comes out "AY", so "E says eh" was teaching
+       the wrong vowel entirely.  No bare vowel spelling is trustworthy, so the
+       five vowels are named ("the short A sound") and anchored in their keyword
+       instead -- which is how they are taught in a classroom anyway.
+     * Letter NAMES are already correct when they sit next to the word "letter",
+       so they are never respelled.  "The letter W" is right; "double you" is not.
+
+   `say`  - the sound, for the speech engine.  null for vowels (see above).
+   `snd`  - how the sound is written on screen for a grown-up reading along.
+   `kind` - 'cont' stretches (ffff), 'stop' cannot be said without a little
+            vowel after it, 'vowel' is never spoken bare.                     */
+const LETTERS = [
+  ['A','vowel',null,    'short a','apple','🍎'],
+  ['B','stop', 'buh',   '/b/','ball','⚽'],
+  ['C','stop', 'kuh',   '/k/','cat','🐱'],
+  ['D','stop', 'duh',   '/d/','dog','🐶'],
+  ['E','vowel',null,    'short e','egg','🥚'],
+  ['F','cont', 'ffff',  '/f/','fish','🐟'],
+  ['G','stop', 'guh',   '/g/','goat','🐐'],
+  ['H','cont', 'hhhh',  '/h/','hat','🎩'],
+  ['I','vowel',null,    'short i','igloo','🧊'],
+  ['J','stop', 'juh',   '/j/','jam','🍯'],
+  ['K','stop', 'kuh',   '/k/','key','🔑'],
+  ['L','cont', 'llll',  '/l/','leaf','🍃'],
+  ['M','cont', 'mmmm',  '/m/','moon','🌙'],
+  ['N','cont', 'nnnn',  '/n/','nose','👃'],
+  ['O','vowel',null,    'short o','octopus','🐙'],
+  ['P','stop', 'puh',   '/p/','pig','🐷'],
+  ['Q','stop', 'kwuh',  '/kw/','queen','👑'],
+  ['R','cont', 'rrrr',  '/r/','rain','🌧️'],
+  ['S','cont', 'ssss',  '/s/','sun','☀️'],
+  ['T','stop', 'tuh',   '/t/','tiger','🐯'],
+  ['U','vowel',null,    'short u','umbrella','☂️'],
+  ['V','cont', 'vvvv',  '/v/','van','🚐'],
+  ['W','stop', 'wuh',   '/w/','web','🕸️'],
+  ['X','cont', 'kssss', '/ks/','box','📦'],
+  ['Y','stop', 'yuh',   '/y/','yarn','🧶'],
+  ['Z','cont', 'zzzz',  '/z/','zebra','🦓']
+].map((r,i)=>({ ch:r[0], kind:r[1], say:r[2], snd:r[3], word:r[4], emoji:r[5],
+                color:PAL[i%PAL.length], firstOk:r[0]!=='X' }));
+const LMAP = {}; LETTERS.forEach(l=>LMAP[l.ch]=l);
+/* C and K share a sound, so one can never be "wrong" when the other is asked
+   for by ear.  Anything in the same group is treated as a good-listening near
+   miss rather than a mistake. */
+const SAME_SOUND = { C:'K', K:'C' };
+
+/* The sound, worded so it can be dropped inside a sentence.  Only used for the
+   letters the speech engine still has to say; the rest go through the
+   synthesiser and never become text at all. */
+function soundPhrase(ch){
+  const L=LMAP[ch]; if(!L) return '';
+  return L.kind==='vowel' ? `the short ${ch} sound` : L.say;
+}
+/* A spoken line plus, where we have one, the real synthesised sound.
+   `speakLines` understands an entry of the form {ph:'S'} and plays it. */
+function soundToken(ch){
+  return Audio2.hasPhoneme(ch) ? {ph:ch} : null;
+}
+/* The sound, written for the grown-up reading the screen. */
+function soundLabel(ch){ const L=LMAP[ch]; return L?L.snd:''; }
+/* The classic classroom triad -- letter, sound, keyword -- as separate short
+   utterances, because the pause between them is what stops a synthesiser from
+   running them into one mush.  Both frames keep every letter next to the word
+   "letter", which is the only context where the names are reliably correct. */
+function soundLines(ch){
+  const L=LMAP[ch]; if(!L) return [];
+  const tok=soundToken(ch);
+  return tok ? [ `The letter ${ch} says`, tok, keywordLine(ch) ]
+             : [ `The letter ${ch} says ${soundPhrase(ch)}.`, keywordLine(ch) ];
+}
+/* X is the one letter with no child-friendly word that STARTS with its sound,
+   so it is taught from the end of "box" -- saying "Box starts with the letter X"
+   would teach the wrong thing outright. */
+function keywordLine(ch){
+  const L=LMAP[ch]; if(!L) return '';
+  return L.ch==='X' ? `${titleCase(L.word)} ends with the letter X.`
+                    : `${titleCase(L.word)} starts with the letter ${ch}.`;
+}
+
+/* Short, spoken, age-appropriate things the shoppers say when tapped.
+   Sounds are written the same way as in the phonics table above: four or more
+   repeats for a stretchy sound, and never the same little syllable twice in a
+   row -- "Wuh, wuh, web" is what turns into a stuttering "wuh-wuh" out of a
+   synthesiser, and it teaches the schwa the child then has to unlearn. */
 const NPC_SCRIPTS=[
-  ["The letter B has a big belly. Buh, buh, ball!",
+  ["The letter B has a big belly. B is for ball!",
    "Number two looks like a swan. One, two!",
    "S wiggles like a snake. Ssssss!"],
   ["M has two mountains. Say it with me. Mmmmm!",
    "The letter O is a circle, like a doughnut.",
    "When you count, touch each one. One. Two. Three."],
-  ["T looks like a table. Tuh, tuh, table!",
+  ["T looks like a table. T is for table!",
    "Number eight is two circles, like a snowman.",
    "Every letter makes a sound. Tap one and listen!"],
-  ["The letter L is a big step. Lll, lll, leaf!",
+  ["The letter L is a big step. Llllleaf!",
    "Number one is just one straight line.",
-   "C curves around like a cup. Kuh, kuh, cat!"],
+   "C curves around like a cup. C is for cat!"],
   ["H has two tall legs and a bridge in the middle.",
    "Five comes after four. Four, five!",
-   "P has a bump at the top. Puh, puh, pig!"],
-  ["W is two V's holding hands. Wuh, wuh, web!",
+   "P has a bump at the top. P is for pig!"],
+  ["W is two V's holding hands. W is for web!",
    "Zero means none at all. Nothing!",
-   "R rolls like a motor. Rrrrr!"],
+   "R rolls like a motor. Rrrrrr!"],
   ["The letter A has a little bridge inside it.",
    "Ten is one and zero side by side.",
-   "F has two arms pointing out. Fff, fish!"],
-  ["G is like a C with a shelf. Guh, guh, goat!",
+   "F has two arms pointing out. Ffffish!"],
+  ["G is like a C with a shelf. G is for goat!",
    "Six has a loop at the bottom.",
-   "N slides down the middle. Nnnn, nose!"],
+   "N slides down the middle. Nnnnnose!"],
   ["Vowels are A, E, I, O and U. They sing!",
    "Nine is a circle with a tail going down.",
-   "D has one big bump. Duh, duh, dog!"],
+   "D has one big bump. D is for dog!"],
   ["K has two little arms kicking out.",
    "Seven has a hat and a slide.",
-   "Y is a tree with two branches. Yuh, yarn!"]
+   "Y is a tree with two branches. Y is for yarn!"]
 ];
 /* one short, spoken shape hint for every glyph in the tracing studio */
 const TRACE_HINTS={
@@ -713,15 +904,18 @@ const QUIZ_WORDS={
   K:[['key','🔑'],['kangaroo','🦘']],   L:[['leaf','🍃'],['lion','🦁']],
   M:[['moon','🌙'],['milk','🥛']],      N:[['nose','👃'],['net','🥅']],
   O:[['octopus','🐙'],['ox','🐂']],     P:[['pig','🐷'],['pizza','🍕']],
-  Q:[['queen','👑'],['question','❓']], R:[['rain','🌧️'],['rabbit','🐰']],
+  Q:[['queen','👑'],['quiet','🤫']],    R:[['rain','🌧️'],['rabbit','🐰']],
   S:[['sun','☀️'],['sock','🧦']],      T:[['tiger','🐯'],['tent','⛺']],
   U:[['umbrella','☂️'],['up','⬆️']],    V:[['van','🚐'],['violin','🎻']],
   W:[['web','🕸️'],['watch','⌚']],      Y:[['yarn','🧶'],['yellow','💛']],
-  Z:[['zebra','🦓']]
+  Z:[['zebra','🦓'],['zipper','🤐']]
 };
-/* letters children genuinely mix up, so at least one choice is a real decision */
-const CONFUSE={ A:'EO', B:'DPR', C:'GKO', D:'BPO', E:'FA', F:'ET', G:'CJQ', H:'NKA',
-  I:'JLT', J:'IG', K:'CX', L:'IJT', M:'NW', N:'MH', O:'QCA', P:'QBR', Q:'OPG',
+/* Letters children genuinely mix up, so at least one choice is a real decision.
+   C and K are deliberately NOT listed against each other: they make the same
+   sound, so offering K as the wrong answer for "cake" punishes a child who
+   heard it correctly. */
+const CONFUSE={ A:'EO', B:'DPR', C:'GOQ', D:'BPO', E:'FA', F:'ET', G:'CJQ', H:'NKA',
+  I:'JLT', J:'IG', K:'XRY', L:'IJT', M:'NW', N:'MH', O:'QCA', P:'QBR', Q:'OPG',
   R:'BPK', S:'ZC', T:'FL', U:'VN', V:'UWY', W:'MVN', X:'KY', Y:'VXT', Z:'SN' };
 
 const CHEERS = ['NICE!','WOW!','YES!','SUPER!','GREAT!','AWESOME!','YAHOO!','PERFECT!'];
@@ -733,25 +927,53 @@ const NPC_LOOKS = [
   {shirt:'#FFC93C', hair:'#4B2E2A', hat:false},
   {shirt:'#FF8FB1', hair:'#2E2A45', hat:true}
 ];
+/* Each cart is a small power-up as well as a paint job, so the stars a child
+   earns buy something they can actually feel:
+     speed  - how fast it rolls
+     fx     - 'glow' lights a coloured pool under the cart, 'trail' leaves a
+              stream of coloured puffs behind it, 'both' does the two together
+   `power` is the plain-English promise shown on the card and spoken aloud.   */
 const CARTS=[
   {id:'classic',  name:'Classic Cart',      cost:0,  icon:'🛒',
    basket:0xE6ECF5, frame:0xFF5A3C, wheel:0x2B2140, speed:1.00, extra:null,
+   fx:null, tint:0xFFFFFF, power:'A steady, comfy ride',
    blurb:'The trusty shop cart you started with.'},
   {id:'racer',    name:'Red Racer',         cost:6,  icon:'🏎️',
    basket:0xFF6B4A, frame:0xFFD34E, wheel:0x2B2140, speed:1.12, extra:'spoiler',
+   fx:null, tint:0xFF6B4A, power:'Speed boost',
    blurb:'A bit quicker down the aisles.'},
   {id:'sunny',    name:'Sunshine Wagon',    cost:9,  icon:'🌞',
    basket:0xFFD34E, frame:0x3FD09B, wheel:0x8C5BE0, speed:1.00, extra:null,
+   fx:'glow', tint:0xFFD34E, power:'Sunny glow',
    blurb:'Bright and cheerful, with purple wheels.'},
+  {id:'bubble',   name:'Bubble Buggy',      cost:11, icon:'🫧',
+   basket:0xCFF0FF, frame:0x4ECDC4, wheel:0xE6ECF5, speed:1.06, extra:null,
+   fx:'trail', tint:0x7FD4F5, power:'Leaves a bubble trail',
+   blurb:'Blows bubbles everywhere it goes.'},
   {id:'trolley',  name:'Ice Cream Trolley', cost:14, icon:'🍦',
    basket:0xFFF2F6, frame:0xFF8FB1, wheel:0xE6ECF5, speed:0.96, extra:'canopy',
+   fx:'glow', tint:0xFF8FB1, power:'Cosy pink glow',
    blurb:'Has its own little striped canopy.'},
+  {id:'glowcart', name:'Glow Cruiser',      cost:18, icon:'💡',
+   basket:0xD8F8FF, frame:0x3FD09B, wheel:0x2B2140, speed:1.10, extra:null,
+   fx:'glow', tint:0x4ECDC4, power:'Glows in the aisles',
+   blurb:'Lights up the floor all around you.'},
   {id:'rocket',   name:'Rocket Sled',       cost:20, icon:'🚀',
    basket:0xB9C3D4, frame:0x3B6FE0, wheel:0x2B2140, speed:1.28, extra:'nose',
-   blurb:'The fastest cart in the shop.'},
+   fx:'trail', tint:0xFF8A00, power:'Super speed + flame trail',
+   blurb:'Very fast, with a fiery trail.'},
+  {id:'dino',     name:'Dino Stomper',      cost:24, icon:'🦖',
+   basket:0x8FD16A, frame:0x3E9A47, wheel:0x6B4A2A, speed:1.18, extra:'spoiler',
+   fx:'trail', tint:0x5AC46A, power:'Fast + stompy dust',
+   blurb:'Stomps down the aisles leaving dust.'},
   {id:'royal',    name:'Royal Carriage',    cost:28, icon:'👑',
    basket:0xF6E4B0, frame:0x8C5BE0, wheel:0xFFD34E, speed:1.00, extra:'canopy',
-   blurb:'Shop like royalty. Gold wheels included.'}
+   fx:'glow', tint:0xFFD34E, power:'Golden royal glow',
+   blurb:'Shop like royalty. Gold wheels included.'},
+  {id:'rainbow',  name:'Rainbow Rocket',    cost:38, icon:'🌈',
+   basket:0xFFE9F6, frame:0x8C5BE0, wheel:0x3FD09B, speed:1.34, extra:'nose',
+   fx:'both', tint:0xFF5A3C, power:'Fastest of all + glow AND trail',
+   blurb:'The fastest, shiniest cart in the whole shop.'}
 ];
 const CARTMAP={}; CARTS.forEach(c=>CARTMAP[c.id]=c);
 const UPGRADES = [
@@ -781,6 +1003,46 @@ function blankSave(avatar){
   return { avatar, apron:1, stars:0, owned:[], carrying:[], mastery, nums, upgrades:[], plays:0, voice:true, music:true, gfx:'auto', traced:{}, tips:'on', voiceName:null, quiz:{ok:0,miss:0}, cart:'classic', carts:['classic'], name:'', list:[], listAll:[], listPrices:{}, listCount:0, streakMiss:0, sfx:true };
 }
 
+/* A save on disk may predate the current build, or have been half-written when
+   a tab was closed.  Rather than hand-checking one key at a time -- which is how
+   a missing `upgrades` list came to crash the game on load -- take blankSave as
+   the schema, fill in anything absent, and sanity-check the values that the rest
+   of the code trusts. */
+function normalizeSave(data, avatar){
+  const base = blankSave(avatar);
+  if(!data || typeof data!=='object') return base;
+  const S2 = data;
+  S2.avatar = S2.avatar || avatar;
+  Object.keys(base).forEach(k=>{
+    const want=base[k], got=S2[k];
+    if(got==null){ S2[k]=want; return; }
+    if(want===null) return;               // e.g. voiceName: any string is fine
+    if(Array.isArray(want) !== Array.isArray(got) || typeof want !== typeof got) S2[k]=want;
+  });
+  /* per-letter and per-number records are added to as the alphabet grows */
+  LETTERS.forEach(l=>{ const m=S2.mastery[l.ch];
+    if(!m || typeof m!=='object') S2.mastery[l.ch]={seen:0,ok:0,miss:0}; });
+  for(let n=1;n<=20;n++) if(!S2.nums[n] || typeof S2.nums[n]!=='object') S2.nums[n]={ok:0,miss:0};
+  /* only real letters, never twice */
+  const clean = a => a.filter((c,i)=>LMAP[c] && a.indexOf(c)===i);
+  S2.owned=clean(S2.owned); S2.carrying=clean(S2.carrying);
+  S2.list=clean(S2.list); S2.listAll=clean(S2.listAll);
+  /* a letter cannot be both on the wall and still in the basket */
+  S2.carrying = S2.carrying.filter(c=>S2.owned.indexOf(c)<0);
+  S2.upgrades = S2.upgrades.filter(u=>UPGRADES.some(x=>x.id===u));
+  S2.carts    = S2.carts.filter(c=>CARTMAP[c]);
+  if(!S2.carts.length) S2.carts=['classic'];
+  if(!CARTMAP[S2.cart]) S2.cart='classic';
+  S2.stars = Math.max(0, Math.floor(+S2.stars||0));
+  S2.plays = Math.max(0, Math.floor(+S2.plays||0));
+  S2.listCount = Math.max(0, Math.floor(+S2.listCount||0));
+  S2.apron = (S2.apron===2||S2.apron===3) ? S2.apron : 1;
+  if(['on','few','off'].indexOf(S2.tips)<0) S2.tips='on';
+  if(['auto','low','high'].indexOf(S2.gfx)<0) S2.gfx='auto';
+  S2.name = String(S2.name||'').replace(/[^A-Za-z ]/g,'').trim().slice(0,12);
+  return S2;
+}
+
 /* ---------------------------------------------------------------- AUDIO */
 const Audio2 = (()=>{
   let ctx=null, master=null, musicGain=null, musicTimer=null, unlocked=false;
@@ -799,6 +1061,13 @@ const Audio2 = (()=>{
   function unlock(){
     ensure();
     if(ctx && ctx.state==='suspended') ctx.resume();
+    /* The first node built on a freshly resumed context gets clipped, which used
+       to eat the first letter sound a child heard.  Push a silent one through. */
+    if(ctx && !unlocked){
+      try{ const s0=noiseSource(0.05), g0=ctx.createGain();
+        g0.gain.value=0.00001; s0.connect(g0); g0.connect(master);
+        s0.start(ctx.currentTime); s0.stop(ctx.currentTime+0.05); }catch(e){}
+    }
     if(!unlocked && window.speechSynthesis){
       try{ const u=new SpeechSynthesisUtterance(' '); u.volume=0; speechSynthesis.speak(u); }catch(e){}
     }
@@ -808,6 +1077,14 @@ const Audio2 = (()=>{
      Zarvox, Albert, eSpeak...) are the ones that sound robotic, so they are ruled
      out entirely and the neural/premium voices are ranked to the top. */
   const BAD=/albert|bad news|bells|boing|bubbles|cellos|deranged|fred|good news|hysterical|jester|junior|kathy|organ|pipe|princess|ralph|superstar|trinoids|whisper|wobble|zarvox|bahh|espeak|compact|veena|rishi/i;
+  /* Some otherwise pleasant voices read a run of consonants as an acronym, so
+     "The letter S says ssss" comes out "...says ESS ESS ESS ESS" -- which teaches
+     a child exactly the wrong thing.  Measured by rendering every letter sound
+     through each voice and comparing it with the spelled-out version: Samantha,
+     Karen and Daniel were clean, Alex nearly so, while Fiona, Moira, Victoria
+     and Tessa spelled out most of the alphabet.  No spelling fixes those, so
+     they are ranked below any voice that handles the sounds properly. */
+  const SPELLS_SOUNDS_OUT=/fiona|moira|victoria|tessa/i;
   function voiceScore(v){
     if(!v || !/^en/i.test(v.lang||'')) return -1;
     if(BAD.test(v.name||'')) return -1;
@@ -816,11 +1093,15 @@ const Audio2 = (()=>{
     if(/google/i.test(v.name)) s+=48;
     if(/(samantha|ava|allison|susan|zoe|joanna|nicky|siri)/i.test(v.name)) s+=44;
     if(/(aria|jenny|michelle|emma|ana)/i.test(v.name)) s+=38;
-    if(/(karen|moira|serena|tessa|fiona)/i.test(v.name)) s+=24;
-    if(/(zira|hazel|catherine|linda)/i.test(v.name)) s+=16;
+    if(/(karen|daniel|serena)/i.test(v.name)) s+=30;
+    if(/(alex|zira|hazel|catherine|linda)/i.test(v.name)) s+=16;
     if(v.localService===false) s+=12;
     if(/en[-_]?US/i.test(v.lang)) s+=10;
     else if(/en[-_]?(GB|AU|CA)/i.test(v.lang)) s+=5;
+    /* floored at zero rather than allowed to go negative: a grown-up can still
+       pick these by hand, and if they are the only English voice on the device
+       we still want one selected */
+    if(SPELLS_SOUNDS_OUT.test(v.name)) s=0;
     return s;
   }
   function englishVoices(){
@@ -850,7 +1131,16 @@ const Audio2 = (()=>{
     const wait = blockUntil - Date.now();
     if(wait > 0){ setTimeout(next, wait+10); return; }
     const item = queue.shift();
-    if(!enabled || !window.speechSynthesis){ if(item.done) item.done(); next(); return; }
+    if(!enabled){ if(item.done) item.done(); next(); return; }
+    /* a synthesised letter sound: play it, then carry on down the queue */
+    if(item.ph){
+      speaking = true;
+      const dur = playPhoneme(item.ph);
+      setTimeout(()=>{ speaking=false; if(item.done) item.done(); next(); },
+                 Math.max(160, dur*1000+140));
+      return;
+    }
+    if(!window.speechSynthesis){ if(item.done) item.done(); next(); return; }
     speaking = true;
     let finished=false;
     const fin=()=>{ if(finished) return; finished=true; speaking=false; if(item.done) item.done(); setTimeout(next,150); };
@@ -866,11 +1156,109 @@ const Audio2 = (()=>{
       setTimeout(fin, Math.min(16000, 1400 + item.text.length*105));
     }catch(e){ fin(); }
   }
+  /* ---------------- spoken letter sounds, synthesised ----------------
+     Speech engines cannot be trusted with an isolated phoneme.  Written as
+     "ssss" some voices sound it out and others read it as an acronym -- "ESS
+     ESS ESS" -- which teaches a child the wrong thing, and there is no spelling
+     that behaves on every engine.  So the sounds that CAN be built from first
+     principles are built here instead, and they come out identical on every
+     device.  A fricative really is just filtered noise: /s/ is hiss up around
+     6 kHz, which is exactly the snake sound it should be.  Voiced sounds add a
+     buzz at a child-friendly pitch under the same filter.                    */
+  function noiseSource(dur){
+    const n=Math.max(1,Math.floor(ctx.sampleRate*dur));
+    const b=ctx.createBuffer(1,n,ctx.sampleRate), d=b.getChannelData(0);
+    for(let i=0;i<n;i++) d[i]=Math.random()*2-1;
+    const s=ctx.createBufferSource(); s.buffer=b; return s;
+  }
+  function env(g,t0,dur,peak){
+    g.gain.setValueAtTime(0.0001,t0);
+    g.gain.exponentialRampToValueAtTime(peak,t0+0.045);
+    g.gain.setValueAtTime(peak,t0+dur-0.10);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  }
+  /* a hiss shaped by a band-pass: the whole family of f/s/v/z/h */
+  function fricative(t0,dur,freq,q,peak,voiced){
+    const src=noiseSource(dur+0.05);
+    const bp=ctx.createBiquadFilter(); bp.type='bandpass';
+    bp.frequency.value=freq; bp.Q.value=q;
+    const g=ctx.createGain(); env(g,t0,dur,peak);
+    src.connect(bp); bp.connect(g); g.connect(master);
+    src.start(t0); src.stop(t0+dur+0.05);
+    if(voiced){                                  // vocal-cord buzz underneath
+      const o=ctx.createOscillator(), og=ctx.createGain();
+      o.type='sawtooth'; o.frequency.value=voiced;
+      const lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=700;
+      env(og,t0,dur,0.055);
+      o.connect(lp); lp.connect(og); og.connect(master);
+      o.start(t0); o.stop(t0+dur+0.05);
+    }
+  }
+  /* a voiced hum shaped by two formants: the m/n/l/r family */
+  function voicedSound(t0,dur,f0,formants,peak,nasalLP){
+    const o=ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=f0;
+    const out=ctx.createGain(); env(out,t0,dur,peak); out.connect(master);
+    if(nasalLP){
+      const lp=ctx.createBiquadFilter(); lp.type='lowpass';
+      lp.frequency.value=nasalLP; lp.Q.value=0.7;
+      o.connect(lp); lp.connect(out);
+    }
+    formants.forEach(f=>{
+      const bp=ctx.createBiquadFilter(); bp.type='bandpass';
+      bp.frequency.value=f[0]; bp.Q.value=f[1];
+      const g=ctx.createGain(); g.gain.value=f[2];
+      o.connect(bp); bp.connect(g); g.connect(out);
+    });
+    o.start(t0); o.stop(t0+dur+0.05);
+  }
+  /* Only the sounds a synthesiser genuinely does better than a voice engine.
+     Stops (b, d, g, p, t...) are almost silent on their own and the voices
+     handle "buh" correctly, so those stay with the speech engine. */
+  const PHONEMES={
+    F:t=>{ fricative(t,0.55,2300,0.9,0.115); return 0.60; },
+    S:t=>{ fricative(t,0.60,6300,1.6,0.165); return 0.65; },   // the snake
+    H:t=>{ fricative(t,0.38,1300,0.5,0.095); return 0.45; },
+    V:t=>{ fricative(t,0.50,1700,1.0,0.070,125); return 0.55; },
+    Z:t=>{ fricative(t,0.55,5200,1.4,0.110,120); return 0.60; },
+    M:t=>{ voicedSound(t,0.58,120,[[280,4,0.9],[1100,6,0.10]],0.13,520); return 0.63; },
+    N:t=>{ voicedSound(t,0.55,128,[[320,4,0.9],[1500,6,0.16]],0.12,1100); return 0.60; },
+    L:t=>{ voicedSound(t,0.55,132,[[420,3.5,1.0],[1300,4,0.45]],0.115); return 0.60; },
+    R:t=>{ voicedSound(t,0.55,124,[[420,3.5,1.0],[1150,4,0.5],[1500,5,0.35]],0.115); return 0.60; },
+    X:t=>{ // /ks/: a little click, then the hiss
+           fricative(t,0.07,1800,0.8,0.115); fricative(t+0.09,0.48,6300,1.6,0.160); return 0.62; }
+  };
+  const hasPhoneme = ch => !!PHONEMES[ch];
+  /* Diagnostic tap on the output, so the letter sounds can be measured rather
+     than taken on trust -- /s/ has to be hiss up in the treble and /m/ a hum
+     down low, and that is checkable. */
+  let _tap=null;
+  function analyser(){
+    if(!ensure()) return null;
+    if(!_tap){ _tap=ctx.createAnalyser(); _tap.fftSize=2048; _tap.smoothingTimeConstant=0;
+               master.connect(_tap); }
+    return {ctx, analyser:_tap};
+  }
+  /* Render one straight away (used by the queue). Returns its length. */
+  function playPhoneme(ch){
+    if(!ensure() || !PHONEMES[ch]) return 0;
+    try{ return PHONEMES[ch](ctx.currentTime+0.02)+0.02; }catch(e){ return 0; }
+  }
   function speak(text,opts){
     opts = opts||{};
     if(opts.flush){ queue.length=0; try{ speechSynthesis.cancel(); }catch(e){} speaking=false; blockUntil=Date.now()+160; }
-    if(queue.length>3) queue.splice(0, queue.length-3);   // never let a backlog build up
+    /* Never let a backlog build up, but the cap has to clear the longest thing
+       we ever say in one go -- the loudspeaker announcement is four lines, and
+       a cap of three was quietly swallowing "Attention shoppers!". */
+    if(queue.length>6) queue.splice(0, queue.length-6);
     queue.push({text:String(text), rate:opts.rate, pitch:opts.pitch, done:opts.done});
+    setTimeout(next,10);
+  }
+  /* queue a synthesised letter sound in amongst the spoken lines */
+  function sound(ch,opts){
+    opts = opts||{};
+    if(opts.flush){ queue.length=0; try{ speechSynthesis.cancel(); }catch(e){} speaking=false; blockUntil=Date.now()+160; }
+    if(queue.length>6) queue.splice(0, queue.length-6);
+    queue.push({ph:ch, done:opts.done});
     setTimeout(next,10);
   }
   function shutUp(){ queue.length=0; try{ speechSynthesis.cancel(); }catch(e){} speaking=false; blockUntil=Date.now()+160; }
@@ -980,7 +1368,7 @@ const Audio2 = (()=>{
     tone(1980,0.2,'triangle',0.16,0.13);
     if(extra){ noise(0.1,0.05,0.3,3000); noise(0.1,0.05,0.42,3000); }
   }
-  return { unlock, speak, shutUp, SFX, musicOn, startAmbience, wheels, chime, sting, register,
+  return { unlock, speak, sound, hasPhoneme, analyser, shutUp, SFX, musicOn, startAmbience, wheels, chime, sting, register,
            setExtra(on){ extra=!!on; if(ambGain) ambGain.gain.value=on?0.05:0; if(!on) wheels(0); },
            listVoices(){ return englishVoices().map(v=>({name:v.name, lang:v.lang})); },
            currentVoice(){ return voice?voice.name:null; },
@@ -998,6 +1386,10 @@ const W = {
   segments:[[-20,-3],[3,20]],       // each run is split by a central cross-corridor
   aisles:[15,8,2,-4,-10,-16]
 };
+/* Start the cart in the first aisle rather than out by the doors: parked at
+   the entrance, the trailing camera sat in the car park and nearly half the
+   opening screen was empty tarmac instead of shelves full of letters. */
+const SPAWN_Z = 8;
 const DEPTS=[['SNACKS','CANDY'],['CEREAL','PASTA'],['CANNED','SAUCE'],['DRINKS','PAPER'],['FROZEN','DAIRY']];
 let renderer, scene, camera, clock, raycaster, floorMesh, wallBack=null;
 let cart, cartGroup, cartBits={}, npcs=[], letterObjs={}, beacon=null;
@@ -1083,31 +1475,45 @@ function nearestFree(ix,iz){
   }
   return [ix,iz];
 }
+/* Scratch buffers, reused between searches.  The grid never changes size, so
+   allocating four typed arrays per tap was pure garbage for the collector to
+   chase -- and on a tap-to-move game that happens constantly. */
+let _aCame=null,_aG=null,_aF=null,_aOpen=null,_aStamp=null,_aRun=0;
 function astar(sx,sz,tx,tz){
   const start=nearestFree(sx,sz), goal=nearestFree(tx,tz);
   const S=start[1]*gw+start[0], G=goal[1]*gw+goal[0];
   if(S===G) return [goal];
-  const open=[S], came=new Int32Array(gw*gh).fill(-1);
-  const gS=new Float32Array(gw*gh).fill(Infinity), fS=new Float32Array(gw*gh).fill(Infinity);
-  gS[S]=0; fS[S]=Math.hypot(goal[0]-start[0],goal[1]-start[1]);
-  const seen=new Uint8Array(gw*gh); seen[S]=1;
+  const N=gw*gh;
+  if(!_aCame || _aCame.length!==N){
+    _aCame=new Int32Array(N); _aG=new Float32Array(N); _aF=new Float32Array(N);
+    _aStamp=new Int32Array(N); _aOpen=new Int32Array(N);
+  }
+  const run=++_aRun;                        // stamping beats clearing the arrays
+  let openN=0;
+  _aOpen[openN++]=S; _aStamp[S]=run; _aCame[S]=-1;
+  _aG[S]=0; _aF[S]=Math.hypot(goal[0]-start[0],goal[1]-start[1]);
   const D=[[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[1,1,1.414],[1,-1,1.414],[-1,1,1.414],[-1,-1,1.414]];
-  let guard=0;
-  while(open.length && guard++<40000){
-    let bi=0; for(let i=1;i<open.length;i++) if(fS[open[i]]<fS[open[bi]]) bi=i;
-    const cur=open.splice(bi,1)[0];
-    if(cur===G) break;
+  let guard=0, found=false;
+  while(openN && guard++<40000){
+    let bi=0; for(let i=1;i<openN;i++) if(_aF[_aOpen[i]]<_aF[_aOpen[bi]]) bi=i;
+    const cur=_aOpen[bi]; _aOpen[bi]=_aOpen[--openN];   // swap-remove, no splice
+    if(cur===G){ found=true; break; }
     const cx=cur%gw, cz=(cur-cx)/gw;
     for(const d of D){
       const nx=cx+d[0], nz=cz+d[1];
       if(!cellFree(nx,nz)) continue;
       if(d[2]>1 && (!cellFree(cx+d[0],cz)||!cellFree(cx,cz+d[1]))) continue;
-      const ni=nz*gw+nx, ng=gS[cur]+d[2];
-      if(ng<gS[ni]){ gS[ni]=ng; came[ni]=cur; fS[ni]=ng+Math.hypot(goal[0]-nx,goal[1]-nz);
-        if(!seen[ni]||!open.includes(ni)) open.push(ni); seen[ni]=1; }
+      const ni=nz*gw+nx, ng=_aG[cur]+d[2];
+      if(_aStamp[ni]!==run || ng<_aG[ni]){
+        const fresh=_aStamp[ni]!==run;
+        _aStamp[ni]=run; _aG[ni]=ng; _aCame[ni]=cur;
+        _aF[ni]=ng+Math.hypot(goal[0]-nx,goal[1]-nz);
+        if(fresh && openN<N) _aOpen[openN++]=ni;
+      }
     }
   }
-  if(came[G]===-1 && S!==G) return null;
+  if(!found && S!==G) return null;
+  const came=_aCame;
   const path=[]; let c=G, g2=0;
   while(c!==-1 && g2++<5000){ const cx=c%gw; path.push([cx,(c-cx)/gw]); if(c===S) break; c=came[c]; }
   path.reverse();
@@ -1843,9 +2249,22 @@ function buildCheckout(){
   },128);
   bPlane('coArrow',4.6,4.6,at,{transparent:true,depthWrite:false}, 20.6,0.035,CZ,-Math.PI/2,0);
 
+  /* A bright pool of light on the floor in front of the till, switched on only
+     while a letter is in the basket.  Finding the checkout was one of the things
+     a three-year-old could not do, and a moving arrow alone was not enough. */
+  const padT=tex((g,s)=>{
+    const gr=g.createRadialGradient(s/2,s/2,2,s/2,s/2,s/2);
+    gr.addColorStop(0,'rgba(255,255,255,.95)'); gr.addColorStop(0.45,'rgba(255,210,90,.6)');
+    gr.addColorStop(1,'rgba(255,190,60,0)');
+    g.fillStyle=gr; g.fillRect(0,0,s,s);
+  },128);
+  const pad=new THREE.Mesh(new THREE.PlaneGeometry(9.0,9.0),
+    new THREE.MeshBasicMaterial({map:padT, transparent:true, depthWrite:false, opacity:0}));
+  pad.rotation.x=-Math.PI/2; pad.position.set(21.6,0.06,CZ); scene.add(pad);
+
   const hit=new THREE.Mesh(new THREE.BoxGeometry(3.4,4.6,10.5), new THREE.MeshBasicMaterial({visible:false}));
   hit.position.set(WX-1.2,2.2,CZ); hit.userData.checkout=1; scene.add(hit);
-  checkout={mesh:hit, stand:{x:22.4, z:CZ}, z:CZ};
+  checkout={mesh:hit, stand:{x:22.4, z:CZ}, z:CZ, pad:pad};
 }
 let tilePops=[];
 let nameBoard=null, nameCanvas=null, nameCtx=null;
@@ -1972,6 +2391,27 @@ function buildCart(){
     scene.add(pf); cartBits.puffs.push({m:pf,life:0});
   }
 
+  /* ---- cart power-ups: a coloured pool of light, and a trail of puffs ---- */
+  const glowT=tex((g,s)=>{
+    const gr=g.createRadialGradient(s/2,s/2,2,s/2,s/2,s/2);
+    gr.addColorStop(0,'rgba(255,255,255,.95)'); gr.addColorStop(0.35,'rgba(255,255,255,.55)');
+    gr.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=gr; g.fillRect(0,0,s,s);
+  },128);
+  const glow=new THREE.Mesh(new THREE.PlaneGeometry(5.2,5.2),
+    new THREE.MeshBasicMaterial({map:glowT, transparent:true, depthWrite:false, opacity:0.7}));
+  glow.rotation.x=-Math.PI/2; glow.position.y=0.07; glow.visible=false;
+  cartGroup.add(glow); cartBits.glow=glow;
+  /* the trail lives in world space, not on the cart, so it stays where it was
+     dropped instead of being dragged along */
+  cartBits.trail=[];
+  for(let i=0;i<14;i++){
+    const m=new THREE.Mesh(new THREE.PlaneGeometry(1.0,1.0),
+      new THREE.MeshBasicMaterial({map:glowT, transparent:true, depthWrite:false, opacity:0}));
+    m.rotation.x=-Math.PI/2; m.position.y=0.09; m.visible=false;
+    scene.add(m); cartBits.trail.push({m, life:0});
+  }
+
   const flag=new THREE.Group();
   const pole=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1.6,6), lam(0xC9C2B4));
   pole.position.y=0.8; flag.add(pole);
@@ -2039,9 +2479,9 @@ function buildCart(){
   });
   spoiler.visible=false; cartGroup.add(spoiler); cartBits.spoiler=spoiler;
 
-  cartGroup.position.set(0,0,16);
+  cartGroup.position.set(0,0,SPAWN_Z);
   scene.add(cartGroup);
-  cart = { pos:new THREE.Vector3(0,0,16), path:[], pi:0, heading:Math.PI, speed:7.6,
+  cart = { pos:new THREE.Vector3(0,0,SPAWN_Z), path:[], pi:0, heading:Math.PI, speed:7.6,
            baseSpeed:7.6, moving:false, blink:0, nextBlink:2, lean:0, squash:0, wasMoving:false, turnRate:0 };
 }
 
@@ -2172,7 +2612,7 @@ function enterRoom(R){
 }
 function roomCheck(){
   if(!started || !roomList.length) return;
-  if(document.querySelector('.layer.on')) return;
+  if(anyLayerOpen()) return;
   let inAny=null;
   for(const R of roomList){
     if(cart.pos.z < W.storeBackZ-1.6 && cart.pos.x>R.x1 && cart.pos.x<R.x2){ inAny=R; break; }
@@ -2206,8 +2646,14 @@ function buildBeacon(){
 }
 
 function resize(){
-  const w=window.innerWidth, h=window.innerHeight;
-  const dpr = Math.min(window.devicePixelRatio||1, CFG.MAX_DPR);
+  const w=Math.max(1,window.innerWidth), h=Math.max(1,window.innerHeight);
+  const native = window.devicePixelRatio||1;
+  /* Rotating the device used to quietly undo the grown-up's Graphics choice,
+     because this always reset the pixel ratio to the automatic value. */
+  const gfx = (S && S.gfx) || 'auto';
+  const dpr = gfx==='low'  ? 1
+            : gfx==='high' ? Math.min(native,2)
+                           : Math.min(native, CFG.MAX_DPR);
   renderer.setPixelRatio(dpr); renderer.setSize(w,h,false);
   camera.aspect=w/h;
   camera.fov = w/h < 0.85 ? 58 : 46;   // portrait phones need a wider view
@@ -2217,16 +2663,36 @@ function resize(){
 /* ---------------------------------------------------------------- STATE */
 let S = null, slotIdx = 0;
 let quest = null, lastInput = Date.now(), started = false, mode='shop', lastBonus=0;
+let finaleRunning=false;
 const $ = id => document.getElementById(id);
 function layer(id,on){
+  /* Only ever one panel at a time.  Several panels are opened from timers
+     (the tutorial, the receipt, the certificate, an apron promotion) and two
+     landing together used to stack them, leaving a child tapping buttons on a
+     panel hidden underneath another one. */
+  if(on) document.querySelectorAll('.layer.on').forEach(el=>{
+    if(el.id!==id) el.classList.remove('on');
+  });
   const r=$(id).classList.toggle('on', on);
   if(on){ keys.l=keys.r=keys.u=keys.d=0; ptr.down=false; ptr.vx=ptr.vy=0; hideStick(); }
+  refreshLayerFlag();
   return r;
 }
+/* The render loop asks "is a panel open?" twice a frame.  Querying the DOM for
+   that 120 times a second was wasteful, so the answer is cached and refreshed
+   whenever a panel is toggled. */
+let _layerOpen=false;
+function refreshLayerFlag(){ _layerOpen = !!document.querySelector('.layer.on'); }
+const anyLayerOpen = () => _layerOpen;
 const titleCase = s => String(s).charAt(0).toUpperCase()+String(s).slice(1);
 const oneOf = a => a[Math.floor(Math.random()*a.length)];
 const numWords = ['zero','one','two','three','four','five','six','seven','eight','nine','ten',
   'eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const numWord = n => numWords[n] != null ? numWords[n] : String(n);
+/* "for one dollars" was the very first thing a child heard, because the cheapest
+   letter costs a dollar and every price line hard-coded the plural. */
+const dollars = n => `${numWord(n)} ${n===1 ? 'dollar' : 'dollars'}`;
+const countOf = (n,word) => `${numWord(n)} ${word}${n===1 ? '' : 's'}`;
 
 function saveNow(){ Store.set('am_slot'+slotIdx, S); }
 function apron(){ return CFG.APRONS[S.apron] || CFG.APRONS[1]; }
@@ -2253,6 +2719,11 @@ function ensureList(){
   let picks=[];
   if(!S.listCount){                                   // the very first list spells their name
     picks = nameLetters().filter(ch=>pool.indexOf(ch)>=0).slice(0, CFG.LIST_LEN);
+    /* The name screen promises "the letters in their name", so honour that
+       exactly rather than padding it out with strangers.  Only a one-letter
+       name is too thin to shop for on its own. */
+    if(picks.length>=2){ S.list=picks.slice(); S.listAll=picks.slice(); S.listPrices={};
+      paintList(); return true; }
   }
   let guard=0;
   while(picks.length < Math.min(CFG.LIST_LEN, pool.length) && guard++<200){
@@ -2308,6 +2779,11 @@ function pickType(L){
 }
 
 function newQuest(){
+  /* Several timers can land on this at once -- a finished list, an apron
+     promotion, the receipt's "Another list!" -- and each extra call used to
+     throw away the quest the child was already listening to.  Callers that
+     genuinely want a fresh one clear `quest` first. */
+  if(quest || finaleRunning) return;
   if(!ensureList()){ finaleAllLetters(); return; }
   const ch=S.list[0];
   const L=LMAP[ch];
@@ -2323,12 +2799,19 @@ function newQuest(){
 function speakLines(lines, opts){
   opts=opts||{};
   lines.filter(Boolean).forEach((l,i)=>{
-    Audio2.speak(l, i===0 ? {flush:opts.flush!==false, rate:opts.rate} : {rate:opts.rate});
+    const o = i===0 ? {flush:opts.flush!==false, rate:opts.rate} : {rate:opts.rate};
+    /* {ph:'S'} is a real synthesised letter sound rather than something to read */
+    if(l && typeof l==='object' && l.ph) Audio2.sound(l.ph, o);
+    else Audio2.speak(l, o);
   });
 }
+/* Returns utterances, not a string, because the sound itself may be a
+   synthesised tone rather than words.  Spread it into a speakLines list. */
 function letterLine(ch){
-  const L=LMAP[ch];
-  return L ? `${ch} says ${L.sound}.` : '';
+  const L=LMAP[ch]; if(!L) return [];
+  const tok=soundToken(ch);
+  return tok ? [`The letter ${ch} says`, tok]
+             : [`The letter ${ch} says ${soundPhrase(ch)}.`];
 }
 function aisleHint(){
   const o=letterObjs[quest.L.ch];
@@ -2341,12 +2824,18 @@ function questLines(){
   const open=oneOf(['Attention shoppers!','Hello, shoppers!','Attention, please!']);
   let ask;
   if(q.type==='name')       ask=oneOf([`We need the letter ${L.ch}.`, `Can you find the letter ${L.ch}?`]);
-  else if(q.type==='sound') ask=`We need the letter that says ${L.sound}.`;
+  else if(q.type==='sound') ask=null;   // handled as its own utterance below
   else                      ask=`We need the letter that starts the word ${L.word}. ${L.word}.`;
   const where = (o && o.where) ? `It's ${o.where}.` : '';
-  const price = oneOf([`It costs ${numWords[q.price]} dollars.`,
-                       `Please buy it for ${numWords[q.price]} dollars.`]);
-  return [open, ask, where, price];
+  const price = oneOf([`It costs ${dollars(q.price)}.`,
+                       `Please buy it for ${dollars(q.price)}.`]);
+  /* a synthesised sound cannot live inside a sentence, so the "what we need"
+     line is split around it */
+  const askParts = q.type==='sound'
+    ? (soundToken(L.ch) ? ['We need the letter that says', soundToken(L.ch), '']
+                        : [`We need the letter that says ${soundPhrase(L.ch)}.`])
+    : [ask];
+  return [open, ...askParts, where, price];
 }
 function questSpeech(){ return questLines().join(' '); }
 function paintQuest(){
@@ -2364,7 +2853,7 @@ function paintQuest(){
   else { ic.textContent=L.emoji; ic.style.background='#fff'; }
   $('questText').textContent =
     q.type==='name'  ? `Find the letter ${L.ch}` :
-    q.type==='sound' ? `Find the letter that says “${L.sound.split(',')[0]}”` :
+    q.type==='sound' ? `Find the letter that says ${soundLabel(L.ch)}` :
                        `Which letter starts “${L.word}”?`;
   const lo=letterObjs[L.ch];
   $('questPrice').textContent = (lo&&lo.short ? `${lo.short}  •  ` : '') + `$${q.price}`;
@@ -2378,7 +2867,7 @@ function icText(){
   const q=quest;
   if(!q) return '';
   if(q.type==='name')  return `Please buy the ${q.L.ch}`;
-  if(q.type==='sound') return `Please buy the letter that says \u201C${q.L.sound.split(',')[0]}\u201D`;
+  if(q.type==='sound') return `Please buy the letter that says ${soundLabel(q.L.ch)}`;
   return `Please buy the letter that starts \u201C${q.L.word}\u201D`;
 }
 let icPending=null;
@@ -2389,7 +2878,7 @@ function openIntercom(){
      would otherwise land on top of them as they walk in. */
   const inRoom = roomList && roomList.some(R=>
     cart.pos.z < W.storeBackZ-1.0 && cart.pos.x>R.x1-1 && cart.pos.x<R.x2+1);
-  if(inRoom || document.querySelector('.layer.on')){
+  if(inRoom || anyLayerOpen()){
     if(icPending) clearTimeout(icPending);
     icPending=setTimeout(()=>{ icPending=null; openIntercom(); }, 1500);
     return;
@@ -2399,7 +2888,7 @@ function openIntercom(){
   if(q.type==='name'){ card.textContent=L.ch; card.style.background=L.color; }
   else { card.textContent=L.emoji; card.style.background='#fff'; }
   $('icLine').textContent=icText();
-  $('icPrice').textContent='for '+numWords[q.price]+' dollars';
+  $('icPrice').textContent='for '+dollars(q.price);
   layer('intercom', true);
   Audio2.SFX.sparkle();
   speakLines(questLines());
@@ -2418,7 +2907,7 @@ function rolly(text, on, speakIt){
 function idleCheck(){
   if(!started || !quest) return;
   if(!S || S.tips==='off') return;
-  if(document.querySelector('.layer.on')) return;
+  if(anyLayerOpen()) return;
   const waitFor = S.tips==='few' ? 28000 : CFG.IDLE_NUDGE_MS;
   if(Date.now()-lastInput < waitFor) return;
   lastInput = Date.now();
@@ -2428,7 +2917,7 @@ function idleCheck(){
     o&&o.where ? `Try looking ${o.where}. Follow the glowing light!`
                : `Look for the glowing light! That's where the ${q.L.ch} is hiding.`,
     q.type==='name' ? `We need the letter ${q.L.ch}. Tap the floor to roll around!`
-                    : `Remember: ${q.L.ch} says ${q.L.sound}.`,
+                    : `Remember: the letter ${q.L.ch} says ${soundPhrase(q.L.ch)}.`,
     `Tap anywhere on the floor and I'll drive us there!`
   ];
   rolly(msgs[Math.floor(Math.random()*msgs.length)], true, true);
@@ -2536,7 +3025,7 @@ function hideStick(){ $('stick').style.display='none'; }
 
 function pDown(ev){
   if(!started || inUI(ev.target)) return;
-  if(document.querySelector('.layer.on')) return;
+  if(anyLayerOpen()) return;
   ptr.down=true; ptr.sx=ev.clientX; ptr.sy=ev.clientY; ptr.moved=false; ptr.vx=ptr.vy=0;
   lastInput=Date.now();
 }
@@ -2564,7 +3053,7 @@ function nearest(list, maxD){
 }
 /* the A button does whatever makes sense where the cart is standing */
 function pressA(){
-  if(!started || document.querySelector('.layer.on')) return;
+  if(!started || anyLayerOpen()) return;
   lastInput=Date.now();
   if(mode==='deliver' && checkout){
     const d=Math.hypot(checkout.stand.x-cart.pos.x, checkout.stand.z-cart.pos.z);
@@ -2616,7 +3105,7 @@ function steerMove(dx,dz){
   at(p.x,p.z+dz);
 }
 function steerVector(){
-  if(document.querySelector('.layer.on')) return [0,0];
+  if(anyLayerOpen()) return [0,0];
   let sx=ptr.vx, sy=ptr.vy;
   if(keys.l) sx-=1; if(keys.r) sx+=1; if(keys.u) sy-=1; if(keys.d) sy+=1;
   return [sx,sy];
@@ -2624,49 +3113,73 @@ function steerVector(){
 
 function tapLetter(ch){
   const L = LMAP[ch];
-  if(!quest){ Audio2.SFX.pop(); Audio2.speak(`${ch}. ${L.sound}.`,{flush:true}); return; }
-  if(ch === quest.L.ch){
+  if(!L) return;
+  if(!quest){ Audio2.SFX.pop(); speakLines(soundLines(ch)); return; }
+  const q = quest;
+  if(ch === q.L.ch){
     Audio2.SFX.sparkle();
     Audio2.speak(oneOf([`You found it! The letter ${ch}.`, `That's the ${ch}! Nice spotting.`,
                         `Yes! There's the ${ch}.`]), {flush:true});
     goToLetter(ch, openWallet);
-  } else {
-    Audio2.SFX.pop();
-    quest.tries++;
-    S.mastery[ch].miss += 0.4;
-    S.streakMiss=(S.streakMiss||0)+1;
-    const q = quest;
-    speakLines([`That one's the ${ch}.`, letterLine(ch),
-      q.type==='name'  ? `We're shopping for the ${q.L.ch}. Keep looking!`
-    : q.type==='sound' ? `We want the letter that says ${q.L.sound}.`
-                       : `We want the letter that starts ${q.L.word}.`]);
-    rolly(`That's ${ch}! We need ${q.type==='name'?q.L.ch:'the one from the clue'}.`, true);
-    if(quest.tries>=3){ letterObjs[q.L.ch].halo.visible = true; }
-    saveNow();
+    return;
   }
+  /* C and K make the same sound, so a child who picked the other one by ear was
+     listening correctly.  Never score that as a miss -- just name the difference. */
+  if(SAME_SOUND[q.L.ch] === ch && q.type !== 'name'){
+    Audio2.SFX.pop();
+    speakLines([`Good listening! ${ch} and ${q.L.ch} make the same sound.`,
+                `This time we need the letter ${q.L.ch}.`,
+                keywordLine(q.L.ch)]);
+    rolly(`Good ear! ${ch} and ${q.L.ch} sound the same. We need ${q.L.ch}.`, true);
+    return;
+  }
+  Audio2.SFX.pop();
+  q.tries++;
+  S.mastery[ch].miss += 0.4;
+  S.streakMiss=(S.streakMiss||0)+1;
+  speakLines([`That one's the ${ch}.`, ...letterLine(ch),
+    q.type==='name'  ? `We're shopping for the ${q.L.ch}. Keep looking!`
+  : q.type==='sound' ? null
+                     : `We want the letter that starts ${q.L.word}.`]);
+  if(q.type==='sound'){
+    const tok=soundToken(q.L.ch);
+    if(tok) speakLines(['We want the letter that says', tok], {flush:false});
+    else Audio2.speak(`We want the letter that says ${soundPhrase(q.L.ch)}.`);
+  }
+  rolly(`That's ${ch}! We need ${q.type==='name'?q.L.ch:'the one from the clue'}.`, true);
+  if(q.tries>=3 && letterObjs[q.L.ch]){ letterObjs[q.L.ch].halo.visible = true; }
+  saveNow();
 }
 
 /* ---------------------------------------------------------------- WALLET */
-let pay = null;
+let pay = null, walletPending=null, buyTimer=null;
 function openWallet(){
-  if(!quest || document.querySelector('.layer.on')) return;
+  if(!quest) return;
+  /* The cart can arrive at the letter just as the loudspeaker or a room panel
+     opens.  Dropping the till on the floor here left the child parked next to
+     the letter with nothing happening, so wait for the panel instead. */
+  if(anyLayerOpen()){
+    clearTimeout(walletPending);
+    walletPending=setTimeout(()=>{ walletPending=null; openWallet(); }, 900);
+    return;
+  }
   const q=quest, L=q.L;
   pay = { stage:'numeral', tray:[], sum:0, misses:0, done:false };
   $('letterGlyph').textContent = L.ch;
   $('letterCard').style.background = L.color;
   /* The numeral is deliberately NOT shown: the child hears "five dollars" and has
      to recognise the 5. The Help button is what reveals it. */
-  $('priceBig').textContent = titleCase(numWords[q.price]) + ' dollars';
-  $('askLine').textContent = 'Which one says ' + numWords[q.price] + ' dollars?';
+  $('priceBig').textContent = titleCase(dollars(q.price));
+  $('askLine').textContent = 'Which one says ' + dollars(q.price) + '?';
   $('coinArea').classList.add('hidden');
   $('numPad').classList.remove('hidden');
   buildPriceOptions();
   layer('wallet', true);
   Audio2.SFX.pop();
   speakLines([ oneOf([`Hi! I'm the letter ${L.ch}.`, `Hello! I'm the letter ${L.ch}.`]),
-               letterLine(L.ch),
-               `I cost ${numWords[q.price]} dollars.`,
-               `Which one says ${numWords[q.price]} dollars?` ]);
+               ...letterLine(L.ch),
+               `I cost ${dollars(q.price)}.`,
+               `Which one says ${dollars(q.price)}?` ]);
 }
 function priceChoices(price){
   const a=apron(), lo=a.minPrice, hi=a.padMax;
@@ -2693,29 +3206,49 @@ function buildPriceOptions(){
   });
 }
 function tapNumeral(n, btn){
-  if(!pay || pay.done || pay.stage!=='numeral') return;
+  if(!pay || pay.done || pay.locked || pay.stage!=='numeral' || !quest) return;
   lastInput=Date.now();
   const price = quest.price;
   if(n===price){
-    btn.classList.add('good'); Audio2.SFX.coin();
+    /* lock straight away: without this, a child drumming on the pad during the
+       pause before the coins appear could bank the same right answer twice, or
+       score a wrong one after already getting it right */
+    pay.locked=true;
+    if(btn) btn.classList.add('good');
+    Audio2.SFX.coin();
     S.nums[price].ok++;
     Audio2.speak(oneOf([`${numWords[n]}. That's right!`, `${numWords[n]}. Perfect!`,
                         `Yes, ${numWords[n]}. Well done!`]), {flush:true});
     const mode = apron().pay;
-    if(mode==='numeral'){ pay.done=true; setTimeout(purchase, 700); }
-    else setTimeout(()=>startCoinStage(mode), 800);
+    if(mode==='numeral'){ pay.done=true; buyLater(700); }
+    else buyTimer=setTimeout(()=>{ buyTimer=null; startCoinStage(mode); }, 800);
   } else {
-    btn.classList.add('meh'); Audio2.SFX.err();
+    if(btn){
+      if(btn.classList.contains('meh')) return;   // same wrong button, one score
+      btn.classList.add('meh');
+      setTimeout(()=>btn.classList.remove('meh'), 900);
+    }
+    Audio2.SFX.err();
     pay.misses++; S.nums[n].miss += 0.5; S.nums[price].miss += 0.5;
     S.streakMiss=(S.streakMiss||0)+1;
     speakLines([`That one's ${numWords[n]}.`, `We need ${numWords[price]}.`]);
     countAloud(price);
-    setTimeout(()=>btn.classList.remove('meh'), 900);
     if(pay.misses>=2){
       const t=document.querySelector('.priceBtn[data-n="'+price+'"]');
       if(t) t.classList.add('hintGlow');
     }
   }
+}
+/* Every path to the till runs through here, so closing the wallet can reliably
+   cancel a purchase that has not happened yet. */
+function buyLater(ms){
+  clearTimeout(buyTimer);
+  buyTimer=setTimeout(()=>{ buyTimer=null; purchase(); }, ms);
+}
+function cancelBuy(){
+  clearTimeout(buyTimer); buyTimer=null;
+  clearTimeout(walletPending); walletPending=null;
+  pay=null;
 }
 function countAloud(n){
   Audio2.speak(oneOf(['Let\u2019s count together.','Count with me.']));
@@ -2728,19 +3261,21 @@ function startCoinStage(mode){
   $('numPad').classList.add('hidden');
   $('coinArea').classList.remove('hidden');
   $('askLine').textContent = mode==='count'
-    ? `Now put ${quest.price} coins in the tray`
+    ? `Now put ${quest.price} ${quest.price===1?'coin':'coins'} in the tray`
     : `Now make $${quest.price} with your coins`;
   buildPurse(mode);
   renderTray();
   speakLines(mode==='count'
-    ? [`Now, count ${numWords[quest.price]} coins into the tray.`]
-    : [`Now let's make ${numWords[quest.price]} dollars.`, 'The green coins are worth five.']);
+    ? [`Now, count ${countOf(quest.price,'coin')} into the tray.`]
+    : [`Now let's make ${dollars(quest.price)}.`, 'The green coins are worth five.']);
 }
 function buildPurse(mode){
   const p=$('coinPurse'); p.innerHTML='';
   const add=(val)=>{
     const c=document.createElement('div');
     c.className='coin'+(val===5?' five':''); c.textContent='$'+val;
+    c.setAttribute('role','button'); c.tabIndex=0;
+    c.setAttribute('aria-label',val+' dollar coin');
     c.addEventListener('click',()=>addCoin(val,c));
     p.appendChild(c);
   };
@@ -2779,20 +3314,21 @@ function check(){
   const val = pay.stage==='count' ? pay.tray.length : pay.sum;
   if(val===price){
     Audio2.SFX.chaching();
-    Audio2.speak(oneOf([`${numWords[price]} dollars. Perfect!`,
-                        `That's exactly ${numWords[price]} dollars. Lovely.`]), {flush:true});
-    pay.done=true; setTimeout(purchase, 900);
+    Audio2.speak(oneOf([`${titleCase(dollars(price))}. Perfect!`,
+                        `That's exactly ${dollars(price)}. Lovely.`]), {flush:true});
+    pay.done=true; buyLater(900);
   } else if(val>price){
     Audio2.SFX.err();
     speakLines(['Ooh, that\u2019s a bit too much.', 'Tap a coin in the tray to take it back.']);
   }
 }
 function walletHint(){
+  if(!pay || !quest) return;
   const price=quest.price;
   if(pay.stage==='numeral'){
     const t=document.querySelector('.priceBtn[data-n="'+price+'"]');
     if(t) t.classList.add('hintGlow');
-    speakLines([`The one that says ${numWords[price]} dollars is glowing.`,
+    speakLines([`The one that says ${dollars(price)} is glowing.`,
                 `It's this one: ${numWords[price]}.`]);
     countAloud(price);
   } else if(pay.stage==='count'){
@@ -2801,7 +3337,7 @@ function walletHint(){
                         : `Take some coins back out of the tray.`, {flush:true});
   } else {
     const left = price - pay.sum;
-    Audio2.speak(left>0 ? `You need ${numWords[Math.min(Math.max(left,0),20)]} more dollars.`
+    Audio2.speak(left>0 ? `You need ${dollars(Math.min(Math.max(left,0),20))} more.`
                         : `Take some coins back out.`, {flush:true});
   }
 }
@@ -2868,7 +3404,7 @@ function purchase(){
   cheer();
   Audio2.SFX.chaching();
   speakLines([ oneOf([`Nice work! You bought the ${L.ch}.`, `You did it! The ${L.ch} is ours.`]),
-               letterLine(L.ch),
+               ...letterLine(L.ch),
                oneOf(['Now let\u2019s take it to the checkout.', 'Off to the checkout counter!']) ]);
   rolly(`Take the ${L.ch} to the checkout! Follow the light.`, true);
   saveNow();
@@ -2893,7 +3429,7 @@ function deliverLetters(){
   celebrate(S.owned.length);
   speakLines([ oneOf([`There we go! The ${list.join(' and ')} is on the wall.`,
                       `Beautiful. The ${list.join(' and ')} is done.`]),
-               `That's ${numWords[Math.min(S.owned.length,20)]||S.owned.length} letters.`,
+               `That's ${countOf(Math.min(S.owned.length,20),'letter')}.`,
                S.owned.length<26 ? oneOf(['Keep going!','What\u2019s next?','You\u2019re doing great.']) : '' ]);
   saveNow();
   if(S.owned.length>=26){ setTimeout(finaleAllLetters, 2600); return; }
@@ -2944,9 +3480,10 @@ function showReceipt(){
   confetti(110);
   speakLines([ 'That is the whole list!',
                S.name ? `Great shopping, ${S.name}.` : 'Great shopping.',
-               `The total is ${numWords[Math.min(total,20)]||total} dollars.`,
+               `The total is ${dollars(Math.min(total,20))}.`,
                'Shall we get another list?' ]);
-  maybeApronUp();
+  /* the apron promotion waits until the receipt is dismissed -- announcing it
+     here talked straight over the receipt and queued a second shopping list */
 }
 function maybeApronUp(){
   const n=S.owned.length;
@@ -2957,7 +3494,7 @@ function maybeApronUp(){
     setTimeout(()=>{
       bigWord(CFG.APRONS[target].label.toUpperCase());
       Audio2.SFX.fanfare();
-      Audio2.speak(`Wow! You earned the ${CFG.APRONS[target].label}! Now the letters give you clues, and the prices go up to ${numWords[CFG.APRONS[target].maxPrice]} dollars.`, {flush:true});
+      Audio2.speak(`Wow! You earned the ${CFG.APRONS[target].label}! Now the letters give you clues, and the prices go up to ${dollars(CFG.APRONS[target].maxPrice)}.`, {flush:true});
       setTimeout(newQuest, 5200);
     }, 900);
     return true;
@@ -2965,6 +3502,10 @@ function maybeApronUp(){
   return false;
 }
 function finaleAllLetters(){
+  /* Reachable from the last delivery and from newQuest finding nothing left to
+     buy; without this the party could run twice on top of itself. */
+  if(finaleRunning) return;
+  finaleRunning=true;
   bigWord('ALL 26!');
   Audio2.SFX.fanfare();
   setTimeout(()=>Audio2.SFX.fanfare(), 700);
@@ -2977,11 +3518,32 @@ function finaleAllLetters(){
     S.owned=[]; S.carrying=[]; mode='shop'; S.stars+=5;
     S.list=[]; S.listAll=[]; S.listPrices={}; paintList();
     LETTERS.forEach(l=>{ const o=letterObjs[l.ch]; if(o) o.group.visible=true; });
-    paintCheckoutWall();
+    /* "Restocked" should mean it: hide them somewhere new, or the second trip
+       round the alphabet is a memory test of where they were last time. */
+    reshuffleLetters();
+    paintCheckoutWall(); paintNameBoard();
     paintHUD(); saveNow();
     Audio2.speak(`The manager restocked the shelves. Let's shop again!`);
+    quest=null;
+    finaleRunning=false;      // release the guard before asking for a new list
     newQuest();
   }, 9000);
+}
+
+/* Deal the letters out to a fresh set of hiding places.  The slots are already
+   computed the same way at build time; this just moves the existing objects, so
+   nothing has to be rebuilt. */
+function reshuffleLetters(){
+  const slots=computeLetterSlots();
+  slots.forEach(s=>{
+    const o=letterObjs[s.ch];
+    if(!o) return;
+    o.group.position.set(s.x, s.y, s.z);
+    o.group.rotation.y = s.ry||0;
+    o.baseY=s.y; o.standX=s.standX; o.standZ=s.standZ;
+    o.where=s.where; o.short=s.short;
+    o.halo.visible=false;
+  });
 }
 
 /* ---------------------------------------------------------------- CELEBRATION FX */
@@ -2997,10 +3559,16 @@ function confetti(n){
     setTimeout(()=>d.remove(), 3600);
   }
 }
+let bigWordTimer=null;
 function bigWord(txt){
-  const b=$('bigWord'); b.querySelector('span').textContent=txt;
+  const b=$('bigWord'), span=b.querySelector('span');
+  span.textContent=txt;
   b.style.display='grid';
-  setTimeout(()=>{ b.style.display='none'; }, 1800);
+  /* restart the animation so a second cheer arriving mid-cheer still plays,
+     and only the newest timer gets to hide it */
+  span.style.animation='none'; void span.offsetWidth; span.style.animation='';
+  clearTimeout(bigWordTimer);
+  bigWordTimer=setTimeout(()=>{ bigWordTimer=null; b.style.display='none'; }, 1800);
 }
 function balloons(n){
   const box=$('confetti'), ems=['\ud83c\udf88','\ud83c\udf89','\u2b50','\ud83c\udf8a'];
@@ -3032,8 +3600,8 @@ function celebrate(count){
     Audio2.SFX.fanfare(); confetti(110); balloons(8);
     bigWord(count+' LETTERS!');
     speakLines([ 'Attention shoppers!',
-                 S.name ? `${S.name} has ${numWords[Math.min(count,20)]||count} letters!`
-                        : `That is ${numWords[Math.min(count,20)]||count} letters!`,
+                 S.name ? `${S.name} has ${countOf(Math.min(count,20),'letter')}!`
+                        : `That is ${countOf(Math.min(count,20),'letter')}!`,
                  'What a shopper!' ]);
     return;
   }
@@ -3071,13 +3639,53 @@ function applyCart(){
   cartBits.mats.wheel.color.setHex(C.wheel);
   ['canopy','nose','spoiler'].forEach(k=>{ if(cartBits[k]) cartBits[k].visible = (C.extra===k); });
   cart.speed = (cart.baseSpeed||7.6) * (C.speed||1);
+  /* the two power-ups */
+  const fx=C.fx||'';
+  cart.fxGlow  = (fx==='glow' || fx==='both');
+  cart.fxTrail = (fx==='trail'|| fx==='both');
+  if(cartBits.glow){
+    cartBits.glow.visible = cart.fxGlow;
+    cartBits.glow.material.color.setHex(C.tint||0xffffff);
+  }
+  if(cartBits.trail) cartBits.trail.forEach(t=>t.m.material.color.setHex(C.tint||0xffffff));
 }
 function applyUpgrades(){
   applyCart();
+  /* the decorations bought with stars; everything else on the cart is either a
+     material, a body kit or a power-up and must not be toggled from here */
+  const NOT_A_DECORATION={mats:1,canopy:1,nose:1,spoiler:1,wheels:1,eyes:1,pupils:1,
+                          puffs:1,glow:1,trail:1};
   Object.keys(cartBits).forEach(k=>{
-    if(k==='mats'||k==='canopy'||k==='nose'||k==='spoiler') return;
-    if(k==='wheels') return;
+    if(NOT_A_DECORATION[k]) return;
     if(cartBits[k]) cartBits[k].visible = S.upgrades.indexOf(k)>=0;
+  });
+}
+/* drop a puff of colour behind a trail cart, and fade the ones already down */
+let trailGap=0;
+function updateTrail(dt){
+  if(!cartBits.trail) return;
+  if(cart.fxTrail && (cart.moving||cart.steering)){
+    trailGap-=dt;
+    if(trailGap<=0){
+      trailGap=0.07;
+      const slot=cartBits.trail.find(t=>t.life<=0);
+      if(slot){
+        slot.life=0.85;
+        slot.m.visible=true;
+        slot.m.position.set(cart.pos.x - Math.sin(cart.heading)*1.3, 0.09,
+                            cart.pos.z - Math.cos(cart.heading)*1.3);
+        slot.m.scale.setScalar(0.7);
+        slot.m.material.opacity=0.75;
+      }
+    }
+  }
+  cartBits.trail.forEach(t=>{
+    if(t.life<=0) return;
+    t.life-=dt;
+    const k=1-Math.max(0,t.life)/0.85;
+    t.m.scale.setScalar(0.7+k*1.6);
+    t.m.material.opacity=Math.max(0,0.75*(1-k));
+    if(t.life<=0) t.m.visible=false;
   });
 }
 
@@ -3088,20 +3696,24 @@ function openWall(){
     const d=document.createElement('div');
     const got=S.owned.indexOf(L.ch)>=0;
     d.className='wtile'+(got?' got':''); d.textContent=L.ch;
+    d.setAttribute('role','button'); d.tabIndex=0;
+    d.setAttribute('aria-label','Letter '+L.ch+(got?', collected':', not collected yet'));
     if(got) d.style.background=L.color;
-    d.addEventListener('click',()=>{ Audio2.SFX.pop();
-      Audio2.speak(`${L.ch}. ${L.sound}.`,{flush:true}); });
+    d.addEventListener('click',()=>{ Audio2.SFX.pop(); speakLines(soundLines(L.ch)); });
     g.appendChild(d);
   });
   $('wallCount').textContent = S.owned.length+' of 26 letters';
   layer('wallLayer', true);
-  Audio2.speak(`Your alphabet wall. You have ${numWords[Math.min(S.owned.length,20)]||S.owned.length} letters. Tap a letter to hear it.`,{flush:true});
+  speakLines([`Your alphabet wall.`,
+              S.owned.length ? `You have ${countOf(Math.min(S.owned.length,20),'letter')}.`
+                             : `You have not bought a letter yet.`,
+              `Tap a letter to hear it.`]);
 }
 let garTab='carts';
 function openGarage(){
   layer('garage', true);
   paintGarage();
-  Audio2.speak(`Welcome to the cart garage. You have ${numWords[Math.min(S.stars,20)]||S.stars} stars.`,{flush:true});
+  Audio2.speak(`Welcome to the cart shop. You have ${countOf(Math.min(S.stars,20),'star')}.`,{flush:true});
 }
 function paintGarage(){
   $('tabCarts').classList.toggle('sel', garTab==='carts');
@@ -3121,16 +3733,17 @@ function buildCartGrid(){
     const can=S.stars>=C.cost;
     const d=document.createElement('div');
     d.className='cartCard'+(using?' using':(owned?' owned':(can?'':' locked')));
+    d.setAttribute('role','button'); d.tabIndex=0;
     const tag = using ? 'Driving this' : (owned ? 'Tap to drive' : '\u2605 '+C.cost);
-    const fast = C.speed>1.05 ? ' \u00b7 fast' : (C.speed<1 ? ' \u00b7 steady' : '');
     d.innerHTML='<div class="ic">'+C.icon+'</div><div class="nm">'+C.name+'</div>'+
-                '<div class="bl">'+C.blurb+'</div><div class="cost">'+tag+fast+'</div>';
+                '<div class="pw">'+(C.power||'')+'</div>'+
+                '<div class="bl">'+C.blurb+'</div><div class="cost">'+tag+'</div>';
     d.addEventListener('click',()=>{
       if(using){ Audio2.SFX.pop(); Audio2.speak('You are already driving that one!',{flush:true}); return; }
       if(!owned){
         if(S.stars<C.cost){
           Audio2.SFX.err();
-          speakLines([`That cart costs ${numWords[Math.min(C.cost,20)]||C.cost} stars.`,
+          speakLines([`That cart costs ${countOf(Math.min(C.cost,20),'star')}.`,
                       'Buy more letters to earn stars!']);
           return;
         }
@@ -3138,7 +3751,7 @@ function buildCartGrid(){
         Audio2.SFX.chaching(); confetti(60);
       } else Audio2.SFX.pop();
       S.cart=C.id; saveNow(); paintHUD(); paintGarage();
-      speakLines([`Nice choice! The ${C.name}.`, C.blurb]);
+      speakLines([`Nice choice! The ${C.name}.`, C.power||C.blurb]);
     });
     g.appendChild(d);
   });
@@ -3150,12 +3763,13 @@ function buildDecorGrid(){
     const can=S.stars>=u.cost;
     const d=document.createElement('div');
     d.className='upCard'+(owned?' owned':(can?'':' locked'));
+    d.setAttribute('role','button'); d.tabIndex=0;
     d.innerHTML=`<div class="ic">${u.icon}</div><div class="nm">${u.name}</div>
       <div class="cost">${owned?'Got it!':'\u2605 '+u.cost}</div>`;
     d.addEventListener('click',()=>{
       if(owned){ Audio2.SFX.pop(); Audio2.speak('You already have that one!',{flush:true}); return; }
       if(S.stars<u.cost){ Audio2.SFX.err();
-        speakLines([`That costs ${numWords[Math.min(u.cost,20)]||u.cost} stars.`,
+        speakLines([`That costs ${countOf(Math.min(u.cost,20),'star')}.`,
                     'Buy more letters to earn stars!']); return; }
       S.stars-=u.cost; S.upgrades.push(u.id); saveNow(); paintHUD(); paintGarage();
       Audio2.SFX.chaching(); confetti(50);
@@ -3196,6 +3810,9 @@ function buildSettings(){
      <button class="btn mint" id="doneSet">Done</button>
      <button class="btn cream" id="switchPlayer">Switch player</button>
      <button class="btn tom" id="resetProg">Reset this player</button>
+   </div>
+   <div style="text-align:center;font-size:14px;font-weight:800;color:#a79dbb;margin-top:14px">
+     Alpha-Mart build ${BUILD}
    </div>`;
   const seg=(host,opts,cur,fn)=>{
     const h=$(host); h.innerHTML='';
@@ -3205,7 +3822,9 @@ function buildSettings(){
   };
   seg('segApron',[{t:'🟢 1',v:1},{t:'🟡 2',v:2},{t:'🔴 3',v:3}],S.apron,v=>{S.apron=v;saveNow();paintHUD();
     if(quest){ quest=null; newQuest(); }});
-  seg('segVoice',[{t:'On',v:true},{t:'Off',v:false}],S.voice,v=>{S.voice=v;Audio2.setVoice(v);saveNow();});
+  seg('segVoice',[{t:'On',v:true},{t:'Off',v:false}],S.voice,v=>{S.voice=v;Audio2.setVoice(v);
+    $('soundBtn').textContent = v ? '🔊' : '🔇';   // keep the child's button in step
+    saveNow();});
   seg('segMusic',[{t:'On',v:true},{t:'Off',v:false}],S.music,v=>{S.music=v;Audio2.musicOn(v);saveNow();});
   seg('segSfx',[{t:'On',v:true},{t:'Off',v:false}],S.sfx!==false,v=>{S.sfx=v;Audio2.setExtra(v);saveNow();});
   seg('segTips',[{t:'On',v:'on'},{t:'Fewer',v:'few'},{t:'Off',v:'off'}],S.tips||'on',v=>{
@@ -3240,9 +3859,16 @@ function buildSettings(){
   $('switchPlayer').addEventListener('click',()=>{ layer('settings',false); openProfiles(); });
   $('resetProg').addEventListener('click',()=>{
     if(confirm('Erase this player\u2019s progress?')){
-      S = blankSave(S.avatar); saveNow();
+      const keepName=S.name, keepAvatar=S.avatar;
+      S = blankSave(keepAvatar);
+      S.name = keepName;                 // the child has not changed, only the score
+      quest=null; mode='shop'; finaleRunning=false; cancelBuy();
+      saveNow();
       LETTERS.forEach(l=>{ const o=letterObjs[l.ch]; if(o){o.group.visible=true;o.halo.visible=false;} });
-      paintHUD(); quest=null; layer('settings',false); newQuest();
+      /* the letters already stuck on the checkout wall and the name board are
+         part of the save too, and used to survive a reset */
+      paintCheckoutWall(); paintNameBoard(); paintHUD(); paintList();
+      layer('settings',false); newQuest();
     }
   });
 }
@@ -3283,10 +3909,16 @@ let pendingSlot=0;
 function openProfiles(){
   const row=$('slotRow'); row.innerHTML='';
   for(let i=0;i<3;i++){
-    const d = Store.get('am_slot'+i, null);
+    let d = Store.get('am_slot'+i, null);
+    /* a half-written save must still show a tappable slot, not a blank card */
+    if(d && typeof d!=='object') d=null;
+    const nOwned = (d && Array.isArray(d.owned)) ? d.owned.length : 0;
+    const nStars = (d && +d.stars>0) ? Math.floor(d.stars) : 0;
     const el=document.createElement('div'); el.className='slot';
-    el.innerHTML=`<div class="face">${d?d.avatar:AVATARS[i]}</div>
-      <div class="cnt">${d? d.owned.length+'/26 · ★'+d.stars : 'New game'}</div>`;
+    el.setAttribute('role','button'); el.tabIndex=0;
+    el.innerHTML=`<div class="face">${(d&&d.avatar)||AVATARS[i]}</div>
+      <div class="cnt">${d? nOwned+'/26 · ★'+nStars : 'New game'}</div>
+      ${d&&d.name?'<div class="cnt" style="color:var(--ink)">'+d.name+'</div>':''}`;
     el.addEventListener('click',()=>{
       Audio2.SFX.pop();
       if(d){ startGame(i, d); return; }
@@ -3308,26 +3940,15 @@ const CAM = {
   rail:    { off:new THREE.Vector3(0,6.8,14.5),  look:new THREE.Vector3(0,1.4,0) }
 };
 function startGame(i, data){
+  /* Switching player mid-shop used to leave the previous child's quest, cart
+     contents and pending timers running underneath the new save. */
+  quest=null; letterAnim=null; roomCool=0; lastBonus=0; finaleRunning=false;
+  cancelBuy();
+  if(icPending){ clearTimeout(icPending); icPending=null; }
+  clearTimeout(rollyTimer); rolly('', false);
+  Audio2.shutUp();
   slotIdx = i;
-  S = data || blankSave(AVATARS[i]);
-  if(!S.mastery) S = blankSave(AVATARS[i]);
-  LETTERS.forEach(l=>{ if(!S.mastery[l.ch]) S.mastery[l.ch]={seen:0,ok:0,miss:0}; });
-  for(let n=1;n<=20;n++) if(!S.nums[n]) S.nums[n]={ok:0,miss:0};
-  if(S.voice===undefined) S.voice=true;
-  if(S.music===undefined) S.music=true;
-  if(!S.gfx) S.gfx='auto';
-  if(!S.traced) S.traced={};
-  if(!S.carrying) S.carrying=[];
-  if(!S.tips) S.tips='on';
-  if(!S.quiz) S.quiz={ok:0,miss:0};
-  if(!S.cart) S.cart='classic';
-  if(!S.carts || !S.carts.length) S.carts=['classic'];
-  if(!S.list) S.list=[];
-  if(!S.listAll) S.listAll=[];
-  if(!S.listPrices) S.listPrices={};
-  if(S.listCount==null) S.listCount=0;
-  if(S.name==null) S.name='';
-  if(S.sfx==null) S.sfx=true;
+  S = normalizeSave(data, AVATARS[i]);
   Audio2.setExtra(S.sfx);
   Audio2.startAmbience();
   if(S.voiceName) Audio2.preferVoice(S.voiceName);
@@ -3339,10 +3960,14 @@ function startGame(i, data){
     const o=letterObjs[l.ch];
     if(o){ o.group.visible = S.owned.indexOf(l.ch)<0; o.halo.visible=false; }
   });
-  cart.pos.set(0,0,16); cartGroup.position.copy(cart.pos); cart.path=[]; cart.moving=false;
+  cart.pos.set(0,0,SPAWN_Z); cartGroup.position.copy(cart.pos); cart.path=[]; cart.moving=false;
+  cart.onArrive=null; cart.heading=Math.PI;
+  /* A letter left in the basket from last session still has to be checked out,
+     otherwise the arrow points nowhere and the letter is stranded. */
+  mode = (S.carrying && S.carrying.length) ? 'deliver' : 'shop';
   layer('profiles', false);
   $('hud').classList.remove('hidden');
-  camPos.set(cart.pos.x, 34, cart.pos.z+30); camIntro=2.4;
+  camPos.set(cart.pos.x, 30, cart.pos.z+18); camIntro=2.4;
   started = true;
   paintHUD(); paintCheckoutWall(); paintNameBoard();
   speakLines([ S.name ? `Welcome to Alpha-Mart, ${S.name}!` : 'Welcome to Alpha-Mart!',
@@ -3384,11 +4009,40 @@ function beaconTarget(){
   }
   return null;
 }
+/* Follows the current goal on screen and names it.  Hidden when the goal is off
+   screen, because the edge arrow is already pointing the way there. */
+function updateWorldTag(){
+  const el=$('worldTag'), tx=$('worldTagText');
+  if(!started || anyLayerOpen()){ el.style.display='none'; return; }
+  let pt=null, text='', deliver=false;
+  if(mode==='deliver' && checkout && S.carrying && S.carrying.length){
+    pt={x:checkout.stand.x+0.6, y:4.6, z:checkout.z};
+    text='🧾 CHECKOUT HERE'; deliver=true;
+  } else if(quest){
+    const o=letterObjs[quest.L.ch];
+    if(o && o.group.visible){
+      pt={x:o.group.position.x, y:(o.baseY||2.5)+1.5, z:o.group.position.z};
+      /* only name the letter when the clue already gives it away */
+      text = quest.type==='name' ? `👆 TAP THE ${quest.L.ch}` : '👆 TAP THIS ONE';
+    }
+  }
+  if(!pt){ el.style.display='none'; return; }
+  const v=_tagV.set(pt.x, pt.y, pt.z).project(camera);
+  if(v.z>=1){ el.style.display='none'; return; }
+  const w=window.innerWidth, h=window.innerHeight;
+  const sx=(v.x*0.5+0.5)*w, sy=(-v.y*0.5+0.5)*h;
+  const m=70;
+  if(sx<m||sx>w-m||sy<m||sy>h-m){ el.style.display='none'; return; }
+  tx.textContent=text;
+  el.classList.toggle('deliver', deliver);
+  el.style.display='block';
+  el.style.left=sx+'px'; el.style.top=sy+'px';
+}
 function updateEdgeArrow(){
   const el=$('edgeArrow');
-  const tg = (!started || document.querySelector('.layer.on')) ? null : beaconTarget();
+  const tg = (!started || anyLayerOpen()) ? null : beaconTarget();
   if(!tg){ el.style.display='none'; return; }
-  const pv = new THREE.Vector3(tg.x, tg.y+0.6, tg.z);
+  const pv = _arrowV.set(tg.x, tg.y+0.6, tg.z);
   pv.project(camera);
   const w=window.innerWidth, h=window.innerHeight;
   const sx=(pv.x*0.5+0.5)*w, sy=(-pv.y*0.5+0.5)*h;
@@ -3402,16 +4056,20 @@ function updateEdgeArrow(){
   const rx=(w/2-m), ry=(h/2-m);
   const tt=Math.min(rx/Math.abs(Math.cos(ang)||1e-6), ry/Math.abs(Math.sin(ang)||1e-6));
   el.style.display='grid';
-  el.style.left=(cx+Math.cos(ang)*tt-38)+'px';
-  el.style.top =(cy+Math.sin(ang)*tt-38)+'px';
+  el.style.left=(cx+Math.cos(ang)*tt-52)+'px';
+  el.style.top =(cy+Math.sin(ang)*tt-52)+'px';
   el.textContent='\u27a4';
   el.style.transform='rotate('+ang+'rad)';
-  el.style.fontSize='52px';
+  el.style.fontSize='64px';
   el.style.color = mode==='deliver' ? '#FF5A3C' : '#FFC93C';
   el.style.textShadow='0 0 0 #2B2140,2px 2px 0 #2B2140,-2px 2px 0 #2B2140,2px -2px 0 #2B2140,-2px -2px 0 #2B2140';
 }
 
 let camPos=new THREE.Vector3(0,34,52), camLook=new THREE.Vector3(0,1,16), camIntro=0;
+/* reused every frame; allocating these in the loop was needless GC churn */
+const _stepDir=new THREE.Vector3(), _camWant=new THREE.Vector3(),
+      _camLook=new THREE.Vector3(), _arrowV=new THREE.Vector3(),
+      _tagV=new THREE.Vector3();
 function animate(){
   requestAnimationFrame(animate);
   step(Math.min(clock.getDelta(),0.05), clock.elapsedTime);
@@ -3444,7 +4102,7 @@ function step(dt,t){
   /* cart movement */
   if(!cart.steering && cart.moving && cart.path.length){
     const tgt=cart.path[cart.pi];
-    const dir=new THREE.Vector3().subVectors(tgt,cart.pos); dir.y=0;
+    const dir=_stepDir.subVectors(tgt,cart.pos); dir.y=0;
     const d=dir.length();
     if(d<0.18){
       cart.pi++;
@@ -3498,6 +4156,18 @@ function step(dt,t){
   cartBits.wheels.forEach(w=>{ w.scale.x=1-cart.squash*0.5; w.scale.z=1+cart.squash*0.35; });
   Audio2.wheels(rolling ? Math.min(1, (cart.speed||7.6)/9) : 0);
   updatePuffs(dt);
+  updateTrail(dt);
+  /* light up the till only while there is something to pay for */
+  if(checkout && checkout.pad){
+    const want = (mode==='deliver' && S && S.carrying && S.carrying.length) ? 0.9 : 0;
+    const m=checkout.pad.material;
+    m.opacity += (want-m.opacity)*Math.min(1,dt*4);
+    if(want>0) checkout.pad.scale.setScalar(1+Math.sin(t*3)*0.09);
+  }
+  if(cartBits.glow && cartBits.glow.visible){
+    cartBits.glow.scale.setScalar(1+Math.sin(t*3.2)*0.10);
+    cartBits.glow.material.opacity=0.55+Math.sin(t*3.2)*0.16;
+  }
   updateLetterAnim(dt);
   updateTilePops(dt);
 
@@ -3532,13 +4202,16 @@ function step(dt,t){
 
   /* camera */
   const preset = CAM[CFG.MOVEMENT] || CAM.waypoint;
-  const want=new THREE.Vector3().copy(cart.pos).add(preset.off);
+  const want=_camWant.copy(cart.pos).add(preset.off);
   want.x=THREE.MathUtils.clamp(want.x, W.minX+7, W.maxX-7);
-  want.z=THREE.MathUtils.clamp(want.z, W.minZ+5, W.maxZ+15);
+  /* The old upper bound let the camera drift out into the car park whenever the
+     cart was near the doors, so the child spent the first few seconds looking at
+     an empty tarmac.  Stop it just outside the shop front instead. */
+  want.z=THREE.MathUtils.clamp(want.z, W.minZ+5, W.maxZ+4);
   if(camIntro>0) camIntro=Math.max(0,camIntro-dt);
   const ease = camIntro>0 ? 0.85 : 3.2;                // drift in gently at the start
   camPos.lerp(want, Math.min(1,dt*ease));
-  camLook.lerp(new THREE.Vector3().copy(cart.pos).add(preset.look), Math.min(1,dt*4.2));
+  camLook.lerp(_camLook.copy(cart.pos).add(preset.look), Math.min(1,dt*4.2));
   camera.position.copy(camPos); camera.lookAt(camLook);
 
   if(started){ const bb=$('boot'); if(bb && !bb.classList.contains('gone')) bb.classList.add('gone'); }
@@ -3546,6 +4219,7 @@ function step(dt,t){
   roomCheck();
   perfTune(dt);
   updateEdgeArrow();
+  updateWorldTag();
   renderer.render(scene,camera);
 }
 
@@ -3633,13 +4307,17 @@ function newQuizQuestion(){
   const w=oneOf(QUIZ_WORDS[L.ch]);
   QUIZ.ans=L.ch; QUIZ.word=w[0]; QUIZ.emoji=w[1];
   QUIZ.misses=0; QUIZ.locked=false;
+  /* a letter that makes the same sound as the answer is never a fair wrong
+     choice in a listening game */
+  const twin=SAME_SOUND[L.ch];
+  const okChoice=c=>LMAP[c] && c!==L.ch && c!==twin && opts.indexOf(c)<0;
   const opts=[L.ch];
-  const conf=(CONFUSE[L.ch]||'').split('').filter(c=>LMAP[c] && c!==L.ch);
+  const conf=(CONFUSE[L.ch]||'').split('').filter(okChoice);
   if(conf.length) opts.push(oneOf(conf));
   let guard=0;
   while(opts.length<4 && guard++<200){
     const c=LETTERS[Math.floor(Math.random()*LETTERS.length)].ch;
-    if(opts.indexOf(c)<0) opts.push(c);
+    if(okChoice(c)) opts.push(c);
   }
   QUIZ.opts=shuffle(opts);
   paintQuiz();
@@ -3681,28 +4359,36 @@ function answerQuiz(ch, btn){
     $('quizFeedback').textContent = `Yes! ${QUIZ.word} begins with ${ans} ${ans.toLowerCase()}.`;
     speakLines([ oneOf(['That\u2019s right!','Yes!','Well done!']),
                  `${titleCase(QUIZ.word)} begins with ${ans}.`,
-                 letterLine(ans) ]);
+                 ...letterLine(ans) ]);
     setTimeout(()=>{ if($('quiz').classList.contains('on')) newQuizQuestion(); }, 3000);
   } else {
-    btn.classList.add('meh');
+    /* one score per wrong button: a child drumming on the same square should
+       not rack up six misses against that letter */
+    if(btn && btn.classList.contains('meh')) return;
+    if(btn){ btn.classList.add('meh'); setTimeout(()=>btn.classList.remove('meh'), 900); }
     QUIZ.misses++;
     if(S){ S.mastery[ch].miss += 0.4; S.quiz=S.quiz||{ok:0,miss:0}; S.quiz.miss++; saveNow(); }
     Audio2.SFX.err();
     $('quizFeedback').textContent = `That's ${ch} ${ch.toLowerCase()}. Try again!`;
-    speakLines([`That one\u2019s ${ch}.`, letterLine(ch),
+    speakLines([`That one\u2019s ${ch}.`, ...letterLine(ch),
                 `We want the letter that begins ${QUIZ.word}.`]);
     setTimeout(()=>btn.classList.remove('meh'), 900);
     if(QUIZ.misses>=2) quizHint();
   }
 }
 function quizHint(){
+  if(QUIZ.locked) return;      // the round is already won; the next one is coming
   const ans=QUIZ.ans, L=LMAP[ans];
   const b=document.querySelector('.optBtn[data-n="'+ans+'"]');
   if(b) b.classList.add('hintGlow');
   $('quizWord').classList.remove('hidden');   // Help is what shows the spelling
-  $('quizFeedback').textContent = `${QUIZ.word} starts with the sound "${L.sound.split(',')[0]}".`;
-  speakLines([`Listen carefully. ${QUIZ.word}.`, `${QUIZ.word} starts with ${L.sound}.`,
-              'It\u2019s the glowing one.']);
+  $('quizFeedback').textContent = `${QUIZ.word} starts with ${soundLabel(ans)}.`;
+  const tok=soundToken(ans);
+  speakLines(tok ? [`Listen carefully. ${QUIZ.word}.`,
+                    `${titleCase(QUIZ.word)} starts with`, tok, 'It\u2019s the glowing one.']
+                 : [`Listen carefully. ${QUIZ.word}.`,
+                    `${titleCase(QUIZ.word)} starts with ${soundPhrase(ans)}.`,
+                    'It\u2019s the glowing one.']);
 }
 
 /* ================================================================ BREAK ROOM: TRACING */
@@ -3721,17 +4407,47 @@ function openTrace(which){
     if(which==='letters' && /^[0-9]+$/.test(TRACE.glyph)) TRACE.glyph='A';
   }
   layer('trace',true);
+  buildTracePicker();      // before sizing, so the panel measures at full height
   sizeTrace();
-  buildTracePicker();
   setGlyph(TRACE.glyph);
-  $('traceTitle').textContent = TRACE.mode==='numbers' ? 'Number Room \u00b7 Write 0 to 20'
-                                                      : 'Letter Room \u00b7 Write A to Z';
+  paintTraceTitle();
   speakLines(TRACE.mode==='numbers'
     ? ['Welcome to the number room!', 'Pick a number, then trace it with your finger.']
     : ['Welcome to the letter room!', 'Pick a letter, then trace it with your finger.']);
 }
+/* The tracing board only exists once sizeTrace() has built its canvases.  Every
+   entry point checks first, so driving the room out of order -- or a browser
+   that refuses a 2D context -- degrades quietly instead of throwing. */
+function traceReady(){
+  return !!(TRACE.cv && TRACE.ctx && TRACE.inkCtx && TRACE.size>0);
+}
+function paintTraceTitle(){
+  $('traceTitle').textContent = TRACE.mode==='numbers' ? 'Number Room · Write 0 to 20'
+                                                      : 'Letter Room · Write A to Z';
+}
 function sizeTrace(){
-  const s=Math.round(Math.min(window.innerWidth*0.80, window.innerHeight*0.46, 430));
+  /* The board used to be a flat fraction of the window height, which pushed the
+     buttons -- including "Back to shopping" -- off the bottom of the panel on a
+     short screen.  Measure everything else in the panel and give the board what
+     is actually left.
+     A viewport can also momentarily measure zero, mid orientation change or while
+     the page is off-screen, and a 0x0 canvas makes drawImage throw; that used to
+     take the whole tracing room down.  Never go below a usable board. */
+  const vh=window.innerHeight||860, vw=window.innerWidth||1280;
+  let room=vh*0.46, wide=vw*0.80;
+  const p=$('tracePanel'), cvNow=$('traceCv');
+  if(p && p.getBoundingClientRect().height>0){
+    /* Everything the panel needs apart from the board, measured rather than
+       guessed: scrollHeight already accounts for padding and the children's
+       margins, and the close button floats so it costs no layout at all. */
+    const chrome = p.scrollHeight - (cvNow ? cvNow.offsetHeight : 0);
+    const outer = parseFloat(getComputedStyle(p).marginTop||0)*2;
+    room = vh*0.96 - chrome - outer - 8;
+  }
+  /* a sideways phone has so little height that the floor has to drop, or the
+     board pushes the meter and the buttons out from under it */
+  const floor = vh<520 ? 110 : 150;
+  const s=Math.max(floor, Math.round(Math.min(wide, room, 430)));
   TRACE.size=s;
   const cv=$('traceCv'); cv.width=s; cv.height=s; cv.style.width=s+'px'; cv.style.height=s+'px';
   TRACE.cv=cv; TRACE.ctx=cv.getContext('2d');
@@ -3747,17 +4463,46 @@ function buildTracePicker(){
     b.addEventListener('click',()=>{ setGlyph(ch); buildTracePicker(); });
     host.appendChild(b);
   });
+  /* the picker scrolls, and the chosen glyph is often below the fold -- 20 sat
+     out of sight while its board was on screen */
+  const sel=host.querySelector('.chip.sel');
+  if(sel && sel.scrollIntoView) sel.scrollIntoView({block:'nearest', inline:'nearest'});
   $('tabLetters').classList.toggle('sel', TRACE.mode==='letters');
   $('tabNumbers').classList.toggle('sel', TRACE.mode==='numbers');
 }
-function glyphFont(s){ return 'bold '+Math.round(s*0.74)+'px Arial Black, Impact, sans-serif'; }
+/* "10" through "20" measured almost exactly the width of the board, so the
+   dotted outline was clipped flat against both edges.  Shrink anything that
+   does not fit inside a comfortable margin. */
+let _fitCv=null;
+function glyphFont(s,ch){
+  let px=Math.round(s*0.74);
+  if(ch && ch.length>1){
+    _fitCv=_fitCv||document.createElement('canvas');
+    const g=_fitCv.getContext('2d'), maxW=s*0.78;
+    let guard=0;
+    do{
+      g.font='bold '+px+'px Arial Black, Impact, sans-serif';
+      if(g.measureText(ch).width<=maxW) break;
+      px=Math.floor(px*0.92);
+    } while(px>12 && guard++<40);
+  }
+  return 'bold '+px+'px Arial Black, Impact, sans-serif';
+}
 function setGlyph(ch){
   TRACE.glyph=ch; TRACE.done=false; TRACE.strokes=0;
+  if(!traceReady()) return;
+  /* keep the chip row pointing at the board on screen, whoever changed it */
+  const host=$('tracePicker');
+  if(host) Array.from(host.children).forEach(b=>{
+    const on=b.textContent===ch;
+    b.classList.toggle('sel', on);
+    if(on && b.scrollIntoView) b.scrollIntoView({block:'nearest', inline:'nearest'});
+  });
   const s=TRACE.size;
   /* build the pixel mask of the glyph */
   const mc=document.createElement('canvas'); mc.width=mc.height=s;
   const m=mc.getContext('2d');
-  m.fillStyle='#000'; m.font=glyphFont(s); m.textAlign='center'; m.textBaseline='middle';
+  m.fillStyle='#000'; m.font=glyphFont(s,ch); m.textAlign='center'; m.textBaseline='middle';
   m.fillText(ch, s/2, s*0.54);
   let mask=null, count=0;
   try{
@@ -3772,10 +4517,11 @@ function setGlyph(ch){
   const L=LMAP[ch];
   const hint=traceHint(ch);
   $('traceTip').textContent=hint;
-  speakLines(L ? [`Let's trace the letter ${ch}.`, letterLine(ch), hint]
+  speakLines(L ? [`Let's trace the letter ${ch}.`, ...letterLine(ch), hint]
                : [`Let's trace the number ${ch}.`, hint]);
 }
 function drawTrace(eyes){
+  if(!traceReady()) return;
   const s=TRACE.size, g=TRACE.ctx;
   g.clearRect(0,0,s,s);
   /* board */
@@ -3783,7 +4529,7 @@ function drawTrace(eyes){
   g.strokeStyle='rgba(255,255,255,.10)'; g.lineWidth=2;
   for(let i=1;i<4;i++){ g.beginPath(); g.moveTo(0,i*s/4); g.lineTo(s,i*s/4); g.stroke(); }
   /* ghost glyph */
-  g.font=glyphFont(s); g.textAlign='center'; g.textBaseline='middle';
+  g.font=glyphFont(s,TRACE.glyph); g.textAlign='center'; g.textBaseline='middle';
   g.fillStyle='rgba(255,255,255,.16)';
   g.fillText(TRACE.glyph, s/2, s*0.54);
   g.save();
@@ -3808,19 +4554,20 @@ function traceXY(ev){
            (ev.clientY-r.top)  * (TRACE.size/(r.height||1)) ];
 }
 function traceDown(ev){
-  if(TRACE.done) return;
+  if(TRACE.done || !traceReady()) return;
   TRACE.drawing=true;
   const p=traceXY(ev); TRACE.lx=p[0]; TRACE.ly=p[1];
   traceStroke(p[0],p[1],p[0]+0.01,p[1]+0.01);
   Audio2.SFX.pop();
 }
 function traceMove(ev){
-  if(!TRACE.drawing || TRACE.done) return;
+  if(!TRACE.drawing || TRACE.done || !traceReady()) return;
   const p=traceXY(ev);
   traceStroke(TRACE.lx,TRACE.ly,p[0],p[1]);
   TRACE.lx=p[0]; TRACE.ly=p[1];
 }
 function traceStroke(x1,y1,x2,y2){
+  if(!traceReady()) return;
   const s=TRACE.size, w=Math.max(14, s*0.085);
   const ic=TRACE.inkCtx;
   ic.strokeStyle='#fff'; ic.lineWidth=w; ic.lineCap='round'; ic.lineJoin='round';
@@ -3832,7 +4579,7 @@ function traceStroke(x1,y1,x2,y2){
   g.beginPath(); g.moveTo(x1,y1); g.lineTo(x2,y2); g.stroke();
 }
 function traceUp(){
-  if(!TRACE.drawing) return;
+  if(!TRACE.drawing || !traceReady()) return;
   TRACE.drawing=false; TRACE.strokes++;
   evaluateTrace();
 }
@@ -3841,7 +4588,7 @@ function setMeter(p){
   $('traceHint').textContent = p>=0.6 ? 'Great tracing!' : Math.round(p*100)+'% traced';
 }
 function evaluateTrace(){
-  if(!TRACE.mask){ return; }
+  if(!TRACE.mask || !traceReady()){ return; }
   const s=TRACE.size;
   let hit=0, ink=0;
   try{
@@ -3872,7 +4619,7 @@ function traceWin(off){
   }
   const L=LMAP[TRACE.glyph];
   speakLines(L ? [oneOf([`You wrote the letter ${TRACE.glyph}!`, `Beautiful ${TRACE.glyph}!`]),
-                  letterLine(TRACE.glyph)]
+                  ...letterLine(TRACE.glyph)]
                : [oneOf([`You wrote the number ${TRACE.glyph}!`, `That's a lovely ${TRACE.glyph}.`])]);
   if(off>0.55) Audio2.speak("Next time try to stay on the lines.");
   buildTracePicker();
@@ -3887,6 +4634,7 @@ function traceNext(){
   setGlyph(next); buildTracePicker();
 }
 function traceErase(){
+  if(!traceReady()) return;
   TRACE.inkCtx.clearRect(0,0,TRACE.size,TRACE.size);
   TRACE.done=false; TRACE.strokes=0;
   drawTrace(); setMeter(0); Audio2.SFX.whoosh();
@@ -3897,9 +4645,11 @@ function decorateBoot(){
   /* the mark cycles a few letters so the start screen feels alive without
      leaving a row of letters floating over the game */
   const m=$('bootMark'); if(!m) return;
-  let i=0;
+  let i=0, ticks=0;
   const tick=setInterval(()=>{
-    if(started){ clearInterval(tick); return; }
+    /* also give up after a few minutes: a start screen left open on a tablet
+       should not keep waking the device forever */
+    if(started || ++ticks>400 || $('boot').classList.contains('gone')){ clearInterval(tick); return; }
     i=(i+1)%LETTERS.length;
     m.textContent=LETTERS[i].ch;
     m.style.background=LETTERS[i].color;
@@ -3929,7 +4679,7 @@ function wire(){
   window.addEventListener('keydown',e=>{
     const ae=document.activeElement, tn=(ae&&ae.tagName)||'';
     if(tn==='INPUT'||tn==='TEXTAREA') return;
-    if(document.querySelector('.layer.on')) return;
+    if(anyLayerOpen()) return;
     const k=KEY[e.key]; if(k){ keys[k]=1; lastInput=Date.now(); e.preventDefault(); }
   });
   window.addEventListener('keyup',  e=>{ const k=KEY[e.key]; if(k) keys[k]=0; });
@@ -3953,9 +4703,11 @@ function wire(){
     b.addEventListener('touchend',off);
   });
   $('rolly').addEventListener('click',()=>{ $('rolly').classList.remove('on'); Audio2.shutUp(); });
+  /* the child's own mute button: one tap silences everything, which is what a
+     grown-up reaches for in a waiting room */
   $('soundBtn').addEventListener('click',()=>{
-    S.voice=!S.voice; S.music=S.voice;
-    Audio2.setVoice(S.voice); Audio2.musicOn(S.music && CFG.MUSIC);
+    S.voice=!S.voice; S.music=S.voice; S.sfx=S.voice;
+    Audio2.setVoice(S.voice); Audio2.musicOn(S.music && CFG.MUSIC); Audio2.setExtra(S.sfx);
     $('soundBtn').textContent = S.voice ? '🔊' : '🔇';
     saveNow();
     if(S.voice){ Audio2.SFX.pop(); Audio2.speak('Sound is on!',{flush:true}); }
@@ -3965,7 +4717,6 @@ function wire(){
   $('icGo').addEventListener('click',()=>{ layer('intercom',false); Audio2.shutUp();
     rolly('Follow the glowing light!', true); });
   $('icAgain').addEventListener('click',()=>{ if(quest) speakLines(questLines()); });
-  $('repeatBtn').removeEventListener('click',()=>{});
   $('nameGo').addEventListener('click',()=>{
     const v=($('nameInput').value||'').replace(/[^A-Za-z ]/g,'').trim().slice(0,12);
     const s=blankSave(AVATARS[pendingSlot]);
@@ -3980,40 +4731,72 @@ function wire(){
   $('nameInput').addEventListener('keydown',e=>{ if(e.key==='Enter') $('nameGo').click(); });
   $('certDone').addEventListener('click',()=>{ layer('cert',false); Audio2.shutUp(); });
   $('recNext').addEventListener('click',()=>{ layer('receipt',false); Audio2.shutUp();
-    S.list=[]; S.listAll=[]; S.listPrices={}; saveNow(); setTimeout(newQuest,250); });
+    S.list=[]; S.listAll=[]; S.listPrices={}; saveNow();
+    if(!maybeApronUp()) setTimeout(newQuest,250); });
   $('recDone').addEventListener('click',()=>{ layer('receipt',false); Audio2.shutUp();
     S.list=[]; S.listAll=[]; S.listPrices={}; saveNow();
+    if(maybeApronUp()) return;
     rolly('Have a look around! Press B when you are ready for a new list.', true); });
   $('helpBtn').addEventListener('click', openTutorial);
   $('tutNext').addEventListener('click', tutNext);
   $('tutSkip').addEventListener('click', closeTut);
-  $('tabLetters').addEventListener('click',()=>{ TRACE.mode='letters'; setGlyph('A'); buildTracePicker(); });
-  $('tabNumbers').addEventListener('click',()=>{ TRACE.mode='numbers'; setGlyph('1'); buildTracePicker(); });
+  /* the heading used to keep saying "Letter Room" after switching to numbers */
+  $('tabLetters').addEventListener('click',()=>{ TRACE.mode='letters'; paintTraceTitle();
+    setGlyph('A'); buildTracePicker(); });
+  $('tabNumbers').addEventListener('click',()=>{ TRACE.mode='numbers'; paintTraceTitle();
+    setGlyph('1'); buildTracePicker(); });
   $('quizAgain').addEventListener('click', speakQuizQuestion);
   $('quizHelp').addEventListener('click', quizHint);
   $('quizDone').addEventListener('click',()=>{ layer('quiz',false); Audio2.shutUp();
     rolly('Great listening! Back to shopping.', true); });
   $('traceErase').addEventListener('click', traceErase);
   $('traceSkip').addEventListener('click', traceNext);
-  $('traceHear').addEventListener('click',()=>{ const L=LMAP[TRACE.glyph];
-    Audio2.speak(L?`${TRACE.glyph}. ${L.sound}.`:`The number ${TRACE.glyph}.`,{flush:true}); });
+  $('traceHear').addEventListener('click',()=>{
+    if(LMAP[TRACE.glyph]) speakLines(soundLines(TRACE.glyph));
+    else Audio2.speak(`The number ${TRACE.glyph}.`,{flush:true}); });
   $('traceDone').addEventListener('click',()=>{ layer('trace',false); Audio2.shutUp();
     rolly('Nice writing! Back to shopping.',true); });
   const tcv=$('traceCv');
-  tcv.addEventListener('pointerdown',e=>{ tcv.setPointerCapture&&tcv.setPointerCapture(e.pointerId); traceDown(e); });
-  tcv.addEventListener('pointermove',traceMove);
-  tcv.addEventListener('pointerup',traceUp);
-  tcv.addEventListener('pointercancel',traceUp);
-  tcv.addEventListener('mousedown',traceDown);
-  tcv.addEventListener('mousemove',traceMove);
-  tcv.addEventListener('mouseup',traceUp);
-  window.addEventListener('resize',()=>{ if($('trace').classList.contains('on')){ sizeTrace(); setGlyph(TRACE.glyph); } });
+  /* Pointer and mouse events both fire on a desktop browser, so registering
+     both drew every stroke twice and counted two strokes for one. */
+  if(window.PointerEvent){
+    tcv.addEventListener('pointerdown',e=>{ tcv.setPointerCapture&&tcv.setPointerCapture(e.pointerId); traceDown(e); });
+    tcv.addEventListener('pointermove',traceMove);
+    tcv.addEventListener('pointerup',traceUp);
+    tcv.addEventListener('pointercancel',traceUp);
+  } else {
+    tcv.addEventListener('mousedown',traceDown);
+    tcv.addEventListener('mousemove',traceMove);
+    tcv.addEventListener('mouseup',traceUp);
+    tcv.addEventListener('touchstart',e=>{ if(e.touches[0]){ e.preventDefault(); traceDown(e.touches[0]); } },{passive:false});
+    tcv.addEventListener('touchmove', e=>{ if(e.touches[0]){ e.preventDefault(); traceMove(e.touches[0]); } },{passive:false});
+    tcv.addEventListener('touchend',  traceUp);
+  }
+  /* Re-sizing rebuilds the board, so only do it when the width really changed;
+     otherwise an on-screen keyboard or a browser toolbar sliding away wipes the
+     child's work and repeats the instructions. */
+  let traceW=window.innerWidth, traceH=window.innerHeight;
+  window.addEventListener('resize',()=>{
+    if(!$('trace').classList.contains('on')) { traceW=window.innerWidth; traceH=window.innerHeight; return; }
+    if(Math.abs(window.innerWidth-traceW)<40 && Math.abs(window.innerHeight-traceH)<120) return;
+    traceW=window.innerWidth; traceH=window.innerHeight;
+    sizeTrace(); setGlyph(TRACE.glyph);
+  });
   $('wallBtn').addEventListener('click', openWall);
   $('garageBtn').addEventListener('click', openGarage);
+  /* A child who never finds the doorways at the back of the shop can still get
+     to the writing and listening rooms straight from the HUD. */
+  $('traceBtn').addEventListener('click',()=>{ Audio2.SFX.pop();
+    openTrace(TRACE.mode==='numbers'?'numbers':'letters'); });
+  $('quizBtn').addEventListener('click',()=>{ Audio2.SFX.pop(); openQuiz(); });
+  $('traceX').addEventListener('click',()=>$('traceDone').click());
+  $('quizX').addEventListener('click',()=>$('quizDone').click());
+  $('walletX').addEventListener('click',()=>$('walletBack').click());
   $('tabCarts').addEventListener('click',()=>{ garTab='carts'; paintGarage(); });
   $('tabDecor').addEventListener('click',()=>{ garTab='decor'; paintGarage(); });
   $('setBtn').addEventListener('click', openSettings);
-  $('walletBack').addEventListener('click',()=>{ layer('wallet',false); Audio2.shutUp(); cart.onArrive=null;
+  $('walletBack').addEventListener('click',()=>{ layer('wallet',false); Audio2.shutUp();
+    cart.onArrive=null; cancelBuy();
     rolly('Come back when you are ready to buy!', true); });
   $('walletHint').addEventListener('click', walletHint);
   document.querySelectorAll('[data-close]').forEach(b=>
@@ -4028,7 +4811,7 @@ function wire(){
   document.addEventListener('visibilitychange',()=>{ if(document.hidden) Audio2.shutUp(); });
 }
 
-const BUILD='v8';
+const BUILD='v15';
 let startArmed=false;
 function beginPlay(){
   if(startArmed) return;
@@ -4060,6 +4843,15 @@ function boot(){
     box.innerHTML='<div style="padding:24px;text-align:center;font-size:18px">Something went wrong.'+
       '<br><br><small style="opacity:.75">'+(ev.message||'unknown')+'</small></div>';
   });
+  /* The 3D library comes from a CDN, so "it did not start" usually means the
+     network, not the browser.  Saying so saves a parent chasing the wrong fix. */
+  if(typeof THREE==='undefined'){
+    $('loading').innerHTML = '<div style="padding:24px;text-align:center;font-size:20px">'+
+      'Alpha-Mart could not finish loading.<br><br>'+
+      'Please check the internet connection and refresh the page.<br><br>'+
+      '<small style="opacity:.6">the 3D library did not download</small></div>';
+    return;
+  }
   try{
     buildGrid();
     buildScene();
