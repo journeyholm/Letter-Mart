@@ -318,6 +318,9 @@ canvas{display:block;width:100%;height:100%}
   #rolly{bottom:6px;max-height:66px}
   #questBar{padding:6px 10px} #questText{font-size:17px} #questPrice{font-size:15px}
   #questIcon{width:46px;height:46px;font-size:26px}
+  #listBar{top:88px;padding:4px 8px;gap:4px}
+  #listBar .lt{width:28px;height:28px;font-size:15px;border-width:3px}
+  #listBar .cap{display:none}
 }
 @media (max-height:520px){ #dpad{bottom:74px} #abpad{bottom:78px} }
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -2063,7 +2066,7 @@ function buildLetters(){
   const invis=new THREE.MeshBasicMaterial({visible:false});
   LETTER_SLOTS.forEach(slot=>{
     const L=slot.L, g=new THREE.Group();
-    const lt=letterTexture(L.ch,L.color);
+    const lt=letterTex(L.ch,L.color);
     const card=new THREE.Mesh(cardGeo, bas(0xffffff,{map:lt}));
     const cardB=new THREE.Mesh(cardGeo, bas(0xffffff,{map:lt}));
     cardB.rotation.y=Math.PI; cardB.position.z=-0.04;
@@ -2378,8 +2381,19 @@ function icText(){
   if(q.type==='sound') return `Please buy the letter that says \u201C${q.L.sound.split(',')[0]}\u201D`;
   return `Please buy the letter that starts \u201C${q.L.word}\u201D`;
 }
+let icPending=null;
 function openIntercom(){
   if(!quest) return;
+  /* never cover an activity the child is in the middle of - wait for them.
+     That includes standing in one of the back rooms, where an announcement
+     would otherwise land on top of them as they walk in. */
+  const inRoom = roomList && roomList.some(R=>
+    cart.pos.z < W.storeBackZ-1.0 && cart.pos.x>R.x1-1 && cart.pos.x<R.x2+1);
+  if(inRoom || document.querySelector('.layer.on')){
+    if(icPending) clearTimeout(icPending);
+    icPending=setTimeout(()=>{ icPending=null; openIntercom(); }, 1500);
+    return;
+  }
   const q=quest, L=q.L;
   const card=$('icCard');
   if(q.type==='name'){ card.textContent=L.ch; card.style.background=L.color; }
@@ -2587,6 +2601,9 @@ function pressB(){
     rolly(`Take the ${held} to the checkout!`, true);
   } else if(quest){
     openIntercom();
+  } else if(mode==='shop'){
+    speakLines(['Here comes a new shopping list!']);
+    newQuest();
   } else {
     Audio2.speak('Wait for the loudspeaker!',{flush:true});
   }
@@ -2881,7 +2898,9 @@ function deliverLetters(){
   saveNow();
   if(S.owned.length>=26){ setTimeout(finaleAllLetters, 2600); return; }
   if(S.listAll && S.listAll.length && !S.list.length){
-    S.listCount=(S.listCount||0)+1; saveNow();
+    S.listCount=(S.listCount||0)+1;
+    S.stars += 3;                       // a list bonus, so the garage is reachable
+    paintHUD(); saveNow();
     setTimeout(showReceipt, 2400);
     return;
   }
@@ -2914,6 +2933,11 @@ function showReceipt(){
     lines.appendChild(d);
   });
   $('recTotal').textContent='$'+total;
+  const bl=document.createElement('div');
+  bl.className='rline';
+  bl.style.borderBottom='none';
+  bl.innerHTML='<span>List bonus</span><span>\u2605 3</span>';
+  lines.appendChild(bl);
   $('recWho').textContent = S.name ? `Great shopping, ${S.name}!` : 'Great shopping!';
   layer('receipt', true);
   Audio2.SFX.chaching(); Audio2.SFX.fanfare();
@@ -3874,8 +3898,8 @@ function decorateBoot(){
      leaving a row of letters floating over the game */
   const m=$('bootMark'); if(!m) return;
   let i=0;
-  setInterval(()=>{
-    if(started){ return; }
+  const tick=setInterval(()=>{
+    if(started){ clearInterval(tick); return; }
     i=(i+1)%LETTERS.length;
     m.textContent=LETTERS[i].ch;
     m.style.background=LETTERS[i].color;
@@ -4027,6 +4051,9 @@ function boot(){
   const sh = Store.get('am_shadows', null);
   if(sh!==null) CFG.SHADOWS = sh;
   window.addEventListener('error', ev=>{
+    /* only take over the screen if we never got going; once the child is playing,
+       a hiccup should stay in the console rather than end the session */
+    if(started){ console.error('Alpha-Mart:', ev.message); return; }
     const box=$('loading');
     if(!box) return;
     box.style.display='grid';
